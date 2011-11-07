@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.github.meo.db.tool.testsuite.TestObjects;
 
-public class EntityTests {
+public class EntityImplTests {
 
 	private final static String ENTITY_NAME = "Entity Name";
 

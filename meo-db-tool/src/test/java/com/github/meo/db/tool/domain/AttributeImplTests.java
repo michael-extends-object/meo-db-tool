@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.github.meo.db.tool.testsuite.TestObjects;
 
-public class AttributeTests {
+public class AttributeImplTests {
 
 	private final static String ATTRIBUTE_NAME = "Attribute Name";
 	private final static Object ATTRIBUTE_VALUE = new String("Attribute Value");
