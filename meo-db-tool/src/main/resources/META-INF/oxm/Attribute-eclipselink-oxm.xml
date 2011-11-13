@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="AttributeImpl">
+			<xml-root-element name="attribute" />
+			<xml-type name="attribute" prop-order="name value" />
+			<java-attributes>
+				<xml-attribute java-attribute="name" />
+				<xml-element java-attribute="value" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

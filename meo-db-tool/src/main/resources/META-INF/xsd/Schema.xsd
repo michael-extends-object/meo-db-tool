@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="attribute" type="attribute" />
+
+	<xs:element name="entity" type="entity" />
+
+	<xs:element name="jdbcDataSource" type="jdbcDataSource" />
+
+	<xs:complexType name="attribute">
+		<xs:sequence>
+			<xs:element name="value" type="xs:anyType" minOccurs="0"
+				maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="entity">
+		<xs:sequence>
+			<xs:element name="attributes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="jdbcDataSource">
+		<xs:sequence>
+			<xs:element name="url" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="username" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="password" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="driver" type="xs:string" />
+	</xs:complexType>
+
+</xs:schema>
