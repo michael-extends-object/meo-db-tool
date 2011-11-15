@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Driver;
+import java.sql.SQLException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -113,6 +114,13 @@ public class JdbcDataSourceTests {
 	}
 
 	@Test
+	public void equalsNull() {
+		for (JdbcDataSource jdbcDataSource : TestObjects.getJdbcDataSources()) {
+			assertFalse(jdbcDataSource.equals(null));
+		}
+	}
+
+	@Test
 	public void equalsSameObject() {
 		assertTrue(jdbcDataSource.equals(jdbcDataSource));
 	}
@@ -184,7 +192,7 @@ public class JdbcDataSourceTests {
 		jdbcDataSourceB.setUrl("Different URL");
 		assertFalse(jdbcDataSourceA.equals(jdbcDataSourceB));
 	}
-	
+
 	@Test
 	public void equalsUsername() {
 		jdbcDataSourceA = TestObjects.getJdbcDataSourceA();
@@ -215,7 +223,7 @@ public class JdbcDataSourceTests {
 		jdbcDataSourceB.setUsername("Different user name");
 		assertFalse(jdbcDataSourceA.equals(jdbcDataSourceB));
 	}
-	
+
 	@Test
 	public void equalsPassword() {
 		jdbcDataSourceA = TestObjects.getJdbcDataSourceA();
@@ -280,6 +288,41 @@ public class JdbcDataSourceTests {
 		String password = TestObjects.getPassword();
 		jdbcDataSource.setPassword(password);
 		assertEquals(password, jdbcDataSource.getPassword());
+	}
+
+	@Test
+	public void setGetPrintWriter() throws SQLException {
+		jdbcDataSource.setLogWriter(null);
+		jdbcDataSource.getLogWriter();
+	}
+
+	@Test
+	public void setGetLoginTimeout() throws SQLException {
+		jdbcDataSource.setLoginTimeout(0);
+		jdbcDataSource.getLoginTimeout();
+	}
+
+	@Test
+	public void isWrapperFor() throws SQLException {
+		jdbcDataSource.isWrapperFor(null);
+		jdbcDataSource.unwrap(null);
+	}
+
+	@Test
+	public void getConnection() throws SQLException {
+		jdbcDataSource.getConnection(null, null);
+		jdbcDataSource.getConnection();
+	}
+
+	@Test
+	public void getDriverInstantiationException() {
+		JdbcDataSource.getDriver("java.sql.Driver");
+	}
+
+	@Test
+	public void getDriverIllegalAccessException() {
+		JdbcDataSource
+				.getDriver("com.github.meo.db.tool.testsuite.ObjectIllegalAccessException");
 	}
 
 }

@@ -1,12 +1,17 @@
 package com.github.meo.db.tool.domain;
 
+import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Driver;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-public class JdbcDataSource {
+public class JdbcDataSource implements DataSource {
 
-	Logger logger = Logger.getLogger(getClass());
+	private final static Logger logger = Logger.getLogger(JdbcDataSource.class);
 
 	private Driver driver;
 	private String url;
@@ -77,12 +82,8 @@ public class JdbcDataSource {
 
 		try {
 			driver = (Driver) Class.forName(driverClassName).newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error(String.format("Could not instantiate class '%s'", driverClassName));
 		}
 
 		return driver;
@@ -91,6 +92,11 @@ public class JdbcDataSource {
 	@Override
 	public boolean equals(Object object) {
 
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+		
 		/*
 		 * Are the references pointing to the same object?
 		 */
@@ -217,6 +223,37 @@ public class JdbcDataSource {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public PrintWriter getLogWriter() throws SQLException {
+		return null;
+	}
+
+	public int getLoginTimeout() throws SQLException {
+		return 0;
+	}
+
+	public void setLogWriter(PrintWriter out) throws SQLException {
+	}
+
+	public void setLoginTimeout(int seconds) throws SQLException {
+	}
+
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+		return false;
+	}
+
+	public <T> T unwrap(Class<T> iface) throws SQLException {
+		return null;
+	}
+
+	public Connection getConnection() throws SQLException {
+		return null;
+	}
+
+	public Connection getConnection(String username, String password)
+			throws SQLException {
+		return null;
 	}
 
 }

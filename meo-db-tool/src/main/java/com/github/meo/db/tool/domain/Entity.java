@@ -11,4 +11,5 @@ public interface Entity extends Attribute {
 	public List<Attribute> getAttributes();
 
 	public void setAttributes(List<Attribute> attributes);
+
 }
