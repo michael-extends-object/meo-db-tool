@@ -42,11 +42,11 @@ public class AttributeImpl implements Attribute, Cloneable {
 
 	public boolean equals(Object object) {
 
-		/*
-		 * The objects should have the same class. It should be either Attribute
-		 * or Entity in case of a nested entity.
-		 */
-
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+		
 		/*
 		 * Are the references pointing to the same object?
 		 */

@@ -42,6 +42,11 @@ public class EntityImpl implements Entity, Cloneable {
 	@Override
 	public boolean equals(Object object) {
 
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+		
 		/*
 		 * Are the references pointing to the same object?
 		 */

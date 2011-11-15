@@ -46,7 +46,14 @@ public class AttributeImplTests {
 			assertEquals(attribute.getValue(), clonedAttribute.getValue());
 		}
 	}
-
+	
+	@Test
+	public void equalsNull() {
+		for (Attribute attribute : TestObjects.getAttributes()) {
+			assertFalse(attribute.equals(null));
+		}
+	}
+	
 	@Test
 	public void equals() {
 

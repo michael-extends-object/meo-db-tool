@@ -2,6 +2,7 @@ package com.github.meo.db.tool.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -108,6 +109,13 @@ public class EntityImplTests {
 				assertTrue(entity.getAttributes().get(i)
 						.equals(clonedEntity.getAttributes().get(i)));
 			}
+		}
+	}
+
+	@Test
+	public void equalsNull() {
+		for (Entity entity : TestObjects.getEntities()) {
+			assertFalse(entity.equals(null));
 		}
 	}
 
