@@ -10,9 +10,10 @@ public class AttributeImpl implements Attribute, Cloneable {
 	/**
 	 * Attribute value
 	 */
-	// TODO exclude value from inheritance to Entity
 	private Object value;
 
+	private boolean isPrimaryKey;
+	
 	public AttributeImpl() {
 
 	}
@@ -124,4 +125,15 @@ public class AttributeImpl implements Attribute, Cloneable {
 		this.value = value;
 	}
 
+	public boolean isPrimaryKey() {
+		return this.isPrimaryKey;
+	}
+
+	public void setPrimaryKey(boolean isPrimaryKey) {
+		this.isPrimaryKey = isPrimaryKey;
+	}
+
+	public String toString() {
+		return name;
+	}
 }

@@ -10,8 +10,12 @@ public interface Attribute {
 
 	public Object getValue();
 
+	public boolean isPrimaryKey();
+
 	public void setName(String name);
 
 	public void setValue(Object value);
+
+	public void setPrimaryKey(boolean isPrimaryKey);
 
 }

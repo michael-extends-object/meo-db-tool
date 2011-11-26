@@ -155,4 +155,16 @@ public class AttributeImplTests {
 		attribute.setValue(ATTRIBUTE_VALUE);
 		assertEquals(ATTRIBUTE_VALUE, attribute.getValue());
 	}
+	
+	@Test
+	public void getSetIsPrimaryKey() {
+		attribute.setPrimaryKey(true);
+		assertEquals(true, attribute.isPrimaryKey());
+	}
+	
+	@Test
+	public void testToString() {
+		attribute.setName(ATTRIBUTE_NAME);
+		assertEquals(ATTRIBUTE_NAME, attribute.toString());
+	}
 }
