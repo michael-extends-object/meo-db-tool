@@ -4,18 +4,27 @@ import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.apache.log4j.Logger;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+
 import com.github.meo.db.tool.domain.Attribute;
 import com.github.meo.db.tool.domain.AttributeImpl;
 import com.github.meo.db.tool.domain.AttributeMapping;
+import com.github.meo.db.tool.domain.Cardinality;
 import com.github.meo.db.tool.domain.Database;
 import com.github.meo.db.tool.domain.DatabaseTable;
 import com.github.meo.db.tool.domain.DatabaseTableColumn;
 import com.github.meo.db.tool.domain.Entity;
 import com.github.meo.db.tool.domain.EntityImpl;
 import com.github.meo.db.tool.domain.EntityMapping;
-import com.github.meo.db.tool.domain.JdbcDataSource;
+import com.github.meo.db.tool.domain.Relationship;
+import com.github.meo.db.tool.domain.RelationshipImpl;
 
 public class TestObjects {
+
+	static Logger logger = Logger.getLogger(TestObjects.class);
 
 	public static final String ATTRIBUTE_NAME_A = "Attribute A";
 	public static final String ATTRIBUTE_NAME_B = "Attribute B";
@@ -33,7 +42,7 @@ public class TestObjects {
 	public static final String JDBC_DRIVER_PSQL = "org.postgresql.Driver";
 	public static final String DB_URL_HSQL_SOURCE = "jdbc:hsqldb:mem:SourceDatabase";
 	public static final String DB_URL_HSQL_TARGET = "jdbc:hsqldb:mem:TargetDatabase";
-	public static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
+	public static final String JDBC_DRIVER_CLASS_NAME_PSQL = "org.postgresql.Driver";
 	public static final String INVALID_DRIVER_CLASS_NAME = "invalid.Driver";
 	public static final String URL = "jdbc:postgresql://localhost/dbem";
 	public static final String USERNAME = "username";
@@ -54,6 +63,7 @@ public class TestObjects {
 	public static Attribute getAttributeA() {
 		attributeA = new AttributeImpl(ATTRIBUTE_NAME_A);
 		attributeA.setValue("value");
+		attributeA.setPrimaryKey(true);
 		return attributeA;
 	}
 
@@ -66,6 +76,7 @@ public class TestObjects {
 	public static Attribute getAttributeC() {
 		attributeC = new AttributeImpl(ATTRIBUTE_NAME_C);
 		attributeC.setValue(8.8);
+		attributeC.setPrimaryKey(true);
 		return attributeC;
 	}
 
@@ -104,70 +115,33 @@ public class TestObjects {
 	}
 
 	public static Driver getDriver() {
-		return JdbcDataSource.getDriver(DRIVER_CLASS_NAME);
+		return getDriver(JDBC_DRIVER_CLASS_NAME_PSQL);
 	}
 
-	public static String getDriverClassName() {
-		return DRIVER_CLASS_NAME;
+	public static DataSource getDataSourceA() {
+		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
+				USERNAME, PASSWORD);
 	}
 
-	public static String getInvalidDriverClassName() {
-		return INVALID_DRIVER_CLASS_NAME;
+	public static DataSource getJdbcDataSourceA() {
+		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
+				USERNAME, PASSWORD);
 	}
 
-	public static String getUrl() {
-		return URL;
+	public static DataSource getJdbcDataSourceB() {
+		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
+				USERNAME, PASSWORD);
 	}
 
-	public static String getUsername() {
-		return USERNAME;
+	public static DataSource getJdbcDataSourceC() {
+		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
+				USERNAME, PASSWORD);
 	}
 
-	public static String getPassword() {
-		return PASSWORD;
-	}
-
-	public static JdbcDataSource getJdbcDataSourceA() {
-		JdbcDataSource jdbcDataSource = new JdbcDataSource();
-
-		jdbcDataSource
-				.setDriver(JdbcDataSource.getDriver(getDriverClassName()));
-		jdbcDataSource.setUrl(URL);
-		jdbcDataSource.setUsername(USERNAME);
-		jdbcDataSource.setPassword(PASSWORD);
-
-		return jdbcDataSource;
-	}
-
-	public static JdbcDataSource getJdbcDataSourceB() {
-		JdbcDataSource jdbcDataSource = new JdbcDataSource();
-
-		jdbcDataSource
-				.setDriver(JdbcDataSource.getDriver(getDriverClassName()));
-		jdbcDataSource.setUrl(URL);
-		jdbcDataSource.setUsername(USERNAME);
-		jdbcDataSource.setPassword(PASSWORD);
-
-		return jdbcDataSource;
-	}
-
-	public static JdbcDataSource getJdbcDataSourceC() {
-		JdbcDataSource jdbcDataSource = new JdbcDataSource();
-
-		jdbcDataSource
-				.setDriver(JdbcDataSource.getDriver(getDriverClassName()));
-		jdbcDataSource.setUrl(URL);
-		jdbcDataSource.setUsername(USERNAME);
-		jdbcDataSource.setPassword(PASSWORD);
-
-		return jdbcDataSource;
-	}
-
-	public static List<JdbcDataSource> getJdbcDataSources() {
-		List<JdbcDataSource> jdbcDataSources = new ArrayList<JdbcDataSource>();
-		jdbcDataSources.add(getJdbcDataSourceA());
-
-		return jdbcDataSources;
+	public static List<DataSource> getJdbcDataSources() {
+		List<DataSource> dataSources = new ArrayList<DataSource>();
+		dataSources.add(getJdbcDataSourceA());
+		return dataSources;
 	}
 
 	public static Database getDatabaseA() {
@@ -201,16 +175,19 @@ public class TestObjects {
 
 	public static DatabaseTable getDatabaseTableA() {
 		DatabaseTable databaseTable = new DatabaseTable(DATABASE_TABLE_NAME_A);
+		databaseTable.setDatabaseTableColumns(getDatabaseTableColumns());
 		return databaseTable;
 	}
 
 	public static DatabaseTable getDatabaseTableB() {
 		DatabaseTable databaseTable = new DatabaseTable(DATABASE_TABLE_NAME_B);
+		databaseTable.setDatabaseTableColumns(getDatabaseTableColumns());
 		return databaseTable;
 	}
 
 	public static DatabaseTable getDatabaseTableC() {
 		DatabaseTable databaseTable = new DatabaseTable(DATABASE_TABLE_NAME_C);
+		databaseTable.setDatabaseTableColumns(getDatabaseTableColumns());
 		return databaseTable;
 	}
 
@@ -308,4 +285,148 @@ public class TestObjects {
 		entityMappings.add(getEntityMappingC());
 		return entityMappings;
 	}
+
+	public static Database getDatabaseUserManagementSource() {
+		Database databaseUserManagement = new Database();
+
+		databaseUserManagement.addEntityMapping(getEntityMappingUser());
+		databaseUserManagement.setName("Database User Management (Source)");
+
+		DataSource dataSource = new SimpleDriverDataSource(
+				getDriver(JDBC_DRIVER_HSQL),
+				"jdbc:hsqldb:mem:UserManagementSource");
+		databaseUserManagement.setDataSource(dataSource);
+
+		databaseUserManagement.addEntityMapping(getEntityMappingUser());
+		databaseUserManagement.addEntityMapping(getEntityMappingGroup());
+
+		return databaseUserManagement;
+	}
+
+	public static Entity getEntityUser() {
+
+		Entity user = new EntityImpl("User");
+
+		user.addAttribute(new AttributeImpl("User ID"));
+		user.addAttribute(new AttributeImpl("Username"));
+		user.addAttribute(new AttributeImpl("Password"));
+		user.addAttribute(new AttributeImpl("Group ID"));
+
+		user.addRelationship(getRelationshipUserToGroup());
+		
+		return user;
+	}
+
+	public static EntityMapping getEntityMappingUser() {
+
+		EntityMapping entityMappingUser = new EntityMapping();
+		Entity entityUser = getEntityUser();
+
+		entityMappingUser.setEntity(entityUser);
+		entityMappingUser.setDatabaseTable(new DatabaseTable("USER"));
+
+		AttributeMapping userIdMapping = new AttributeMapping();
+		userIdMapping.setAttribute(entityUser.getAttribute("User ID"));
+		userIdMapping.setDatabaseTableColumn(new DatabaseTableColumn("ID"));
+
+		AttributeMapping usernameMapping = new AttributeMapping();
+		usernameMapping.setAttribute(entityUser.getAttribute("Username"));
+		usernameMapping.setDatabaseTableColumn(new DatabaseTableColumn(
+				"USERNAME"));
+
+		AttributeMapping passwordMapping = new AttributeMapping();
+		passwordMapping.setAttribute(entityUser.getAttribute("Password"));
+		passwordMapping.setDatabaseTableColumn(new DatabaseTableColumn(
+				"PASSWORD"));
+
+		AttributeMapping groupIdMapping = new AttributeMapping();
+		groupIdMapping.setAttribute(entityUser.getAttribute("Group ID"));
+		groupIdMapping.setDatabaseTableColumn(new DatabaseTableColumn(
+				"GROUP_ID"));
+
+		entityMappingUser.addAttributeMapping(userIdMapping);
+		entityMappingUser.addAttributeMapping(usernameMapping);
+		entityMappingUser.addAttributeMapping(passwordMapping);
+		entityMappingUser.addAttributeMapping(groupIdMapping);
+
+		return entityMappingUser;
+	}
+
+	public static Entity getEntityGroup() {
+		Entity group = new EntityImpl("User Group");
+
+		Attribute groupId = new AttributeImpl("Group ID");
+		Attribute username = new AttributeImpl("Group Name");
+
+		group.addAttribute(groupId);
+		group.addAttribute(username);
+
+		return group;
+	}
+
+	public static EntityMapping getEntityMappingGroup() {
+
+		EntityMapping entityMappingGroup = new EntityMapping();
+		Entity entityGroup = getEntityGroup();
+
+		entityMappingGroup.setEntity(entityGroup);
+		entityMappingGroup.setDatabaseTable(new DatabaseTable("USER_GROUP"));
+
+		AttributeMapping userIdMapping = new AttributeMapping();
+		userIdMapping.setAttribute(entityGroup.getAttribute("Group ID"));
+		userIdMapping.setDatabaseTableColumn(new DatabaseTableColumn("ID"));
+
+		AttributeMapping groupnameMapping = new AttributeMapping();
+		groupnameMapping.setAttribute(entityGroup.getAttribute("Group Name"));
+		groupnameMapping.setDatabaseTableColumn(new DatabaseTableColumn(
+				"GROUPNAME"));
+
+		entityMappingGroup.addAttributeMapping(userIdMapping);
+		entityMappingGroup.addAttributeMapping(groupnameMapping);
+
+		return entityMappingGroup;
+	}
+
+	public static Relationship getRelationshipUserToGroup() {
+
+		String relationshipName = "User to Group";
+		Entity group = getEntityGroup();
+		Cardinality cardinality = Cardinality.OneToMany;
+
+		Relationship relationship = new RelationshipImpl();
+		relationship.setName(relationshipName);
+		relationship.setReferencedEntity(group);
+		relationship.setCardinality(cardinality);
+
+		return relationship;
+	}
+
+	public static Driver getDriver(String driverClassName) {
+
+		Driver driver = null;
+
+		try {
+			driver = (Driver) Class.forName(driverClassName).newInstance();
+		} catch (Exception e) {
+			logger.error(String.format("Could not instantiate class '%s'",
+					driverClassName));
+		}
+
+		return driver;
+	}
+
+	public static Relationship getRelationshipA() {
+		Relationship relationshipA = new RelationshipImpl();
+		return relationshipA;
+	}
+
+	public static List<Relationship> getRelationships() {
+
+		List<Relationship> relationships = new ArrayList<Relationship>();
+
+		relationships.add(getRelationshipA());
+
+		return relationships;
+	}
+
 }
