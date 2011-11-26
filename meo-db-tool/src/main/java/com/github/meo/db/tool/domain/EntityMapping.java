@@ -25,8 +25,9 @@ public class EntityMapping {
 
 		DatabaseTableColumn databaseTableColumn = null;
 
-		for (AttributeMapping attributeMapping : attributeMappings) {
-			if (attribute.getName().equals(attributeMapping.getAttribute().getName())) {
+		for (AttributeMapping attributeMapping : getAttributeMappings()) {
+			if (attribute.getName().equals(
+					attributeMapping.getAttribute().getName())) {
 				databaseTableColumn = attributeMapping.getDatabaseTableColumn();
 			}
 		}

@@ -1,9 +1,6 @@
 package com.github.meo.db.tool.domain;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +15,8 @@ public class EntityImplTests {
 	private final static String ENTITY_NAME = "Entity Name";
 
 	private Entity entity;
+	private String expectedString;
+	private String actualString;
 
 	@Before
 	public void setUp() {
@@ -31,17 +30,6 @@ public class EntityImplTests {
 		entity = new EntityImpl(ENTITY_NAME);
 
 		assertEquals(ENTITY_NAME, entity.getName());
-	}
-
-	@Test
-	public void nestedEntities() {
-
-		Entity nestedEntity = new EntityImpl("Nested Entity");
-
-		entity.addAttribute(nestedEntity);
-
-		assertEquals(nestedEntity, entity.getAttribute(nestedEntity.getName()));
-
 	}
 
 	@Test
@@ -63,6 +51,29 @@ public class EntityImplTests {
 	}
 
 	@Test
+	public void testGetSetRelationships() {
+
+		List<Relationship> relationships = TestObjects.getRelationships();
+
+		entity.setRelationships(relationships);
+
+		assertEquals(relationships, entity.getRealtionships());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetRelationshipsNull() {
+		try {
+			entity.setRelationships(null);
+		} catch (IllegalArgumentException e) {
+			expectedString = actualString = e.getMessage();
+
+			assertEquals(expectedString, actualString);
+
+			throw e;
+		}
+	}
+
+	@Test
 	public void addAttribute() {
 
 		List<Attribute> attributes = TestObjects.getAttributes();
@@ -75,6 +86,22 @@ public class EntityImplTests {
 
 		for (int i = 0; i < attributesActual.size(); i++) {
 			assertEquals(attributes.get(i), attributesActual.get(i));
+		}
+	}
+
+	@Test
+	public void testAddRelationships() {
+
+		List<Relationship> relationships = TestObjects.getRelationships();
+
+		for (int i = 0; i < relationships.size(); i++) {
+			entity.addRelationship(relationships.get(i));
+		}
+
+		List<Relationship> relationshipsActual = entity.getRealtionships();
+
+		for (int i = 0; i < relationshipsActual.size(); i++) {
+			assertEquals(relationships.get(i), relationshipsActual.get(i));
 		}
 	}
 
@@ -235,9 +262,87 @@ public class EntityImplTests {
 	}
 
 	@Test
-	public void getSetObject() {
-		Object object = new Object();
-		entity.setValue(object);
-		assertSame(object, entity.getValue());
+	public void getAttributesPrimaryKey() {
+
+		List<Attribute> expectedAttributes = new ArrayList<Attribute>();
+
+		expectedAttributes.add(TestObjects.getAttributeA());
+		expectedAttributes.add(TestObjects.getAttributeC());
+
+		entity.setAttributes(TestObjects.getAttributes());
+
+		assertEquals(expectedAttributes, entity.getAttributesPrimaryKey());
+	}
+
+	@Test
+	public void testToString() {
+		entity.setName(ENTITY_NAME);
+		assertEquals(ENTITY_NAME, entity.toString());
+	}
+
+	@Test
+	public void testGetSetAttributeValue() {
+		String attributeName = "Attribute";
+		Attribute attribute = new AttributeImpl(attributeName);
+		String value = "Value";
+		entity.addAttribute(attribute);
+		entity.setAttributeValue(attribute, value);
+		assertEquals(value, entity.getAttributeValue(attribute));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void voidtestGetAttributeValueNullAttribute() {
+		try {
+			entity.getAttributeValue((Attribute) null);
+		} catch (IllegalArgumentException e) {
+			assertEquals("null is not valid argument!", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void voidtestGetAttributeValueNullAttributeName() {
+		try {
+			entity.getAttributeValue((String) null);
+		} catch (IllegalArgumentException e) {
+			assertEquals("null is not valid argument!", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void voidtestSetAttributeValueNullAttribute() {
+		try {
+			entity.setAttributeValue((Attribute) null, new Object());
+		} catch (IllegalArgumentException e) {
+			assertEquals("null is not valid argument!", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void voidtestSetAttributeValueNullAttributeName() {
+		try {
+			entity.setAttributeValue((String) null, new Object());
+		} catch (IllegalArgumentException e) {
+			assertEquals("null is not valid argument!", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void voidtestGetAttributeValueAttributeNotFound() {
+
+		String attributeName = "Attribute Name";
+		String expectedString = "Attribute with name '" + attributeName
+				+ "' could not be found!";
+
+		try {
+			entity.getAttributeValue(new AttributeImpl(attributeName));
+		} catch (IllegalArgumentException e) {
+
+			assertEquals(expectedString, e.getMessage());
+			throw e;
+		}
 	}
 }

@@ -3,10 +3,12 @@ package com.github.meo.db.tool.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 public class Database {
 
 	String name;
-	JdbcDataSource dataSource;
+	DataSource dataSource;
 	List<EntityMapping> entityMappings;
 
 	public Database() {
@@ -32,15 +34,48 @@ public class Database {
 			return null;
 		}
 
-		DatabaseTable databaseTable = null;
+		return getEntityMapping(entity).getDatabaseTable();
+	}
 
-		for (EntityMapping entityMapping : entityMappings) {
+	public EntityMapping getEntityMapping(Entity entity) {
+
+		for (EntityMapping entityMapping : getEntityMappings()) {
 			if (entity.getName().equals(entityMapping.getEntity().getName())) {
-				databaseTable = entityMapping.getDatabaseTable();
+				return entityMapping;
 			}
 		}
 
-		return databaseTable;
+		return null;
+	}
+
+	public List<AttributeMapping> getAttributeMappings(Entity entity) {
+
+		List<AttributeMapping> attributeMapping = new ArrayList<AttributeMapping>();
+
+		EntityMapping entityMapping = getEntityMapping(entity);
+
+		if(entityMapping == null) {
+			return attributeMapping;
+		}
+		
+		attributeMapping.addAll(entityMapping.getAttributeMappings());
+
+		return entityMapping.getAttributeMappings();
+	}
+
+	public List<DatabaseTableColumn> getDatabaseTableColumns(Entity entity) {
+
+		List<DatabaseTableColumn> databaseTableColumns = new ArrayList<DatabaseTableColumn>();
+
+		for (AttributeMapping attributeMapping : getAttributeMappings(entity)) {
+			databaseTableColumns.add(attributeMapping.getDatabaseTableColumn());
+		}
+
+		return databaseTableColumns;
+	}
+
+	public int getColumnCount(Entity entity) {
+		return getDatabaseTableColumns(entity).size();
 	}
 
 	@Override
@@ -52,7 +87,7 @@ public class Database {
 		return name;
 	}
 
-	public JdbcDataSource getDataSource() {
+	public DataSource getDataSource() {
 		return dataSource;
 	}
 
@@ -64,7 +99,7 @@ public class Database {
 		this.name = name;
 	}
 
-	public void setDataSource(JdbcDataSource dataSource) {
+	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
@@ -72,4 +107,28 @@ public class Database {
 		this.entityMappings = entityMappings;
 	}
 
+	public DatabaseTableColumn getDatabaseTableColumn(Entity entity, Attribute attribute) {
+		
+		if(attribute == null) {
+			throw new IllegalArgumentException("null is not a valid argument!");
+		}
+		
+		return getDatabaseTableColumn(entity, attribute.getName());
+	}
+	
+	public DatabaseTableColumn getDatabaseTableColumn(Entity entity, String attributeName) {
+		
+		if(entity == null || attributeName == null) {
+			throw new IllegalArgumentException("null is not a valid argument!");
+		}
+		
+		for (AttributeMapping attributeMapping : getAttributeMappings(entity)) {
+			if (attributeName.equals(attributeMapping.getAttribute().getName())) {
+				return attributeMapping.getDatabaseTableColumn();
+			}
+		}
+		
+		return null;
+	}
+	
 }

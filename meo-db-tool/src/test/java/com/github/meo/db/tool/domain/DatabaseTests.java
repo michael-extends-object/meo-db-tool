@@ -1,10 +1,10 @@
 package com.github.meo.db.tool.domain;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class DatabaseTests {
 
 	@Test
 	public void getSetDataSource() {
-		JdbcDataSource dataSource = TestObjects.getJdbcDataSourceA();
+		DataSource dataSource = TestObjects.getDataSourceA();
 		database.setDataSource(dataSource);
 		assertEquals(dataSource, database.getDataSource());
 	}
@@ -73,10 +73,11 @@ public class DatabaseTests {
 		List<Database> databases = TestObjects.getDatabases();
 
 		for (Database database : databases) {
-			assertEquals(TestObjects.getDatabaseTableA(), database.getDatabaseTable(TestObjects.getEntityA()));
+			assertEquals(TestObjects.getDatabaseTableA(),
+					database.getDatabaseTable(TestObjects.getEntityA()));
 		}
 	}
-	
+
 	@Test
 	public void getDatabaseTableNull() {
 
@@ -85,5 +86,67 @@ public class DatabaseTests {
 		for (Database database : databases) {
 			assertNull(database.getDatabaseTable(null));
 		}
+	}
+
+	public void getEntityMapping() {
+
+		for (EntityMapping entityMapping : TestObjects.getEntityMappings()) {
+			database.addEntityMapping(entityMapping);
+		}
+
+		assertEquals(TestObjects.getEntityMappingB(), TestObjects.getEntityB());
+	}
+
+	public void getEntityMappingNull() {
+		assertNull(database.getEntityMapping(null));
+	}
+
+	@Test
+	public void getAttributeMappings() {
+		database.addEntityMapping(TestObjects.getEntityMappingA());
+		assertEquals(TestObjects.getAttributeMappings(),
+				database.getAttributeMappings(TestObjects.getEntityA()));
+	}
+
+	@Test
+	public void getColumnCount() {
+		database.setEntityMappings(TestObjects.getEntityMappings());
+		assertEquals(TestObjects.getDatabaseTableColumns().size(),
+				database.getColumnCount(TestObjects.getEntityA()));
+	}
+
+	@Test
+	public void getAttributeMappingsNull() {
+		database.getAttributeMappings(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getDatabaseTableColumnNullAttribute() {
+		try {
+			database.getDatabaseTableColumn(new EntityImpl(), (Attribute) null);
+		} catch (IllegalArgumentException e) {
+			assertEquals("null is not a valid argument!", e.getMessage());
+			throw e;
+		}
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getDatabaseTableColumnNullEntity() {
+		try {
+			database.getDatabaseTableColumn(null, new AttributeImpl());
+		} catch (IllegalArgumentException e) {
+			assertEquals("null is not a valid argument!", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test
+	public void getDatabaseTableColumnResultNull() {
+
+		Attribute attribute = new AttributeImpl();
+		attribute.setName("Attribute name");
+		
+		assertNull(database.getDatabaseTableColumn(new EntityImpl(), attribute));
 	}
 }
