@@ -4,9 +4,11 @@ import java.sql.Driver;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.github.meo.db.tool.domain.JdbcDataSource;
+import org.apache.log4j.Logger;
 
 public class DriverXmlAdapter extends XmlAdapter<String, Driver> {
+
+	private final static Logger logger = Logger.getLogger(DriverXmlAdapter.class);
 
 	public DriverXmlAdapter() {
 	}
@@ -18,7 +20,17 @@ public class DriverXmlAdapter extends XmlAdapter<String, Driver> {
 
 	@Override
 	public Driver unmarshal(String driverClassName) {
-		return JdbcDataSource.getDriver(driverClassName);
+
+		Driver driver = null;
+
+		try {
+			driver = (Driver) Class.forName(driverClassName).newInstance();
+		} catch (Exception e) {
+			logger.error(String.format("Could not instantiate class '%s'",
+					driverClassName));
+		}
+
+		return driver;
 	}
 
 }

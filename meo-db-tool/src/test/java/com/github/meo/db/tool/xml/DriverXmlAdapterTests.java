@@ -25,4 +25,9 @@ public class DriverXmlAdapterTests {
 		
 		assertEquals(driver.getClass(), driverXmlAdapter.unmarshal(marshalledDriver).getClass());
 	}
+	
+	@Test
+	public void unmarshalException() throws Exception {
+		driverXmlAdapter.unmarshal(TestObjects.INVALID_DRIVER_CLASS_NAME);
+	}
 }
