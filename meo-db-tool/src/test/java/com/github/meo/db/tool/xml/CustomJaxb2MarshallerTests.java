@@ -13,7 +13,6 @@ import org.springframework.oxm.XmlMappingException;
 
 import com.github.meo.db.tool.domain.Attribute;
 import com.github.meo.db.tool.domain.Entity;
-import com.github.meo.db.tool.domain.JdbcDataSource;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
 public class CustomJaxb2MarshallerTests {
@@ -59,24 +58,5 @@ public class CustomJaxb2MarshallerTests {
 
 			assertEquals(entity, jaxbMarshaller.unmarshal(path));
 		}
-
-	}
-
-	@Test
-	public void marshalUnmarshalJdbcDataSource() throws XmlMappingException,
-			FileNotFoundException, IOException {
-
-		for (JdbcDataSource jdbcDataSource : TestObjects.getJdbcDataSources()) {
-			String path = basePath + jdbcDataSource.getClass().getSimpleName()
-					+ "_" + jdbcDataSource.getDriver().getClass().getName() + ".xml";
-
-			jaxbMarshaller.marshal(jdbcDataSource, path);
-
-			JdbcDataSource unmarshalledJdbcDataSource = (JdbcDataSource) jaxbMarshaller
-					.unmarshal(path);
-
-			assertEquals(jdbcDataSource, unmarshalledJdbcDataSource);
-		}
-
 	}
 }

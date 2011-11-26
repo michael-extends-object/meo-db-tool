@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jdbcDataSource driver="org.postgresql.Driver">
-   <url>jdbc:postgresql://localhost/dbem</url>
-   <username>username</username>
-   <password>ENC(2nluVf1AgFYJvurNb6aOTLCxJZ6uNwzu)</password>
-</jdbcDataSource>
