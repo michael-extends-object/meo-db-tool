@@ -15,4 +15,6 @@ public interface Relationship {
 	public void setReferencedEntity(Entity referencedEntity);
 	
 	public String toString();
+
+	public Relationship clone();
 }

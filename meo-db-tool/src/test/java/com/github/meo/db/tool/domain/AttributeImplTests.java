@@ -38,7 +38,7 @@ public class AttributeImplTests {
 	@Test
 	public void cloneAttribute() {
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			Attribute clonedAttribute = (Attribute) attribute.clone();
+			Attribute clonedAttribute = attribute.clone();
 			assertNotSame(attribute, clonedAttribute);
 			assertTrue(attribute.equals(clonedAttribute));
 			assertEquals(attribute.getClass(), clonedAttribute.getClass());
@@ -60,46 +60,46 @@ public class AttributeImplTests {
 		Attribute modifiedAttribute;
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setName("Modified name");
 			assertFalse(attribute.equals(modifiedAttribute));
 		}
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setValue("Modified value");
 			assertFalse(attribute.equals(modifiedAttribute));
 		}
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setName("Modified name");
 			modifiedAttribute.setValue("Modified value");
 			assertFalse(attribute.equals(modifiedAttribute));
 		}
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setName(null);
 			assertFalse(attribute.equals(modifiedAttribute));
 		}
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setValue(null);
 			attribute.setValue("Attribute value");
 			assertFalse(attribute.equals(modifiedAttribute));
 		}
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setValue("Modified Attribute value");
 			attribute.setValue(null);
 			assertFalse(attribute.equals(modifiedAttribute));
 		}
 
 		for (Attribute attribute : TestObjects.getAttributes()) {
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			modifiedAttribute.setValue("Modified Attribute value");
 			attribute.setValue("Attribute value");
 			assertFalse(attribute.equals(modifiedAttribute));
@@ -108,7 +108,7 @@ public class AttributeImplTests {
 		for (Attribute attribute : TestObjects.getAttributes()) {
 			attribute.setName(null);
 			attribute.setValue(null);
-			modifiedAttribute = (Attribute) attribute.clone();
+			modifiedAttribute = attribute.clone();
 			assertTrue(attribute.equals(attribute));
 			assertTrue(attribute.equals(attribute.clone()));
 

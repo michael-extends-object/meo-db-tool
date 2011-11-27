@@ -1,6 +1,6 @@
 package com.github.meo.db.tool.domain;
 
-public class RelationshipImpl implements Relationship {
+public class RelationshipImpl implements Relationship, Cloneable {
 
 	String name;
 	Entity referencedEntity;
@@ -14,8 +14,7 @@ public class RelationshipImpl implements Relationship {
 		setName(name);
 	}
 
-	public RelationshipImpl(Entity referencedEntity,
-			Cardinality cardinality) {
+	public RelationshipImpl(Entity referencedEntity, Cardinality cardinality) {
 		setReferencedEntity(referencedEntity);
 		setCardinality(cardinality);
 	}
@@ -59,5 +58,16 @@ public class RelationshipImpl implements Relationship {
 		}
 
 		return String.format("'Relationship to %s'", referencedEntity);
+	}
+
+	public Relationship clone() {
+
+		Relationship relationship = new RelationshipImpl();
+
+		relationship.setName(getName());
+		relationship.setReferencedEntity(getReferencedEntity().clone());
+		relationship.setCardinality(getCardinality());
+
+		return relationship;
 	}
 }

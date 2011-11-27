@@ -7,7 +7,7 @@ public class EntityImpl implements Entity, Cloneable {
 
 	private String name;
 	private List<Attribute> attributes;
-	List<Relationship> realtionships;
+	private List<Relationship> realtionships;
 
 	public EntityImpl() {
 		init();
@@ -24,17 +24,17 @@ public class EntityImpl implements Entity, Cloneable {
 	}
 
 	@Override
-	public Object clone() {
+	public Entity clone() {
 		Entity entity = new EntityImpl();
 
 		entity.setName(getName());
 
-		if (getAttributes() == null) {
-			entity.setAttributes(null);
-		} else {
-			for (Attribute attribute : getAttributes()) {
-				entity.addAttribute((Attribute) attribute.clone());
-			}
+		for (Attribute attribute : getAttributes()) {
+			entity.addAttribute(attribute.clone());
+		}
+
+		for (Relationship relationship : getRealtionships()) {
+			 entity.addRelationship(relationship.clone());
 		}
 
 		return entity;
@@ -109,8 +109,13 @@ public class EntityImpl implements Entity, Cloneable {
 		return true;
 	}
 
-	public void addAttribute(Attribute attribute) {
-		getAttributes().add(attribute);
+	public boolean addAttribute(Attribute attribute) {
+
+		if (attribute == null) {
+			return false;
+		}
+
+		return getAttributes().add(attribute);
 	}
 
 	/**
@@ -197,6 +202,11 @@ public class EntityImpl implements Entity, Cloneable {
 	}
 
 	public void setAttributes(List<Attribute> attributes) {
+
+		if (attributes == null) {
+			return;
+		}
+
 		this.attributes = attributes;
 	}
 
@@ -253,7 +263,7 @@ public class EntityImpl implements Entity, Cloneable {
 	public boolean addRelationship(Relationship relationship) {
 		return getRealtionships().add(relationship);
 	}
-	
+
 	public List<Relationship> getRealtionships() {
 		return realtionships;
 	}
@@ -266,6 +276,5 @@ public class EntityImpl implements Entity, Cloneable {
 
 		this.realtionships = realtionships;
 	}
-	
 
 }

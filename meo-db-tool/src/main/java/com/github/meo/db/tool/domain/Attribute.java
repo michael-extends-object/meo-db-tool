@@ -2,8 +2,6 @@ package com.github.meo.db.tool.domain;
 
 public interface Attribute {
 
-	public Object clone();
-
 	public boolean equals(Object object);
 
 	public String getName();
@@ -17,5 +15,7 @@ public interface Attribute {
 	public void setValue(Object value);
 
 	public void setPrimaryKey(boolean isPrimaryKey);
+	
+	public Attribute clone();
 
 }

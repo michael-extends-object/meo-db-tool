@@ -20,13 +20,13 @@ public interface Entity {
 
 	public void setAttributes(List<Attribute> attributes);
 
-	public void addAttribute(Attribute attribute);
+	public boolean addAttribute(Attribute attribute);
 
 	public Attribute getAttribute(String name);
 
 	public void setName(String name);
 
-	public Object clone();
+	public Entity clone();
 
 	public String toString();
 
