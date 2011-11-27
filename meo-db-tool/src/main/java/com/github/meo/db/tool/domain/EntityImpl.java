@@ -7,7 +7,7 @@ public class EntityImpl implements Entity, Cloneable {
 
 	private String name;
 	private List<Attribute> attributes;
-	private List<Relationship> realtionships;
+	private List<Relationship> relationships;
 
 	public EntityImpl() {
 		init();
@@ -19,8 +19,8 @@ public class EntityImpl implements Entity, Cloneable {
 	}
 
 	private void init() {
-		setAttributes(new ArrayList<Attribute>());
-		setRelationships(new ArrayList<Relationship>());
+		attributes = new ArrayList<Attribute>();
+		relationships = new ArrayList<Relationship>();
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class EntityImpl implements Entity, Cloneable {
 			entity.addAttribute(attribute.clone());
 		}
 
-		for (Relationship relationship : getRealtionships()) {
-			 entity.addRelationship(relationship.clone());
+		for (Relationship relationship : getRelationships()) {
+			entity.addRelationship(relationship.clone());
 		}
 
 		return entity;
@@ -85,24 +85,13 @@ public class EntityImpl implements Entity, Cloneable {
 		/*
 		 * Do the objects have the same attributes?
 		 */
-		if (getAttributes() == null) {
-			if (entity.getAttributes() != null) {
-				return false;
-			}
-		} else {
-			if (entity.getAttributes() == null) {
-				return false;
-			} else {
-				if (getAttributes().size() != entity.getAttributes().size()) {
-					return false;
-				}
+		if (getAttributes().size() != entity.getAttributes().size()) {
+			return false;
+		}
 
-				for (int i = 0; i < getAttributes().size(); i++) {
-					if (!getAttributes().get(i).equals(
-							entity.getAttributes().get(i))) {
-						return false;
-					}
-				}
+		for (int i = 0; i < getAttributes().size(); i++) {
+			if (!getAttributes().get(i).equals(entity.getAttributes().get(i))) {
+				return false;
 			}
 		}
 
@@ -116,6 +105,15 @@ public class EntityImpl implements Entity, Cloneable {
 		}
 
 		return getAttributes().add(attribute);
+	}
+
+	public boolean addRelationship(Relationship relationship) {
+
+		if (relationship == null) {
+			return false;
+		}
+
+		return getRelationships().add(relationship);
 	}
 
 	/**
@@ -148,6 +146,10 @@ public class EntityImpl implements Entity, Cloneable {
 
 	public List<Attribute> getAttributes() {
 		return attributes;
+	}
+
+	public List<Relationship> getRelationships() {
+		return relationships;
 	}
 
 	public List<Attribute> getAttributesPrimaryKey() {
@@ -201,15 +203,6 @@ public class EntityImpl implements Entity, Cloneable {
 		this.name = name;
 	}
 
-	public void setAttributes(List<Attribute> attributes) {
-
-		if (attributes == null) {
-			return;
-		}
-
-		this.attributes = attributes;
-	}
-
 	public String toString() {
 		return getName();
 	}
@@ -260,21 +253,25 @@ public class EntityImpl implements Entity, Cloneable {
 		return attribute.getValue();
 	}
 
-	public boolean addRelationship(Relationship relationship) {
-		return getRealtionships().add(relationship);
-	}
+	public void setAttributes(List<Attribute> attributes) {
 
-	public List<Relationship> getRealtionships() {
-		return realtionships;
+		if (attributes == null) {
+			return;
+		}
+
+		for (Attribute attribute : attributes) {
+			addAttribute(attribute);
+		}
 	}
 
 	public void setRelationships(List<Relationship> realtionships) {
 
 		if (realtionships == null) {
-			throw new IllegalArgumentException("<null> is not a valid argument");
+			return;
 		}
 
-		this.realtionships = realtionships;
+		for (Relationship relationship : realtionships) {
+			addRelationship(relationship);
+		}
 	}
-
 }

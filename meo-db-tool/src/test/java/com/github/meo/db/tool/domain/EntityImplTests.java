@@ -15,12 +15,9 @@ public class EntityImplTests {
 	private final static String ENTITY_NAME = "Entity Name";
 
 	private Entity entity;
-	private String expectedString;
-	private String actualString;
 
 	@Before
 	public void setUp() {
-
 		entity = new EntityImpl();
 	}
 
@@ -57,24 +54,17 @@ public class EntityImplTests {
 
 		entity.setRelationships(relationships);
 
-		assertEquals(relationships, entity.getRealtionships());
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetRelationshipsNull() {
-		try {
-			entity.setRelationships(null);
-		} catch (IllegalArgumentException e) {
-			expectedString = actualString = e.getMessage();
-
-			assertEquals(expectedString, actualString);
-
-			throw e;
-		}
+		assertEquals(relationships, entity.getRelationships());
 	}
 
 	@Test
-	public void addAttribute() {
+	public void testSetRelationshipsNull() {
+		entity.setRelationships(null);
+		assertNotNull(entity.getRelationships());
+	}
+
+	@Test
+	public void testAddAttribute() {
 
 		List<Attribute> attributes = TestObjects.getAttributes();
 
@@ -90,6 +80,24 @@ public class EntityImplTests {
 	}
 
 	@Test
+	public void testAddAttributeNull() {
+		entity.addAttribute(null);
+
+		for (Attribute attribute : entity.getAttributes()) {
+			assertNotNull(attribute);
+		}
+	}
+
+	@Test
+	public void testAddRelationNull() {
+		entity.addRelationship(null);
+
+		for (Relationship relationship : entity.getRelationships()) {
+			assertNotNull(relationship);
+		}
+	}
+
+	@Test
 	public void testAddRelationships() {
 
 		List<Relationship> relationships = TestObjects.getRelationships();
@@ -98,7 +106,7 @@ public class EntityImplTests {
 			entity.addRelationship(relationships.get(i));
 		}
 
-		List<Relationship> relationshipsActual = entity.getRealtionships();
+		List<Relationship> relationshipsActual = entity.getRelationships();
 
 		for (int i = 0; i < relationshipsActual.size(); i++) {
 			assertEquals(relationships.get(i), relationshipsActual.get(i));
@@ -215,7 +223,8 @@ public class EntityImplTests {
 
 		for (Entity entity : TestObjects.getEntities()) {
 			modifiedEntity = (Entity) entity.clone();
-			modifiedEntity.setAttributes(new ArrayList<Attribute>());
+			modifiedEntity
+					.addAttribute(new AttributeImpl("Modified Attribute"));
 			assertFalse(entity.equals(modifiedEntity));
 		}
 

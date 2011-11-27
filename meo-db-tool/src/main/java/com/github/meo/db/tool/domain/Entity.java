@@ -30,7 +30,7 @@ public interface Entity {
 
 	public String toString();
 
-	public List<Relationship> getRealtionships();
+	public List<Relationship> getRelationships();
 
 	public void setRelationships(List<Relationship> realtionships);
 
