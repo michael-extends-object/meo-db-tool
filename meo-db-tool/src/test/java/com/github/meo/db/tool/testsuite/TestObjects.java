@@ -416,8 +416,12 @@ public class TestObjects {
 	}
 
 	public static Relationship getRelationshipA() {
-		Relationship relationshipA = new RelationshipImpl();
-		return relationshipA;
+		Relationship relationship;
+		relationship = new RelationshipImpl();
+		relationship.setName("Relationship A");
+		relationship.setReferencedEntities(getEntities());
+		relationship.setCardinality(Cardinality.OneToMany);
+		return relationship;
 	}
 
 	public static List<Relationship> getRelationships() {
