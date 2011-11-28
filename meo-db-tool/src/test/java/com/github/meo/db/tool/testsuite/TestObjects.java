@@ -313,8 +313,18 @@ public class TestObjects {
 		user.addAttribute(new AttributeImpl("Group ID"));
 
 		user.addRelationship(getRelationshipUserToGroup());
-		
+
 		return user;
+	}
+
+	public static Entity getEntityGroup() {
+		
+		Entity group = new EntityImpl("User Group");
+
+		group.addAttribute(new AttributeImpl("Group ID"));
+		group.addAttribute(new AttributeImpl("Group Name"));
+
+		return group;
 	}
 
 	public static EntityMapping getEntityMappingUser() {
@@ -352,18 +362,6 @@ public class TestObjects {
 		return entityMappingUser;
 	}
 
-	public static Entity getEntityGroup() {
-		Entity group = new EntityImpl("User Group");
-
-		Attribute groupId = new AttributeImpl("Group ID");
-		Attribute username = new AttributeImpl("Group Name");
-
-		group.addAttribute(groupId);
-		group.addAttribute(username);
-
-		return group;
-	}
-
 	public static EntityMapping getEntityMappingGroup() {
 
 		EntityMapping entityMappingGroup = new EntityMapping();
@@ -396,6 +394,7 @@ public class TestObjects {
 		Relationship relationship = new RelationshipImpl();
 		relationship.setName(relationshipName);
 		relationship.setReferencedEntity(group);
+		relationship.addReferencedEntity(group);
 		relationship.setCardinality(cardinality);
 
 		return relationship;

@@ -139,6 +139,23 @@ public class RelationshipImpl implements Relationship, Cloneable {
 		return getReferencedEntities().add(referencedEntity);
 	}
 
+	public boolean addReferencedEntities(List<Entity> referencedEntities) {
+
+		boolean isOperationSuccessful = true;
+
+		if (referencedEntities == null) {
+			return false;
+		}
+
+		for (Entity referencedEntity : referencedEntities) {
+			if (!addReferencedEntity(referencedEntity)) {
+				isOperationSuccessful = false;
+			}
+		}
+
+		return isOperationSuccessful;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -178,6 +195,8 @@ public class RelationshipImpl implements Relationship, Cloneable {
 		if (referencedEntities == null) {
 			return;
 		}
+
+		this.referencedEntities = new ArrayList<Entity>();
 
 		for (Entity referencedEntity : referencedEntities) {
 			addReferencedEntity(referencedEntity);

@@ -19,6 +19,7 @@ public class EntityImpl implements Entity, Cloneable {
 	}
 
 	private void init() {
+		name = "";
 		attributes = new ArrayList<Attribute>();
 		relationships = new ArrayList<Relationship>();
 	}
@@ -67,19 +68,9 @@ public class EntityImpl implements Entity, Cloneable {
 		/*
 		 * Do the objects have the same name?
 		 */
-		if (getName() == null) {
-			if (entity.getName() != null) {
-				return false;
-			}
-		} else {
 
-			if (entity.getName() == null) {
-				return false;
-			}
-
-			if (!getName().equals(entity.getName())) {
-				return false;
-			}
+		if (!getName().equals(entity.getName())) {
+			return false;
 		}
 
 		/*
@@ -200,6 +191,11 @@ public class EntityImpl implements Entity, Cloneable {
 	}
 
 	public void setName(String name) {
+
+		if (name == null) {
+			return;
+		}
+
 		this.name = name;
 	}
 
@@ -259,18 +255,22 @@ public class EntityImpl implements Entity, Cloneable {
 			return;
 		}
 
+		this.attributes = new ArrayList<Attribute>();
+
 		for (Attribute attribute : attributes) {
 			addAttribute(attribute);
 		}
 	}
 
-	public void setRelationships(List<Relationship> realtionships) {
+	public void setRelationships(List<Relationship> relationships) {
 
-		if (realtionships == null) {
+		if (relationships == null) {
 			return;
 		}
 
-		for (Relationship relationship : realtionships) {
+		this.relationships = new ArrayList<Relationship>();
+
+		for (Relationship relationship : relationships) {
 			addRelationship(relationship);
 		}
 	}

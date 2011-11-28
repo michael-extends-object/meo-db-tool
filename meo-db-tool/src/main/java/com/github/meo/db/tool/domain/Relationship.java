@@ -12,6 +12,8 @@ public interface Relationship {
 
 	public boolean addReferencedEntity(Entity referencedEntity);
 
+	public boolean addReferencedEntities(List<Entity> referencedEntities);
+
 	public String getName();
 
 	public Entity getReferencedEntity();

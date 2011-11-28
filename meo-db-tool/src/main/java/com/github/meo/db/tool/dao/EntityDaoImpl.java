@@ -3,7 +3,8 @@ package com.github.meo.db.tool.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.sql.DataSource;
+
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 import com.github.meo.db.tool.domain.Attribute;
@@ -15,28 +16,22 @@ import com.github.meo.db.tool.sql.SqlUtils;
 
 public class EntityDaoImpl implements EntityDao {
 
-	Logger logger = Logger.getLogger(EntityDaoImpl.class);
-
 	Database database;
 	SimpleJdbcTemplate jdbcTemplate;
 
 	public EntityDaoImpl() {
-
 	}
 
 	public EntityDaoImpl(Database database) {
 		setDatabase(database);
-		jdbcTemplate = new SimpleJdbcTemplate(getDatabase().getDataSource());
 	}
 
 	public void insertEntity(Entity entity) {
-		insertEntity(getDatabase(), entity);
-	}
 
-	public void insertEntity(Database database, Entity entity) {
-
-		for (Relationship relationship : entity.getRealtionships()) {
-			insertEntity(database, relationship.getReferencedEntity());
+		for (Relationship relationship : entity.getRelationships()) {
+			for (Entity referencedEntity : relationship.getReferencedEntities()) {
+				insertEntity(referencedEntity);
+			}
 		}
 
 		List<DatabaseTableColumn> databaseTableColmuns = new ArrayList<DatabaseTableColumn>();
@@ -62,12 +57,27 @@ public class EntityDaoImpl implements EntityDao {
 		jdbcTemplate.update(sqlString, values.toArray());
 	}
 
-	public SimpleJdbcTemplate getJdbcTemplate() {
-		return jdbcTemplate;
-	}
+	public List<Entity> selectEntities(Entity entity) {
 
-	public void setJdbcTemplate(SimpleJdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+		for (Relationship relationship : entity.getRelationships()) {
+
+			List<Entity> newReferencedEntities = new ArrayList<Entity>();
+
+			for (Entity referencedEntity : relationship.getReferencedEntities()) {
+				newReferencedEntities.addAll(selectEntities(referencedEntity));
+			}
+
+			relationship.setReferencedEntities(newReferencedEntities);
+		}
+
+		List<Entity> entities;
+
+		entities = jdbcTemplate.query(SqlUtils.getSelectStatement(
+				database.getDatabaseTable(entity),
+				database.getDatabaseTableColumns(entity)), new EntityRowMapper(
+				getDatabase(), entity));
+
+		return entities;
 	}
 
 	public void deleteEntity(Entity entity) {
@@ -91,25 +101,36 @@ public class EntityDaoImpl implements EntityDao {
 		jdbcTemplate.update(sqlStatement, values.toArray());
 	}
 
-	public List<Entity> selectEntities(Entity entity) {
-
-		List<Entity> entities;
-
-		entities = jdbcTemplate.query(SqlUtils.getSelectStatement(
-				database.getDatabaseTable(entity),
-				database.getDatabaseTableColumns(entity)), new EntityRowMapper(
-				getDatabase(), entity));
-
-		return entities;
-	}
-
 	public Database getDatabase() {
 		return database;
 	}
 
+	public SimpleJdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
 	public void setDatabase(Database database) {
+
+		if (database == null) {
+			return;
+		}
+
 		this.database = database;
-		jdbcTemplate = new SimpleJdbcTemplate(database.getDataSource());
+
+		DataSource ds = getDatabase().getDataSource();
+
+		if (ds != null) {
+			setJdbcTemplate(new SimpleJdbcTemplate(ds));
+		}
+	}
+
+	public void setJdbcTemplate(SimpleJdbcTemplate jdbcTemplate) {
+
+		if (jdbcTemplate == null) {
+			return;
+		}
+
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 }

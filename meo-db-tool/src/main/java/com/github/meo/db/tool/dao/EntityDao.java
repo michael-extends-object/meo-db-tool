@@ -11,11 +11,9 @@ public interface EntityDao {
 
 	public void insertEntity(Entity entity);
 
-	public void insertEntity(Database database, Entity entity);
+	public List<Entity> selectEntities(Entity entity);
 
 	public void deleteEntity(Entity entity);
-
-	public List<Entity> selectEntities(Entity entity);
 
 	public Database getDatabase();
 
@@ -24,5 +22,4 @@ public interface EntityDao {
 	public void setDatabase(Database database);
 
 	public void setJdbcTemplate(SimpleJdbcTemplate jdbcTemplate);
-
 }

@@ -15,7 +15,7 @@
     ]]>
 	</description>
 	<properties>
-		<maven.test.failure.ignore>true</maven.test.failure.ignore>
+		<maven.test.failure.ignore>false</maven.test.failure.ignore>
 		<spring.framework.version>3.0.6.RELEASE</spring.framework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

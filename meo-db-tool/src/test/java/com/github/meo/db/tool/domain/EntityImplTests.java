@@ -31,10 +31,14 @@ public class EntityImplTests {
 
 	@Test
 	public void getSetName() {
-
 		entity.setName(ENTITY_NAME);
-
 		assertEquals(ENTITY_NAME, entity.getName());
+	}
+	
+	@Test
+	public void setNameNull() {
+		entity.setName(null);
+		assertNotNull(entity.getName());
 	}
 
 	@Test
