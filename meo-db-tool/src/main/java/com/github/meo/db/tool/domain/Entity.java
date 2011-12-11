@@ -18,13 +18,7 @@ public class Entity implements IEntity, Cloneable {
 		init();
 		setEntityType(entityType);
 	}
-	
-	public Entity(IEntityType entityType, List<IAttribute> attributes) {
-		init();
-		setEntityType(entityType);
-		setAttributes(attributes);
-	}
-	
+
 	private void init() {
 		attributes = new ArrayList<IAttribute>();
 	}
@@ -43,9 +37,10 @@ public class Entity implements IEntity, Cloneable {
 	 * @param name
 	 * @return Returns the argument with the given name. In case there was no
 	 *         argument with the given name, the method will return null.
-	 * @throws AttributeTypeNotFoundException 
+	 * @throws AttributeTypeNotFoundException
 	 */
-	public IAttribute getAttribute(String name) throws AttributeTypeNotFoundException {
+	public IAttribute getAttribute(String name)
+			throws AttributeTypeNotFoundException {
 
 		if (name == null) {
 			throw new IllegalArgumentException(
@@ -57,7 +52,7 @@ public class Entity implements IEntity, Cloneable {
 				return attribute;
 			}
 		}
-		
+
 		throw new AttributeTypeNotFoundException(name);
 	}
 
@@ -122,6 +117,14 @@ public class Entity implements IEntity, Cloneable {
 
 	public void setEntityType(IEntityType entityType) {
 		this.entityType = entityType;
+		
+		List<IAttribute> attributes = new ArrayList<IAttribute>();
+		
+		for (IAttributeType attributeType : getEntityType().getAttributeTypes()) {
+			attributes.add(new Attribute(attributeType));
+		}
+		
+		setAttributes(attributes);
 	}
 
 	public boolean setAttributeValue(IAttribute attribute, Object value)
@@ -152,7 +155,8 @@ public class Entity implements IEntity, Cloneable {
 		return false;
 	}
 
-	public Object getAttributeValue(IAttribute attribute) throws AttributeTypeNotFoundException {
+	public Object getAttributeValue(IAttribute attribute)
+			throws AttributeTypeNotFoundException {
 
 		if (attribute == null) {
 			throw new IllegalArgumentException("null is not valid argument!");
@@ -161,7 +165,8 @@ public class Entity implements IEntity, Cloneable {
 		return getAttributeValue(attribute.getAttributeType().getName());
 	}
 
-	public Object getAttributeValue(String attributeName) throws AttributeTypeNotFoundException {
+	public Object getAttributeValue(String attributeName)
+			throws AttributeTypeNotFoundException {
 
 		if (attributeName == null) {
 			throw new IllegalArgumentException("null is not valid argument!");

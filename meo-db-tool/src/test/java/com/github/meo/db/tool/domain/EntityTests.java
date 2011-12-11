@@ -36,13 +36,6 @@ public class EntityTests {
 	}
 
 	@Test
-	public void testNewInstanceEntityTypeAttributes() {
-		attributes = TestObjects.getAttributes();
-		entity = new Entity(entityType, attributes);
-		assertTrue(entityType == entity.getEntityType());
-	}
-
-	@Test
 	public void testSetGetEntityType() {
 		IEntityType entityType = new EntityType("Entity Class");
 		entity.setEntityType(entityType);
