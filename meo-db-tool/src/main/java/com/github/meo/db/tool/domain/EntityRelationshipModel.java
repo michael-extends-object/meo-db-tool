@@ -3,7 +3,8 @@ package com.github.meo.db.tool.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityRelationshipModel implements IEntityRelationshipModel {
+public class EntityRelationshipModel implements IEntityRelationshipModel,
+		Cloneable {
 
 	String name;
 	List<IEntityType> entityTypes;
@@ -88,4 +89,77 @@ public class EntityRelationshipModel implements IEntityRelationshipModel {
 		return name;
 	}
 
+	public IEntityRelationshipModel clone() {
+		IEntityRelationshipModel erm = new EntityRelationshipModel(getName());
+
+		for (IEntityType entityType : getEntityTypes()) {
+			erm.addEntityType(entityType.clone());
+		}
+
+		for (IRelationship relationship : getRelationships()) {
+			erm.addRelationship(relationship.clone());
+		}
+
+		return erm;
+	}
+
+	public boolean equals(Object object) {
+
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+
+		/*
+		 * Are the references pointing to the same object?
+		 */
+		if (this == object) {
+			return true;
+		}
+
+		/*
+		 * Same class?
+		 */
+		if (!getClass().equals(object.getClass())) {
+			return false;
+		}
+
+		IEntityRelationshipModel erm = (IEntityRelationshipModel) object;
+
+		/*
+		 * Do the objects have the same name?
+		 */
+		if (!getName().equals(erm.getName())) {
+			return false;
+		}
+
+		/*
+		 * Do the objects have the same entity types?
+		 */
+		if (getEntityTypes().size() != erm.getEntityTypes().size()) {
+			return false;
+		}
+
+		for (int i = 0; i < getEntityTypes().size(); i++) {
+			if (!getEntityTypes().get(i).equals(erm.getEntityTypes().get(i))) {
+				return false;
+			}
+		}
+
+		/*
+		 * Do the objects have the same relationships?
+		 */
+		if (getRelationships().size() != erm.getRelationships().size()) {
+			return false;
+		}
+
+		for (int i = 0; i < getRelationships().size(); i++) {
+			if (!getRelationships().get(i)
+					.equals(erm.getRelationships().get(i))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

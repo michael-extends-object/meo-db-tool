@@ -21,4 +21,8 @@ public interface IEntityRelationshipModel {
 	public void setRelationships(List<IRelationship> relationships);
 
 	public String toString();
+	
+	public IEntityRelationshipModel clone();
+	
+	public boolean equals(Object object);
 }
