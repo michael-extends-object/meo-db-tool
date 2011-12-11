@@ -18,10 +18,10 @@ public interface IEntity {
 
 	public List<IAttribute> getAttributesPrimaryKey();
 
-	public boolean setAttributeValue(IAttribute attribute, Object value)
+	public void setAttributeValue(IAttribute attribute, Object value)
 			throws AttributeTypeNotFoundException;
 
-	public boolean setAttributeValue(String attributeName, Object value)
+	public void setAttributeValue(String attributeName, Object value)
 			throws AttributeTypeNotFoundException;
 
 	public void setAttributes(List<IAttribute> attributes);
@@ -31,6 +31,13 @@ public interface IEntity {
 	public IAttribute getAttribute(String name)
 			throws AttributeTypeNotFoundException;
 
+	/**
+	 * Setter method for property entity type.
+	 * 
+	 * Will automatically create attributes according to the entity type.
+	 * 
+	 * @param entityType
+	 */
 	public void setEntityType(IEntityType entityType);
 
 	public IEntity clone();

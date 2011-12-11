@@ -117,27 +117,27 @@ public class Entity implements IEntity, Cloneable {
 
 	public void setEntityType(IEntityType entityType) {
 		this.entityType = entityType;
-		
+
 		List<IAttribute> attributes = new ArrayList<IAttribute>();
-		
+
 		for (IAttributeType attributeType : getEntityType().getAttributeTypes()) {
 			attributes.add(new Attribute(attributeType));
 		}
-		
+
 		setAttributes(attributes);
 	}
 
-	public boolean setAttributeValue(IAttribute attribute, Object value)
+	public void setAttributeValue(IAttribute attribute, Object value)
 			throws AttributeTypeNotFoundException {
 
 		if (attribute == null) {
 			throw new IllegalArgumentException("null is not valid argument!");
 		}
 
-		return setAttributeValue(attribute.getAttributeType().getName(), value);
+		setAttributeValue(attribute.getAttributeType().getName(), value);
 	}
 
-	public boolean setAttributeValue(String attributeName, Object value)
+	public void setAttributeValue(String attributeName, Object value)
 			throws AttributeTypeNotFoundException {
 
 		if (attributeName == null) {
@@ -147,12 +147,6 @@ public class Entity implements IEntity, Cloneable {
 		IAttribute attribute = getAttribute(attributeName);
 
 		attribute.setValue(value);
-
-		if (value.equals(attribute.getValue())) {
-			return true;
-		}
-
-		return false;
 	}
 
 	public Object getAttributeValue(IAttribute attribute)
@@ -194,10 +188,15 @@ public class Entity implements IEntity, Cloneable {
 	public IEntity clone() {
 		IEntity entity = new Entity();
 
+		// will also create attributes according to the entity type
 		entity.setEntityType(getEntityType());
 
 		for (IAttribute attribute : getAttributes()) {
-			entity.addAttribute(attribute.clone());
+			try {
+				entity.setAttributeValue(attribute, attribute.getValue());
+			} catch (AttributeTypeNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return entity;

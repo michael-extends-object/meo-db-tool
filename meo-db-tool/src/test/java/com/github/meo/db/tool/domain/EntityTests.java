@@ -1,6 +1,9 @@
 package com.github.meo.db.tool.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
-import com.github.meo.db.tool.testsuite.AttributeSetValueError;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
 public class EntityTests {
@@ -19,7 +21,6 @@ public class EntityTests {
 	private IEntityType entityType;
 	private IEntity entity;
 	private IAttributeType attributeType;
-	private List<IAttribute> attributes;
 
 	@Before
 	public void setUp() {
@@ -126,7 +127,8 @@ public class EntityTests {
 	@Test
 	public void equalsClonedObject() {
 		for (IEntity entity : TestObjects.getEntities()) {
-			assertTrue(entity.equals(entity.clone()));
+			IEntity clone = entity.clone();
+			assertTrue(entity.equals(clone));
 		}
 	}
 
@@ -183,8 +185,6 @@ public class EntityTests {
 
 		for (IEntity entity : TestObjects.getEntities()) {
 			entity.setAttributes(null);
-			assertTrue(entity.equals(entity));
-			assertTrue(entity.equals(entity.clone()));
 
 			modifiedEntity = (IEntity) entity.clone();
 
@@ -320,9 +320,4 @@ public class EntityTests {
 		assertEquals(attributesNotNull, entity.getAttributesNotNull());
 	}
 
-	@Test
-	public void setValueError() throws AttributeTypeNotFoundException {
-		entity.addAttribute(new AttributeSetValueError(attributeType));
-		assertFalse(entity.setAttributeValue("Attribute", "Value"));
-	}
 }

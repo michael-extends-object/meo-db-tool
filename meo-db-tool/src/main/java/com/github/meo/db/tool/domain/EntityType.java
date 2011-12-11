@@ -84,10 +84,6 @@ public class EntityType implements IEntityType {
 
 		entity.setEntityType(this);
 
-		for (IAttributeType attributeType : getAttributeTypes()) {
-			entity.addAttribute(attributeType.getAttribute());
-		}
-
 		return entity;
 	}
 
