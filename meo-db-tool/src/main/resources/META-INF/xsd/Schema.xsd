@@ -1,42 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-	<xs:element name="attributeType" type="attributeType" />
-
 	<xs:element name="attribute" type="attribute" />
 
-	<xs:element name="entityType" type="entityType" />
+	<xs:element name="attributeType" type="attributeType" />
 
 	<xs:element name="entity" type="entity" />
 
-	<xs:element name="jdbcDataSource" type="jdbcDataSource" />
+	<xs:element name="entityType" type="entityType" />
 
-	<xs:complexType name="attributeType">
-		<xs:attribute name="name" type="xs:string" />
-	</xs:complexType>
+	<xs:element name="entityRelationshipModel" type="entityRelationshipModel" />
+
+	<xs:element name="jdbcDataSource" type="jdbcDataSource" />
 
 	<xs:complexType name="attribute">
 		<xs:sequence>
+			<xs:element ref="attributeType" minOccurs="1" maxOccurs="1" />
 			<xs:element name="value" type="xs:anyType" minOccurs="0"
 				maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:complexType name="entityType">
-		<xs:sequence>
-			<xs:element name="attributeTypes">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element ref="attributeType" minOccurs="0" maxOccurs="unbounded" />
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
+	<xs:complexType name="attributeType">
 		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
 	<xs:complexType name="entity">
 		<xs:sequence>
+			<xs:element ref="entityType" minOccurs="1" maxOccurs="1" />
 			<xs:element name="attributes">
 				<xs:complexType>
 					<xs:sequence>
@@ -45,6 +36,33 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="entityRelationshipModel">
+		<xs:sequence>
+			<xs:element name="entityTypes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="entityType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="entityType">
+		<xs:sequence>
+			<xs:element name="attributeTypes">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="attributeType" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
 	<xs:complexType name="jdbcDataSource">

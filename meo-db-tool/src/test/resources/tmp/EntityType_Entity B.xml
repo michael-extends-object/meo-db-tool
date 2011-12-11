@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<entityType>
-   <name>Entity B</name>
+<entityType name="Entity B">
    <attributeTypes>
       <attributeType name="Attribute A"/>
       <attributeType name="Attribute B"/>

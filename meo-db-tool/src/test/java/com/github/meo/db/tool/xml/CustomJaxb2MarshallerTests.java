@@ -14,6 +14,7 @@ import org.springframework.oxm.XmlMappingException;
 import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.IEntity;
+import com.github.meo.db.tool.domain.IEntityRelationshipModel;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
@@ -29,22 +30,6 @@ public class CustomJaxb2MarshallerTests {
 				"META-INF/spring/app-context.xml");
 		jaxbMarshaller = (CustomJaxb2Marshaller) appContext
 				.getBean("jaxbMarshaller");
-	}
-
-	@Test
-	public void marshalUnmarshalAttributeType() throws XmlMappingException,
-			FileNotFoundException, IOException {
-
-		for (IAttributeType attributeType : TestObjects.getAttributeTypes()) {
-
-			String path = basePath + attributeType.getClass().getSimpleName()
-					+ "_" + attributeType.getName() + ".xml";
-
-			jaxbMarshaller.marshal(attributeType, path);
-
-			assertEquals(attributeType, jaxbMarshaller.unmarshal(path));
-		}
-
 	}
 
 	@Test
@@ -64,18 +49,19 @@ public class CustomJaxb2MarshallerTests {
 	}
 
 	@Test
-	public void marshalUnmarshalEntityType() throws XmlMappingException,
+	public void marshalUnmarshalAttributeType() throws XmlMappingException,
 			FileNotFoundException, IOException {
 
-		for (IEntityType entityType : TestObjects.getEntityTypes()) {
+		for (IAttributeType attributeType : TestObjects.getAttributeTypes()) {
 
-			String path = basePath + entityType.getClass().getSimpleName()
-					+ "_" + entityType.getName() + ".xml";
+			String path = basePath + attributeType.getClass().getSimpleName()
+					+ "_" + attributeType.getName() + ".xml";
 
-			jaxbMarshaller.marshal(entityType, path);
+			jaxbMarshaller.marshal(attributeType, path);
 
-			assertEquals(entityType, jaxbMarshaller.unmarshal(path));
+			assertEquals(attributeType, jaxbMarshaller.unmarshal(path));
 		}
+
 	}
 
 	@Test
@@ -92,4 +78,35 @@ public class CustomJaxb2MarshallerTests {
 			assertEquals(entity, jaxbMarshaller.unmarshal(path));
 		}
 	}
+
+	@Test
+	public void marshalUnmarshalEntityRelationshipModel()
+			throws XmlMappingException, FileNotFoundException, IOException {
+
+		for (IEntityRelationshipModel erm : TestObjects.getErms()) {
+
+			String path = basePath + erm.getClass().getSimpleName() + "_"
+					+ erm.getName() + ".xml";
+
+			jaxbMarshaller.marshal(erm, path);
+
+			assertEquals(erm, jaxbMarshaller.unmarshal(path));
+		}
+	}
+
+	@Test
+	public void marshalUnmarshalEntityType() throws XmlMappingException,
+			FileNotFoundException, IOException {
+
+		for (IEntityType entityType : TestObjects.getEntityTypes()) {
+
+			String path = basePath + entityType.getClass().getSimpleName()
+					+ "_" + entityType.getName() + ".xml";
+
+			jaxbMarshaller.marshal(entityType, path);
+
+			assertEquals(entityType, jaxbMarshaller.unmarshal(path));
+		}
+	}
+
 }

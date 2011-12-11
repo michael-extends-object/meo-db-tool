@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entityRelationshipModel name="ERM B">
+   <entityTypes>
+      <entityType name="Entity A">
+         <attributeTypes>
+            <attributeType name="Attribute A"/>
+            <attributeType name="Attribute B"/>
+            <attributeType name="Attribute C"/>
+         </attributeTypes>
+      </entityType>
+      <entityType name="Entity B">
+         <attributeTypes>
+            <attributeType name="Attribute A"/>
+            <attributeType name="Attribute B"/>
+            <attributeType name="Attribute C"/>
+         </attributeTypes>
+      </entityType>
+      <entityType name="Entity C">
+         <attributeTypes>
+            <attributeType name="Attribute A"/>
+            <attributeType name="Attribute B"/>
+            <attributeType name="Attribute C"/>
+         </attributeTypes>
+      </entityType>
+   </entityTypes>
+</entityRelationshipModel>
