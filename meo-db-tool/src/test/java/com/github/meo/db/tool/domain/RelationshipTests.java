@@ -14,17 +14,57 @@ import org.junit.Test;
 
 import com.github.meo.db.tool.testsuite.TestObjects;
 
-public class RelationshipImplTests {
+public class RelationshipTests {
 
-	Relationship relationship;
+	IRelationship relationship;
+	IRelationship differentRelationship;
+	IEntityType entityType;
 
 	public final static String RELATIONSHIP_NAME = "Relationship Name";
 	String expectedString;
 	String actualString;
 
 	@Before
-	public void setUp() throws Exception {
-		relationship = new RelationshipImpl();
+	public void setUp() {
+		relationship = new Relationship();
+		entityType = new EntityType();
+	}
+
+	@Test
+	public void testSetGetEntityType() {
+		relationship.setEntity(entityType);
+		assertEquals(entityType, relationship.getEntity());
+	}
+
+	@Test
+	public void testSetGetEntityTypeNull() {
+		relationship.setEntity(null);
+		assertNotNull(relationship.getEntity());
+	}
+
+	@Test
+	public void testSetGetReferencedEntityType() {
+		relationship.setReferencedEntity(entityType);
+		assertTrue(entityType == relationship.getReferencedEntity());
+	}
+
+	@Test
+	public void testSetGetReferencedEntityNull() {
+		relationship.setReferencedEntity(null);
+		assertNotNull(relationship.getReferencedEntity());
+	}
+
+	@Test
+	public void testSetGetCardinality() {
+		Cardinality cardinality = Cardinality.OneToMany;
+		relationship.setCardinality(cardinality);
+		assertEquals(cardinality, relationship.getCardinality());
+	}
+
+	@Test
+	public void testSetGetCardinalityNull() {
+		relationship.setCardinality(null);
+		assertNotNull(relationship.getCardinality());
 	}
 
 	@Test
@@ -32,7 +72,7 @@ public class RelationshipImplTests {
 
 		String name = RELATIONSHIP_NAME;
 
-		relationship = new RelationshipImpl(name);
+		relationship = new Relationship(name);
 
 		assertTrue(name == relationship.getName());
 	}
@@ -40,10 +80,10 @@ public class RelationshipImplTests {
 	@Test
 	public void testNewInstanceEntityReferencedEntityCardinality() {
 
-		Entity referencedEntity = TestObjects.getEntityB();
+		IEntity referencedEntity = TestObjects.getEntityB();
 		Cardinality cardinality = Cardinality.ManyToMany;
 
-		relationship = new RelationshipImpl(referencedEntity, cardinality);
+		relationship = new Relationship(referencedEntity, cardinality);
 
 		assertTrue(referencedEntity == relationship.getReferencedEntity());
 		assertTrue(cardinality == relationship.getCardinality());
@@ -53,11 +93,11 @@ public class RelationshipImplTests {
 	public void testNewInstanceNameEntityReferencedEntityCardinality() {
 
 		String name = RELATIONSHIP_NAME;
-		Entity entity = TestObjects.getEntityA();
-		Entity referencedEntity = TestObjects.getEntityB();
+		IEntity entity = TestObjects.getEntityA();
+		IEntity referencedEntity = TestObjects.getEntityB();
 		Cardinality cardinality = Cardinality.ManyToMany;
 
-		relationship = new RelationshipImpl(name, entity, referencedEntity,
+		relationship = new Relationship(name, entity, referencedEntity,
 				cardinality);
 
 		assertTrue(name == relationship.getName());
@@ -89,52 +129,65 @@ public class RelationshipImplTests {
 
 	@Test
 	public void testEqualsDifferentName() {
-		Relationship differentRelationship = relationship.clone();
+		differentRelationship = relationship.clone();
 		differentRelationship.setName("Different name");
 		assertFalse(relationship.equals(differentRelationship));
 	}
 
 	@Test
-	public void testEqualsDifferentReferencedEntity() {
-		Relationship differentRelationship = relationship.clone();
-		differentRelationship.setReferencedEntity(new EntityImpl(
-				"Different entity"));
-		assertFalse(relationship.equals(differentRelationship));
+	public void equalsDifferentEntity() {
+		for (IRelationship relationship : TestObjects.getRelationships()) {
+			IRelationship clonedRelationship = relationship.clone();
+			clonedRelationship
+					.setEntity(new EntityType("Different entity"));
+			assertFalse(relationship.equals(clonedRelationship));
+		}
 	}
 
 	@Test
 	public void testEqualsDifferentReferencedEntitiesSize() {
-		Relationship differentRelationship = relationship.clone();
-		differentRelationship.addReferencedEntity(new EntityImpl());
+		differentRelationship = relationship.clone();
+		differentRelationship.addReferencedEntity(new Entity());
 		assertFalse(relationship.equals(differentRelationship));
+	}
+	
+	@Test
+	public void equalsDifferentReferencedEntity() {
+		for (IRelationship relationship : TestObjects.getRelationships()) {
+			IRelationship clonedRelationship = relationship.clone();
+			relationship.setReferencedEntity("Entity");
+			clonedRelationship.setReferencedEntity("Different Entity");
+			assertFalse(relationship.equals(clonedRelationship));
+		}
 	}
 
 	@Test
-	public void testEqualsDifferentReferencedEntities() {
-		Relationship differentRelationship = relationship.clone();
-		relationship.addReferencedEntity(new EntityImpl("Entity"));
-		differentRelationship.addReferencedEntity(new EntityImpl(
-				"Different entity"));
-		assertFalse(relationship.equals(differentRelationship));
+	public void equalsDifferentReferencedEntities() {
+		for (IRelationship relationship : TestObjects.getRelationships()) {
+			IRelationship clonedRelationship = relationship.clone();
+			relationship.addReferencedEntity("Entity");
+			clonedRelationship.addReferencedEntity("Different Entity");
+			assertFalse(relationship.equals(clonedRelationship));
+		}
 	}
 
 	@Test
 	public void testEqualsDifferentCardinality() {
-		Relationship differentRelationship = relationship.clone();
+		IRelationship differentRelationship = relationship.clone();
 		relationship.setCardinality(Cardinality.OneToMany);
 		assertFalse(relationship.equals(differentRelationship));
 	}
 
 	@Test
 	public void testEqualsEqualObject() {
-		Relationship clonedRelationship = relationship.clone();
+		IRelationship clonedRelationship = relationship.clone();
 		assertTrue(relationship.equals(clonedRelationship));
 	}
 
 	@Test
 	public void testClone() {
-		Relationship relationship = TestObjects.getRelationshipA();
-		Relationship clonedRelationship = relationship.clone();
+		IRelationship relationship = TestObjects.getRelationshipA();
+		IRelationship clonedRelationship = relationship.clone();
 		assertNotSame(relationship, clonedRelationship);
 		assertEquals(relationship, clonedRelationship);
 	}
@@ -142,7 +195,7 @@ public class RelationshipImplTests {
 	@Test
 	public void testToString() {
 
-		Entity referencedEntity = TestObjects.getEntityB();
+		IEntity referencedEntity = TestObjects.getEntityB();
 
 		relationship.setReferencedEntity(referencedEntity);
 
@@ -153,7 +206,7 @@ public class RelationshipImplTests {
 
 	@Test
 	public void testAddReferencedEntity() {
-		Entity referencedEntity = TestObjects.getEntityB();
+		IEntity referencedEntity = TestObjects.getEntityB();
 		assertTrue(relationship.addReferencedEntity(referencedEntity));
 		assertEquals(referencedEntity, relationship.getReferencedEntities()
 				.get(0));
@@ -162,15 +215,21 @@ public class RelationshipImplTests {
 	@Test
 	public void testAddReferencedEntityNull() {
 		assertFalse(relationship.addReferencedEntity(null));
-		for (Entity referencedEntity : relationship.getReferencedEntities()) {
+		for (Object referencedEntity : relationship.getReferencedEntities()) {
 			assertNotNull(referencedEntity);
 		}
 	}
 
 	@Test
 	public void testAddReferencedEntities() {
-		List<Entity> referencedEntities = TestObjects.getEntities();
+		List<Object> referencedEntities = new ArrayList<Object>();
+
+		for (IEntity entity : TestObjects.getEntities()) {
+			referencedEntities.add(entity);
+		}
+
 		int initialSize = relationship.getReferencedEntities().size();
+
 		assertTrue(relationship.addReferencedEntities(referencedEntities));
 
 		for (int i = 0; i < relationship.getReferencedEntities().size(); i++) {
@@ -181,17 +240,17 @@ public class RelationshipImplTests {
 
 	@Test
 	public void testaddReferencedEntitiesExpectFalse() {
-		List<Entity> referencedEntities = new ArrayList<Entity>();
-		referencedEntities.add(new EntityImpl());
+		List<Object> referencedEntities = new ArrayList<Object>();
+		referencedEntities.add(new Entity());
 		referencedEntities.add(null);
-		referencedEntities.add(new EntityImpl());
+		referencedEntities.add(new Entity());
 		assertFalse(relationship.addReferencedEntities(referencedEntities));
 	}
 
 	@Test
 	public void testAddReferencedEntitiesNull() {
 		assertFalse(relationship.addReferencedEntities(null));
-		for (Entity referencedEntity : relationship.getReferencedEntities()) {
+		for (Object referencedEntity : relationship.getReferencedEntities()) {
 			assertNotNull(referencedEntity);
 		}
 	}
@@ -210,7 +269,7 @@ public class RelationshipImplTests {
 
 	@Test
 	public void testGetSetReferencedEntity() {
-		for (Entity referencedEntity : TestObjects.getEntities()) {
+		for (IEntity referencedEntity : TestObjects.getEntities()) {
 			relationship.setReferencedEntity(referencedEntity);
 			assertTrue(referencedEntity == relationship.getReferencedEntity());
 		}
@@ -224,7 +283,12 @@ public class RelationshipImplTests {
 
 	@Test
 	public void testGetSetReferencedEntities() {
-		List<Entity> referencedEntities = TestObjects.getEntities();
+		List<Object> referencedEntities = new ArrayList<Object>();
+
+		for (IEntity entity : TestObjects.getEntities()) {
+			referencedEntities.add(entity);
+		}
+
 		relationship.setReferencedEntities(referencedEntities);
 		assertEquals(referencedEntities, relationship.getReferencedEntities());
 	}
@@ -232,7 +296,7 @@ public class RelationshipImplTests {
 	@Test
 	public void testSetReferencedEntitiesNull() {
 		relationship.setReferencedEntities(null);
-		for (Entity referencedEntity : relationship.getReferencedEntities()) {
+		for (Object referencedEntity : relationship.getReferencedEntities()) {
 			assertNotNull(referencedEntity);
 		}
 	}

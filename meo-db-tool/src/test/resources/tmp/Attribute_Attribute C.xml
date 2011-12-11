@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attribute name="Attribute C">
+<attribute>
+   <attributeType name="Attribute C"/>
    <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:double">8.8</value>
 </attribute>

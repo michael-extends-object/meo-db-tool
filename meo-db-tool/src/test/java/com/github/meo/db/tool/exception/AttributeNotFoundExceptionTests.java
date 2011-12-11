@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.Attribute;
-import com.github.meo.db.tool.domain.AttributeImpl;
+import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.AttributeType;
-import com.github.meo.db.tool.domain.AttributeTypeImpl;
 
 public class AttributeNotFoundExceptionTests {
 
@@ -17,7 +17,7 @@ public class AttributeNotFoundExceptionTests {
 
 	@Test
 	public void testAttributeNotFoundExceptionString() {
-		Exception e = new AttributeNotFoundException("Attribute");
+		Exception e = new AttributeTypeNotFoundException("Attribute");
 		expectedString = "Couldn't find the attribute 'Attribute'";
 		actualString = e.getMessage();
 		assertEquals(expectedString, actualString);
@@ -25,9 +25,9 @@ public class AttributeNotFoundExceptionTests {
 
 	@Test
 	public void testAttributeNotFoundExceptionAttribute() {
-		AttributeType attributeType = new AttributeTypeImpl("Attribute");
-		Attribute attribute = new AttributeImpl(attributeType);
-		Exception e = new AttributeNotFoundException(attribute);
+		IAttributeType attributeType = new AttributeType("Attribute");
+		IAttribute attribute = new Attribute(attributeType);
+		Exception e = new AttributeTypeNotFoundException(attribute);
 		expectedString = "Couldn't find the attribute 'Attribute'";
 		actualString = e.getMessage();
 		assertEquals(expectedString, actualString);

@@ -9,18 +9,21 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-import com.github.meo.db.tool.domain.Attribute;
-import com.github.meo.db.tool.domain.AttributeImpl;
-import com.github.meo.db.tool.domain.AttributeMapping;
+import com.github.meo.db.tool.domain.IAttribute;
+import com.github.meo.db.tool.domain.IAttributeType;
+import com.github.meo.db.tool.domain.AttributeType;
+import com.github.meo.db.tool.domain.AttributeTypeMapping;
 import com.github.meo.db.tool.domain.Cardinality;
 import com.github.meo.db.tool.domain.Database;
 import com.github.meo.db.tool.domain.DatabaseTable;
 import com.github.meo.db.tool.domain.DatabaseTableColumn;
-import com.github.meo.db.tool.domain.Entity;
-import com.github.meo.db.tool.domain.EntityImpl;
-import com.github.meo.db.tool.domain.EntityMapping;
+import com.github.meo.db.tool.domain.IEntity;
+import com.github.meo.db.tool.domain.IEntityType;
+import com.github.meo.db.tool.domain.EntityType;
+import com.github.meo.db.tool.domain.EntityTypeMapping;
+import com.github.meo.db.tool.domain.IRelationship;
 import com.github.meo.db.tool.domain.Relationship;
-import com.github.meo.db.tool.domain.RelationshipImpl;
+import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
 
 public class TestObjects {
 
@@ -29,10 +32,6 @@ public class TestObjects {
 	public static final String ATTRIBUTE_NAME_A = "Attribute A";
 	public static final String ATTRIBUTE_NAME_B = "Attribute B";
 	public static final String ATTRIBUTE_NAME_C = "Attribute C";
-
-	public static Attribute attributeA;
-	public static Attribute attributeB;
-	public static Attribute attributeC;
 
 	public static final String ENTITY_NAME_A = "Entity A";
 	public static final String ENTITY_NAME_B = "Entity B";
@@ -60,54 +59,183 @@ public class TestObjects {
 	public static final String DATABASE_TABLE_COLUMN_NAME_B = "Database table column B";
 	public static final String DATABASE_TABLE_COLUMN_NAME_C = "Database table column C";
 
-	public static Attribute getAttributeA() {
-		attributeA = new AttributeImpl(ATTRIBUTE_NAME_A);
-		attributeA.setValue("value");
-		attributeA.setPrimaryKey(true);
-		return attributeA;
+	public static IAttributeType getAttributeTypeA() {
+		IAttributeType attributeType = new AttributeType(ATTRIBUTE_NAME_A);
+		attributeType.setPrimaryKey(true);
+		return attributeType;
 	}
 
-	public static Attribute getAttributeB() {
-		attributeB = new AttributeImpl(ATTRIBUTE_NAME_B);
-		attributeB.setValue(Boolean.TRUE);
-		return attributeB;
+	public static IAttributeType getAttributeTypeB() {
+		IAttributeType attributeType = new AttributeType(ATTRIBUTE_NAME_B);
+		return attributeType;
 	}
 
-	public static Attribute getAttributeC() {
-		attributeC = new AttributeImpl(ATTRIBUTE_NAME_C);
-		attributeC.setValue(8.8);
-		attributeC.setPrimaryKey(true);
-		return attributeC;
+	public static IAttributeType getAttributeTypeC() {
+		IAttributeType attributeType = new AttributeType(ATTRIBUTE_NAME_C);
+		attributeType.setPrimaryKey(true);
+		return attributeType;
 	}
 
-	public static List<Attribute> getAttributes() {
-		List<Attribute> attributes = new ArrayList<Attribute>();
+	public static List<IAttributeType> getAttributeTypes() {
+		List<IAttributeType> attributeTypes = new ArrayList<IAttributeType>();
+		attributeTypes.add(getAttributeTypeA());
+		attributeTypes.add(getAttributeTypeB());
+		attributeTypes.add(getAttributeTypeC());
+		return attributeTypes;
+	}
+
+	public static AttributeTypeMapping getAttributeTypeMappingA() {
+		AttributeTypeMapping attributeTypeMapping = new AttributeTypeMapping();
+		attributeTypeMapping.setAttributeType(getAttributeTypeA());
+		attributeTypeMapping.setDatabaseTableColumn(getDatabaseTableColumnA());
+		return attributeTypeMapping;
+	}
+
+	public static AttributeTypeMapping getAttributeTypeMappingB() {
+		AttributeTypeMapping attributeTypeMapping = new AttributeTypeMapping();
+		attributeTypeMapping.setAttributeType(getAttributeTypeB());
+		attributeTypeMapping.setDatabaseTableColumn(getDatabaseTableColumnB());
+		return attributeTypeMapping;
+	}
+
+	public static AttributeTypeMapping getAttributeTypeMappingC() {
+		AttributeTypeMapping attributeTypeMapping = new AttributeTypeMapping();
+		attributeTypeMapping.setAttributeType(getAttributeTypeC());
+		attributeTypeMapping.setDatabaseTableColumn(getDatabaseTableColumnC());
+		return attributeTypeMapping;
+	}
+
+	public static List<AttributeTypeMapping> getAttributeTypeMappings() {
+		List<AttributeTypeMapping> attributeTypeMappings = new ArrayList<AttributeTypeMapping>();
+		attributeTypeMappings.add(getAttributeTypeMappingA());
+		attributeTypeMappings.add(getAttributeTypeMappingB());
+		attributeTypeMappings.add(getAttributeTypeMappingC());
+		return attributeTypeMappings;
+	}
+
+	public static IAttribute getAttributeA() {
+		IAttribute attribute = getAttributeTypeA().getAttribute();
+		attribute.setValue("value");
+		return attribute;
+	}
+
+	public static IAttribute getAttributeB() {
+		IAttribute attribute = getAttributeTypeB().getAttribute();
+		attribute.setValue(Boolean.TRUE);
+		return attribute;
+	}
+
+	public static IAttribute getAttributeC() {
+		IAttribute attribute = getAttributeTypeC().getAttribute();
+		attribute.setValue(8.8);
+		return attribute;
+	}
+
+	public static List<IAttribute> getAttributes() {
+		List<IAttribute> attributes = new ArrayList<IAttribute>();
 		attributes.add(getAttributeA());
 		attributes.add(getAttributeB());
 		attributes.add(getAttributeC());
 		return attributes;
 	}
 
-	public static Entity getEntityA() {
-		Entity entity = new EntityImpl(ENTITY_NAME_A);
-		entity.setAttributes(getAttributes());
+	public static IEntityType getEntityTypeA() {
+		IEntityType entityType = new EntityType(ENTITY_NAME_A);
+		entityType.setAttributeTypes(getAttributeTypes());
+		return entityType;
+	}
+
+	public static IEntityType getEntityTypeB() {
+		IEntityType entityType = new EntityType(ENTITY_NAME_B);
+		entityType.setAttributeTypes(getAttributeTypes());
+		return entityType;
+	}
+
+	public static IEntityType getEntityTypeC() {
+		IEntityType entityType = new EntityType(ENTITY_NAME_C);
+		entityType.setAttributeTypes(getAttributeTypes());
+		return entityType;
+	}
+
+	public static List<IEntityType> getEntityTypes() {
+		List<IEntityType> entityTypes = new ArrayList<IEntityType>();
+		entityTypes.add(getEntityTypeA());
+		entityTypes.add(getEntityTypeB());
+		entityTypes.add(getEntityTypeC());
+		return entityTypes;
+	}
+
+	public static EntityTypeMapping getEntityTypeMappingA() {
+		EntityTypeMapping entityTypeMapping = new EntityTypeMapping();
+		entityTypeMapping.setEntityType(getEntityTypeA());
+		entityTypeMapping.setDatabaseTable(getDatabaseTableA());
+		entityTypeMapping.setAttributeTypeMappings(getAttributeTypeMappings());
+		return entityTypeMapping;
+	}
+
+	public static EntityTypeMapping getEntityTypeMappingB() {
+		EntityTypeMapping entityTypeMapping = new EntityTypeMapping();
+		entityTypeMapping.setEntityType(getEntityTypeB());
+		entityTypeMapping.setDatabaseTable(getDatabaseTableB());
+		entityTypeMapping.setAttributeTypeMappings(getAttributeTypeMappings());
+		return entityTypeMapping;
+	}
+
+	public static EntityTypeMapping getEntityTypeMappingC() {
+		EntityTypeMapping entityTypeMapping = new EntityTypeMapping();
+		entityTypeMapping.setEntityType(getEntityTypeC());
+		entityTypeMapping.setDatabaseTable(getDatabaseTableC());
+		entityTypeMapping.setAttributeTypeMappings(getAttributeTypeMappings());
+		return entityTypeMapping;
+	}
+
+	public static List<EntityTypeMapping> getEntityTypeMappings() {
+		List<EntityTypeMapping> entityTypeMappings = new ArrayList<EntityTypeMapping>();
+		entityTypeMappings.add(getEntityTypeMappingA());
+		entityTypeMappings.add(getEntityTypeMappingB());
+		entityTypeMappings.add(getEntityTypeMappingC());
+		return entityTypeMappings;
+	}
+
+	public static IEntity getEntityA() {
+		IEntity entity = getEntityTypeA().getEntity();
+		try {
+			entity.setAttributeValue(ATTRIBUTE_NAME_A, "value");
+			entity.setAttributeValue(ATTRIBUTE_NAME_B, Boolean.TRUE);
+			entity.setAttributeValue(ATTRIBUTE_NAME_C, 8.8);
+		} catch (AttributeTypeNotFoundException e) {
+			logger.error(e);
+		}
+
 		return entity;
 	}
 
-	public static Entity getEntityB() {
-		Entity entity = new EntityImpl(ENTITY_NAME_B);
-		entity.setAttributes(getAttributes());
+	public static IEntity getEntityB() {
+		IEntity entity = getEntityTypeB().getEntity();
+		try {
+			entity.setAttributeValue(ATTRIBUTE_NAME_A, "value");
+			entity.setAttributeValue(ATTRIBUTE_NAME_B, Boolean.TRUE);
+			entity.setAttributeValue(ATTRIBUTE_NAME_C, 8.8);
+		} catch (AttributeTypeNotFoundException e) {
+			logger.error(e);
+		}
 		return entity;
 	}
 
-	public static Entity getEntityC() {
-		Entity entity = new EntityImpl(ENTITY_NAME_C);
-		entity.setAttributes(getAttributes());
+	public static IEntity getEntityC() {
+		IEntity entity = getEntityTypeC().getEntity();
+		try {
+			entity.setAttributeValue(ATTRIBUTE_NAME_A, "value");
+			entity.setAttributeValue(ATTRIBUTE_NAME_B, Boolean.TRUE);
+			entity.setAttributeValue(ATTRIBUTE_NAME_C, 8.8);
+		} catch (AttributeTypeNotFoundException e) {
+			e.printStackTrace();
+		}
 		return entity;
 	}
 
-	public static List<Entity> getEntities() {
-		List<Entity> entities = new ArrayList<Entity>();
+	public static List<IEntity> getEntities() {
+		List<IEntity> entities = new ArrayList<IEntity>();
 		entities.add(getEntityA());
 		entities.add(getEntityB());
 		entities.add(getEntityC());
@@ -123,45 +251,40 @@ public class TestObjects {
 				USERNAME, PASSWORD);
 	}
 
-	public static DataSource getJdbcDataSourceA() {
+	public static DataSource getDataSourceB() {
 		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
 				USERNAME, PASSWORD);
 	}
 
-	public static DataSource getJdbcDataSourceB() {
-		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
-				USERNAME, PASSWORD);
-	}
-
-	public static DataSource getJdbcDataSourceC() {
+	public static DataSource getDataSourceC() {
 		return new SimpleDriverDataSource(getDriver(JDBC_DRIVER_HSQL), URL,
 				USERNAME, PASSWORD);
 	}
 
 	public static List<DataSource> getJdbcDataSources() {
 		List<DataSource> dataSources = new ArrayList<DataSource>();
-		dataSources.add(getJdbcDataSourceA());
+		dataSources.add(getDataSourceA());
 		return dataSources;
 	}
 
 	public static Database getDatabaseA() {
 		Database database = new Database(DATABASE_NAME_A);
-		database.setDataSource(getJdbcDataSourceA());
-		database.setEntityMappings(getEntityMappings());
+		database.setDataSource(getDataSourceA());
+		database.setEntityTypeMappings(getEntityTypeMappings());
 		return database;
 	}
 
 	public static Database getDatabaseB() {
 		Database database = new Database(DATABASE_NAME_B);
-		database.setDataSource(getJdbcDataSourceB());
-		database.setEntityMappings(getEntityMappings());
+		database.setDataSource(getDataSourceB());
+		database.setEntityTypeMappings(getEntityTypeMappings());
 		return database;
 	}
 
 	public static Database getDatabaseC() {
 		Database database = new Database(DATABASE_NAME_C);
-		database.setDataSource(getJdbcDataSourceC());
-		database.setEntityMappings(getEntityMappings());
+		database.setDataSource(getDataSourceC());
+		database.setEntityTypeMappings(getEntityTypeMappings());
 		return database;
 	}
 
@@ -225,181 +348,6 @@ public class TestObjects {
 		return databaseTableColumns;
 	}
 
-	public static AttributeMapping getAttributeMappingA() {
-		AttributeMapping attributeMapping = new AttributeMapping();
-		attributeMapping.setAttribute(getAttributeA());
-		attributeMapping.setDatabaseTableColumn(getDatabaseTableColumnA());
-		return attributeMapping;
-	}
-
-	public static AttributeMapping getAttributeMappingB() {
-		AttributeMapping attributeMapping = new AttributeMapping();
-		attributeMapping.setAttribute(getAttributeB());
-		attributeMapping.setDatabaseTableColumn(getDatabaseTableColumnB());
-		return attributeMapping;
-	}
-
-	public static AttributeMapping getAttributeMappingC() {
-		AttributeMapping attributeMapping = new AttributeMapping();
-		attributeMapping.setAttribute(getAttributeC());
-		attributeMapping.setDatabaseTableColumn(getDatabaseTableColumnC());
-		return attributeMapping;
-	}
-
-	public static List<AttributeMapping> getAttributeMappings() {
-		List<AttributeMapping> attributeMappings = new ArrayList<AttributeMapping>();
-		attributeMappings.add(getAttributeMappingA());
-		attributeMappings.add(getAttributeMappingB());
-		attributeMappings.add(getAttributeMappingC());
-		return attributeMappings;
-	}
-
-	public static EntityMapping getEntityMappingA() {
-		EntityMapping entityMapping = new EntityMapping();
-		entityMapping.setEntity(getEntityA());
-		entityMapping.setDatabaseTable(getDatabaseTableA());
-		entityMapping.setAttributeMappings(getAttributeMappings());
-		return entityMapping;
-	}
-
-	public static EntityMapping getEntityMappingB() {
-		EntityMapping entityMapping = new EntityMapping();
-		entityMapping.setEntity(getEntityB());
-		entityMapping.setDatabaseTable(getDatabaseTableB());
-		entityMapping.setAttributeMappings(getAttributeMappings());
-		return entityMapping;
-	}
-
-	public static EntityMapping getEntityMappingC() {
-		EntityMapping entityMapping = new EntityMapping();
-		entityMapping.setEntity(getEntityC());
-		entityMapping.setDatabaseTable(getDatabaseTableC());
-		entityMapping.setAttributeMappings(getAttributeMappings());
-		return entityMapping;
-	}
-
-	public static List<EntityMapping> getEntityMappings() {
-		List<EntityMapping> entityMappings = new ArrayList<EntityMapping>();
-		entityMappings.add(getEntityMappingA());
-		entityMappings.add(getEntityMappingB());
-		entityMappings.add(getEntityMappingC());
-		return entityMappings;
-	}
-
-	public static Database getDatabaseUserManagementSource() {
-		Database databaseUserManagement = new Database();
-
-		databaseUserManagement.addEntityMapping(getEntityMappingUser());
-		databaseUserManagement.setName("Database User Management (Source)");
-
-		DataSource dataSource = new SimpleDriverDataSource(
-				getDriver(JDBC_DRIVER_HSQL),
-				"jdbc:hsqldb:mem:UserManagementSource");
-		databaseUserManagement.setDataSource(dataSource);
-
-		databaseUserManagement.addEntityMapping(getEntityMappingUser());
-		databaseUserManagement.addEntityMapping(getEntityMappingGroup());
-
-		return databaseUserManagement;
-	}
-
-	public static Entity getEntityUser() {
-
-		Entity user = new EntityImpl("User");
-
-		user.addAttribute(new AttributeImpl("User ID"));
-		user.addAttribute(new AttributeImpl("Username"));
-		user.addAttribute(new AttributeImpl("Password"));
-		user.addAttribute(new AttributeImpl("Group ID"));
-
-		user.addRelationship(getRelationshipUserToGroup());
-
-		return user;
-	}
-
-	public static Entity getEntityGroup() {
-		
-		Entity group = new EntityImpl("User Group");
-
-		group.addAttribute(new AttributeImpl("Group ID"));
-		group.addAttribute(new AttributeImpl("Group Name"));
-
-		return group;
-	}
-
-	public static EntityMapping getEntityMappingUser() {
-
-		EntityMapping entityMappingUser = new EntityMapping();
-		Entity entityUser = getEntityUser();
-
-		entityMappingUser.setEntity(entityUser);
-		entityMappingUser.setDatabaseTable(new DatabaseTable("USER"));
-
-		AttributeMapping userIdMapping = new AttributeMapping();
-		userIdMapping.setAttribute(entityUser.getAttribute("User ID"));
-		userIdMapping.setDatabaseTableColumn(new DatabaseTableColumn("ID"));
-
-		AttributeMapping usernameMapping = new AttributeMapping();
-		usernameMapping.setAttribute(entityUser.getAttribute("Username"));
-		usernameMapping.setDatabaseTableColumn(new DatabaseTableColumn(
-				"USERNAME"));
-
-		AttributeMapping passwordMapping = new AttributeMapping();
-		passwordMapping.setAttribute(entityUser.getAttribute("Password"));
-		passwordMapping.setDatabaseTableColumn(new DatabaseTableColumn(
-				"PASSWORD"));
-
-		AttributeMapping groupIdMapping = new AttributeMapping();
-		groupIdMapping.setAttribute(entityUser.getAttribute("Group ID"));
-		groupIdMapping.setDatabaseTableColumn(new DatabaseTableColumn(
-				"GROUP_ID"));
-
-		entityMappingUser.addAttributeMapping(userIdMapping);
-		entityMappingUser.addAttributeMapping(usernameMapping);
-		entityMappingUser.addAttributeMapping(passwordMapping);
-		entityMappingUser.addAttributeMapping(groupIdMapping);
-
-		return entityMappingUser;
-	}
-
-	public static EntityMapping getEntityMappingGroup() {
-
-		EntityMapping entityMappingGroup = new EntityMapping();
-		Entity entityGroup = getEntityGroup();
-
-		entityMappingGroup.setEntity(entityGroup);
-		entityMappingGroup.setDatabaseTable(new DatabaseTable("USER_GROUP"));
-
-		AttributeMapping userIdMapping = new AttributeMapping();
-		userIdMapping.setAttribute(entityGroup.getAttribute("Group ID"));
-		userIdMapping.setDatabaseTableColumn(new DatabaseTableColumn("ID"));
-
-		AttributeMapping groupnameMapping = new AttributeMapping();
-		groupnameMapping.setAttribute(entityGroup.getAttribute("Group Name"));
-		groupnameMapping.setDatabaseTableColumn(new DatabaseTableColumn(
-				"GROUPNAME"));
-
-		entityMappingGroup.addAttributeMapping(userIdMapping);
-		entityMappingGroup.addAttributeMapping(groupnameMapping);
-
-		return entityMappingGroup;
-	}
-
-	public static Relationship getRelationshipUserToGroup() {
-
-		String relationshipName = "User to Group";
-		Entity group = getEntityGroup();
-		Cardinality cardinality = Cardinality.OneToMany;
-
-		Relationship relationship = new RelationshipImpl();
-		relationship.setName(relationshipName);
-		relationship.setReferencedEntity(group);
-		relationship.addReferencedEntity(group);
-		relationship.setCardinality(cardinality);
-
-		return relationship;
-	}
-
 	public static Driver getDriver(String driverClassName) {
 
 		Driver driver = null;
@@ -414,18 +362,22 @@ public class TestObjects {
 		return driver;
 	}
 
-	public static Relationship getRelationshipA() {
-		Relationship relationship;
-		relationship = new RelationshipImpl();
+	public static IRelationship getRelationshipA() {
+		IRelationship relationship;
+		relationship = new Relationship();
 		relationship.setName("Relationship A");
-		relationship.setReferencedEntities(getEntities());
+
+		for (IEntity entity : getEntities()) {
+			relationship.addReferencedEntity(entity);
+		}
+
 		relationship.setCardinality(Cardinality.OneToMany);
 		return relationship;
 	}
 
-	public static List<Relationship> getRelationships() {
+	public static List<IRelationship> getRelationships() {
 
-		List<Relationship> relationships = new ArrayList<Relationship>();
+		List<IRelationship> relationships = new ArrayList<IRelationship>();
 
 		relationships.add(getRelationshipA());
 

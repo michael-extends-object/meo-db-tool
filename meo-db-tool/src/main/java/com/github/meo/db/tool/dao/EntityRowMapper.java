@@ -5,53 +5,59 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.github.meo.db.tool.domain.Attribute;
-import com.github.meo.db.tool.domain.AttributeMapping;
+import com.github.meo.db.tool.domain.AttributeTypeMapping;
 import com.github.meo.db.tool.domain.Database;
-import com.github.meo.db.tool.domain.Entity;
+import com.github.meo.db.tool.domain.IEntity;
+import com.github.meo.db.tool.domain.IEntityType;
+import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
 
-public class EntityRowMapper implements RowMapper<Entity> {
+public class EntityRowMapper implements RowMapper<IEntity> {
 
-	Entity entity;
+	IEntityType entityType;
 	Database database;
 
 	EntityRowMapper() {
 	}
 
-	EntityRowMapper(Entity entity) {
-		setEntity(entity);
+	EntityRowMapper(IEntityType entityType) {
+		setEntityType(entityType);
 	}
 
-	public EntityRowMapper(Database database, Entity entity) {
-		setEntity(entity);
+	public EntityRowMapper(Database database, IEntityType entityType) {
+		setEntityType(entityType);
 		setDatabase(database);
 	}
 
-	public Entity mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Entity entity = (Entity) this.entity.clone();
+	public IEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+		IEntity entity = entityType.getEntity();
 
-		for (AttributeMapping attributeMapping : database
-				.getAttributeMappings(entity)) {
-			String attributeName = attributeMapping.getAttribute().getName();
-			String columnName = attributeMapping.getDatabaseTableColumn()
+		for (AttributeTypeMapping attributeTypeMapping : database
+				.getAttributeTypeMappings(entityType)) {
+			String attributeName = attributeTypeMapping.getAttributeType()
+					.getName();
+			String columnName = attributeTypeMapping.getDatabaseTableColumn()
 					.toString();
-			Attribute attribute = entity.getAttribute(attributeName);
-			attribute.setValue(rs.getObject(columnName));
+			try {
+				entity.setAttributeValue(attributeName,
+						rs.getObject(columnName));
+			} catch (AttributeTypeNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return entity;
 	}
 
-	public Entity getEntity() {
-		return entity;
+	public IEntityType getEntityType() {
+		return entityType;
 	}
 
 	public Database getDatabase() {
 		return database;
 	}
 
-	public void setEntity(Entity entity) {
-		this.entity = entity;
+	public void setEntityType(IEntityType entityType) {
+		this.entityType = entityType;
 	}
 
 	public void setDatabase(Database database) {

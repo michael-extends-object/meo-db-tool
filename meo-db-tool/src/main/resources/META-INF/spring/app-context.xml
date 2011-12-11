@@ -15,9 +15,10 @@
 		<!-- <property name="contextPath" value="com.github.meo.db.tool.domain"/> -->
 		<property name="classesToBeBound">
 			<list>
-				<value>com.github.meo.db.tool.domain.AttributeImpl</value>
-				<value>com.github.meo.db.tool.domain.EntityImpl</value>
-				<value>com.github.meo.db.tool.domain.JdbcDataSource</value>
+				<value>com.github.meo.db.tool.domain.AttributeType</value>
+				<value>com.github.meo.db.tool.domain.Attribute</value>
+				<value>com.github.meo.db.tool.domain.EntityType</value>
+				<value>com.github.meo.db.tool.domain.Entity</value>
 			</list>
 		</property>
 		<property name="marshallerProperties">
@@ -30,17 +31,17 @@
 				</entry>
 			</map>
 		</property>
-		<property name="schemas">
-			<list>
-				<value>classpath:/META-INF/xsd/Schema.xsd</value>
-			</list>
-		</property>
+<!-- 		<property name="schemas"> -->
+<!-- 			<list> -->
+<!-- 				<value>classpath:/META-INF/xsd/Schema.xsd</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
 		<property name="bindingFiles">
 			<list>
+				<value>classpath:/META-INF/oxm/AttributeType-eclipselink-oxm.xml</value>
 				<value>classpath:/META-INF/oxm/Attribute-eclipselink-oxm.xml</value>
+				<value>classpath:/META-INF/oxm/EntityType-eclipselink-oxm.xml</value>
 				<value>classpath:/META-INF/oxm/Entity-eclipselink-oxm.xml</value>
-				<value>classpath:/META-INF/oxm/JdbcDataSource-eclipselink-oxm.xml
-				</value>
 			</list>
 		</property>
 	</bean>

@@ -9,8 +9,10 @@ public class Database {
 
 	String name;
 	DataSource dataSource;
-	List<EntityMapping> entityMappings;
-
+	List<EntityTypeMapping> entityTypeMappings;
+	List<IEntityRelationshipModel> entityRelationshipModels;
+	List<IRelationship> relationships;
+	
 	public Database() {
 		init();
 	}
@@ -21,61 +23,67 @@ public class Database {
 	}
 
 	private void init() {
-		entityMappings = new ArrayList<EntityMapping>();
+		entityTypeMappings = new ArrayList<EntityTypeMapping>();
+		entityRelationshipModels = new ArrayList<IEntityRelationshipModel>();
+		relationships = new ArrayList<IRelationship>();
 	}
 
-	public boolean addEntityMapping(EntityMapping entityMapping) {
-		return entityMappings.add(entityMapping);
+	public boolean addEntityTypeMapping(EntityTypeMapping entityTypeMapping) {
+		return entityTypeMappings.add(entityTypeMapping);
 	}
 
-	public DatabaseTable getDatabaseTable(Entity entity) {
+	public DatabaseTable getDatabaseTable(IEntityType entityType) {
 
-		if (entity == null) {
+		if (entityType == null) {
 			return null;
 		}
 
-		return getEntityMapping(entity).getDatabaseTable();
+		return getEntityTypeMapping(entityType).getDatabaseTable();
 	}
 
-	public EntityMapping getEntityMapping(Entity entity) {
+	public EntityTypeMapping getEntityTypeMapping(IEntityType entityType) {
 
-		for (EntityMapping entityMapping : getEntityMappings()) {
-			if (entity.getName().equals(entityMapping.getEntity().getName())) {
-				return entityMapping;
+		for (EntityTypeMapping entityTypeMapping : getEntityTypeMappings()) {
+			if (entityType.getName().equals(
+					entityTypeMapping.getEntityType().getName())) {
+				return entityTypeMapping;
 			}
 		}
 
 		return null;
 	}
 
-	public List<AttributeMapping> getAttributeMappings(Entity entity) {
+	public List<AttributeTypeMapping> getAttributeTypeMappings(
+			IEntityType entityType) {
+		List<AttributeTypeMapping> attributeTypeMapping = new ArrayList<AttributeTypeMapping>();
 
-		List<AttributeMapping> attributeMapping = new ArrayList<AttributeMapping>();
+		EntityTypeMapping entityTypeMapping = getEntityTypeMapping(entityType);
 
-		EntityMapping entityMapping = getEntityMapping(entity);
-
-		if(entityMapping == null) {
-			return attributeMapping;
+		if (entityTypeMapping == null) {
+			return attributeTypeMapping;
 		}
-		
-		attributeMapping.addAll(entityMapping.getAttributeMappings());
 
-		return entityMapping.getAttributeMappings();
+		attributeTypeMapping.addAll(entityTypeMapping
+				.getAttributeTypeMappings());
+
+		return entityTypeMapping.getAttributeTypeMappings();
 	}
 
-	public List<DatabaseTableColumn> getDatabaseTableColumns(Entity entity) {
+	public List<DatabaseTableColumn> getDatabaseTableColumns(
+			IEntityType entityType) {
 
 		List<DatabaseTableColumn> databaseTableColumns = new ArrayList<DatabaseTableColumn>();
 
-		for (AttributeMapping attributeMapping : getAttributeMappings(entity)) {
-			databaseTableColumns.add(attributeMapping.getDatabaseTableColumn());
+		for (AttributeTypeMapping attributeTypeMapping : getAttributeTypeMappings(entityType)) {
+			databaseTableColumns.add(attributeTypeMapping
+					.getDatabaseTableColumn());
 		}
 
 		return databaseTableColumns;
 	}
 
-	public int getColumnCount(Entity entity) {
-		return getDatabaseTableColumns(entity).size();
+	public int getColumnCount(IEntityType entityType) {
+		return getDatabaseTableColumns(entityType).size();
 	}
 
 	@Override
@@ -91,10 +99,6 @@ public class Database {
 		return dataSource;
 	}
 
-	public List<EntityMapping> getEntityMappings() {
-		return entityMappings;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -103,32 +107,48 @@ public class Database {
 		this.dataSource = dataSource;
 	}
 
-	public void setEntityMappings(List<EntityMapping> entityMappings) {
-		this.entityMappings = entityMappings;
+	public DatabaseTableColumn getDatabaseTableColumn(IEntityType entityType,
+			IAttributeType attributeType) {
+
+		if (attributeType == null) {
+			throw new IllegalArgumentException("null is not a valid argument!");
+		}
+
+		return getDatabaseTableColumn(entityType, attributeType.getName());
 	}
 
-	public DatabaseTableColumn getDatabaseTableColumn(Entity entity, Attribute attribute) {
-		
-		if(attribute == null) {
+	public DatabaseTableColumn getDatabaseTableColumn(IEntityType entityType,
+			String attributeName) {
+
+		if (entityType == null || attributeName == null) {
 			throw new IllegalArgumentException("null is not a valid argument!");
 		}
-		
-		return getDatabaseTableColumn(entity, attribute.getName());
-	}
-	
-	public DatabaseTableColumn getDatabaseTableColumn(Entity entity, String attributeName) {
-		
-		if(entity == null || attributeName == null) {
-			throw new IllegalArgumentException("null is not a valid argument!");
-		}
-		
-		for (AttributeMapping attributeMapping : getAttributeMappings(entity)) {
-			if (attributeName.equals(attributeMapping.getAttribute().getName())) {
-				return attributeMapping.getDatabaseTableColumn();
+
+		for (AttributeTypeMapping attributeTypeMapping : getAttributeTypeMappings(entityType)) {
+			if (attributeName.equals(attributeTypeMapping.getAttributeType()
+					.getName())) {
+				return attributeTypeMapping.getDatabaseTableColumn();
 			}
 		}
-		
+
 		return null;
 	}
-	
+
+	public List<EntityTypeMapping> getEntityTypeMappings() {
+		return entityTypeMappings;
+	}
+
+	public List<IEntityRelationshipModel> getEntityRelationshipModels() {
+		return entityRelationshipModels;
+	}
+
+	public void setEntityTypeMappings(List<EntityTypeMapping> entityTypeMappings) {
+		this.entityTypeMappings = entityTypeMappings;
+	}
+
+	public void setEntityRelationshipModels(
+			List<IEntityRelationshipModel> entityRelationshipModels) {
+		this.entityRelationshipModels = entityRelationshipModels;
+	}
+
 }

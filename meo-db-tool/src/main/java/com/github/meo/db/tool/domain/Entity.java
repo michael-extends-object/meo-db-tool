@@ -1,42 +1,248 @@
 package com.github.meo.db.tool.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface Entity {
+import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
 
-	public String getName();
+public class Entity implements IEntity, Cloneable {
 
-	public Object getAttributeValue(String attributeName);
+	private IEntityType entityType;
+	private List<IAttribute> attributes;
 
-	public Object getAttributeValue(Attribute attribute);
+	public Entity() {
+		init();
+	}
 
-	public List<Attribute> getAttributes();
+	public Entity(IEntityType entityType) {
+		init();
+		setEntityType(entityType);
+	}
+	
+	public Entity(IEntityType entityType, List<IAttribute> attributes) {
+		init();
+		setEntityType(entityType);
+		setAttributes(attributes);
+	}
+	
+	private void init() {
+		attributes = new ArrayList<IAttribute>();
+	}
 
-	public List<Attribute> getAttributesPrimaryKey();
+	public boolean addAttribute(IAttribute attribute) {
 
-	public boolean setAttributeValue(Attribute attribute, Object value);
+		if (attribute == null) {
+			return false;
+		}
 
-	public boolean setAttributeValue(String attributeName, Object value);
+		return getAttributes().add(attribute);
+	}
 
-	public void setAttributes(List<Attribute> attributes);
+	/**
+	 * 
+	 * @param name
+	 * @return Returns the argument with the given name. In case there was no
+	 *         argument with the given name, the method will return null.
+	 * @throws AttributeTypeNotFoundException 
+	 */
+	public IAttribute getAttribute(String name) throws AttributeTypeNotFoundException {
 
-	public boolean addAttribute(Attribute attribute);
+		if (name == null) {
+			throw new IllegalArgumentException(
+					"The given attribute name is null!");
+		}
 
-	public Attribute getAttribute(String name);
+		for (IAttribute attribute : getAttributes()) {
+			if (name.equals(attribute.getAttributeType().getName())) {
+				return attribute;
+			}
+		}
+		
+		throw new AttributeTypeNotFoundException(name);
+	}
 
-	public void setName(String name);
+	public IEntityType getEntityType() {
+		return entityType;
+	}
 
-	public Entity clone();
+	public List<IAttribute> getAttributes() {
+		return attributes;
+	}
 
-	public String toString();
+	public List<IAttribute> getAttributesPrimaryKey() {
 
-	public List<Relationship> getRelationships();
+		List<IAttribute> attributesPrimaryKey = new ArrayList<IAttribute>();
 
-	public void setRelationships(List<Relationship> realtionships);
+		for (IAttribute attribute : getAttributes()) {
+			if (attribute.isPrimaryKey()) {
+				attributesPrimaryKey.add(attribute);
+			}
+		}
 
-	public boolean addRelationship(Relationship realtionship);
+		/*
+		 * The primary key is the combination of all attributes, in case no PK
+		 * attribute is set
+		 */
+		if (attributesPrimaryKey.isEmpty()) {
+			return getAttributes();
+		}
 
-	public List<Attribute> getAttributesPrimaryKeyNotNull();
+		return attributesPrimaryKey;
+	}
 
-	public List<Attribute> getAttributesNotNull();
+	public List<IAttribute> getAttributesNotNull() {
+
+		List<IAttribute> attributesNotNull = new ArrayList<IAttribute>();
+
+		for (IAttribute attribute : getAttributes()) {
+			if (attribute.getValue() != null) {
+				attributesNotNull.add(attribute);
+			}
+		}
+
+		return attributesNotNull;
+	}
+
+	public List<IAttribute> getAttributesPrimaryKeyNotNull() {
+
+		List<IAttribute> attributesPrimaryKeyNotNull = new ArrayList<IAttribute>();
+
+		for (IAttribute attribute : getAttributesPrimaryKey()) {
+			if (attribute.getValue() != null) {
+				attributesPrimaryKeyNotNull.add(attribute);
+			}
+		}
+
+		return attributesPrimaryKeyNotNull;
+	}
+
+	public String toString() {
+		return getEntityType().getName();
+	}
+
+	public void setEntityType(IEntityType entityType) {
+		this.entityType = entityType;
+	}
+
+	public boolean setAttributeValue(IAttribute attribute, Object value)
+			throws AttributeTypeNotFoundException {
+
+		if (attribute == null) {
+			throw new IllegalArgumentException("null is not valid argument!");
+		}
+
+		return setAttributeValue(attribute.getAttributeType().getName(), value);
+	}
+
+	public boolean setAttributeValue(String attributeName, Object value)
+			throws AttributeTypeNotFoundException {
+
+		if (attributeName == null) {
+			throw new IllegalArgumentException("null is not valid argument!");
+		}
+
+		IAttribute attribute = getAttribute(attributeName);
+
+		attribute.setValue(value);
+
+		if (value.equals(attribute.getValue())) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public Object getAttributeValue(IAttribute attribute) throws AttributeTypeNotFoundException {
+
+		if (attribute == null) {
+			throw new IllegalArgumentException("null is not valid argument!");
+		}
+
+		return getAttributeValue(attribute.getAttributeType().getName());
+	}
+
+	public Object getAttributeValue(String attributeName) throws AttributeTypeNotFoundException {
+
+		if (attributeName == null) {
+			throw new IllegalArgumentException("null is not valid argument!");
+		}
+
+		IAttribute attribute = getAttribute(attributeName);
+
+		return attribute.getValue();
+	}
+
+	public void setAttributes(List<IAttribute> attributes) {
+
+		if (attributes == null) {
+			return;
+		}
+
+		this.attributes = new ArrayList<IAttribute>();
+
+		for (IAttribute attribute : attributes) {
+			addAttribute(attribute);
+		}
+	}
+
+	@Override
+	public IEntity clone() {
+		IEntity entity = new Entity();
+
+		entity.setEntityType(getEntityType());
+
+		for (IAttribute attribute : getAttributes()) {
+			entity.addAttribute(attribute.clone());
+		}
+
+		return entity;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+
+		/*
+		 * Are the references pointing to the same object?
+		 */
+		if (this == object) {
+			return true;
+		}
+
+		/*
+		 * Same class?
+		 */
+		if (!getClass().equals(object.getClass())) {
+			return false;
+		}
+
+		IEntity entity = (IEntity) object;
+
+		/*
+		 * Do the objects have the same entity type?
+		 */
+		if (!getEntityType().equals(entity.getEntityType())) {
+			return false;
+		}
+
+		/*
+		 * Do the objects have the same attributes?
+		 */
+		if (getAttributes().size() != entity.getAttributes().size()) {
+			return false;
+		}
+
+		for (int i = 0; i < getAttributes().size(); i++) {
+			if (!getAttributes().get(i).equals(entity.getAttributes().get(i))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }

@@ -2,13 +2,13 @@
 <xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
 	package-name="com.github.meo.db.tool.domain" xml-accessor-type="NONE">
 	<java-types>
-		<java-type name="EntityImpl">
+		<java-type name="Entity">
 			<xml-root-element name="entity" />
-			<xml-type name="entity" prop-order="name attributes" />
+			<xml-type name="entity" prop-order="entityType attributes" />
 			<java-attributes>
-				<xml-attribute java-attribute="name" />
+				<xml-element java-attribute="entityType" type="com.github.meo.db.tool.domain.EntityType"/>
 				<xml-element java-attribute="attributes"
-					type="com.github.meo.db.tool.domain.AttributeImpl" xml-path="attributes/attribute" />
+					type="com.github.meo.db.tool.domain.Attribute" xml-path="attributes/attribute" />
 			</java-attributes>
 		</java-type>
 	</java-types>

@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<entity name="Entity C">
+<entity>
+   <entityType>
+      <name>Entity C</name>
+      <attributeTypes>
+         <attributeType name="Attribute A"/>
+         <attributeType name="Attribute B"/>
+         <attributeType name="Attribute C"/>
+      </attributeTypes>
+   </entityType>
    <attributes>
-      <attribute name="Attribute A">
+      <attribute>
+         <attributeType name="Attribute A"/>
          <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">value</value>
       </attribute>
-      <attribute name="Attribute B">
+      <attribute>
+         <attributeType name="Attribute B"/>
          <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:boolean">true</value>
       </attribute>
-      <attribute name="Attribute C">
+      <attribute>
+         <attributeType name="Attribute C"/>
          <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:double">8.8</value>
       </attribute>
    </attributes>

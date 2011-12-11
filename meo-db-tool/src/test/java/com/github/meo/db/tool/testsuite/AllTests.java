@@ -4,17 +4,21 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import com.github.meo.db.tool.dao.EntityDaoImplTests;
 import com.github.meo.db.tool.dao.EntityRowMapperTests;
-import com.github.meo.db.tool.domain.AttributeImplTests;
-import com.github.meo.db.tool.domain.AttributeMappingTests;
+import com.github.meo.db.tool.dao.EntityDaoTests;
+import com.github.meo.db.tool.domain.AttributeTests;
+import com.github.meo.db.tool.domain.AttributeTypeMappingTests;
+import com.github.meo.db.tool.domain.AttributeTypeTests;
 import com.github.meo.db.tool.domain.CardinalityTests;
 import com.github.meo.db.tool.domain.DatabaseTableTests;
 import com.github.meo.db.tool.domain.DatabaseTableColumnTests;
 import com.github.meo.db.tool.domain.DatabaseTests;
-import com.github.meo.db.tool.domain.EntityImplTests;
-import com.github.meo.db.tool.domain.EntityMappingTests;
-import com.github.meo.db.tool.domain.RelationshipImplTests;
+import com.github.meo.db.tool.domain.EntityTests;
+import com.github.meo.db.tool.domain.EntityRelationshipModelTests;
+import com.github.meo.db.tool.domain.EntityTypeTests;
+import com.github.meo.db.tool.domain.EntityTypeMappingTests;
+import com.github.meo.db.tool.domain.RelationshipTests;
+import com.github.meo.db.tool.exception.AttributeNotFoundExceptionTests;
 import com.github.meo.db.tool.sql.SqlColumnListTests;
 import com.github.meo.db.tool.sql.SqlUtilsTests;
 import com.github.meo.db.tool.xml.DriverXmlAdapterTests;
@@ -23,8 +27,10 @@ import com.github.meo.db.tool.xml.CustomJaxb2MarshallerTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	AttributeImplTests.class, 
-	AttributeMappingTests.class, 
+	AttributeTests.class, 
+	AttributeNotFoundExceptionTests.class, 
+	AttributeTypeTests.class,	
+	AttributeTypeMappingTests.class, 
 	CardinalityTests.class, 
 	CustomJaxb2MarshallerTests.class, 
 	DatabaseTests.class, 
@@ -32,11 +38,13 @@ import com.github.meo.db.tool.xml.CustomJaxb2MarshallerTests;
 	DatabaseTableColumnTests.class, 
 	DriverXmlAdapterTests.class, 
 	EncryptedStringXmlAdapterTests.class, 
-	EntityDaoImplTests.class, 
-	EntityImplTests.class, 
-	EntityMappingTests.class, 
+	EntityTypeTests.class, 
+	EntityDaoTests.class, 
+	EntityTests.class, 
+	EntityTypeMappingTests.class, 
 	EntityRowMapperTests.class, 
-	RelationshipImplTests.class, 
+	EntityRelationshipModelTests.class, 
+	RelationshipTests.class, 
 	SqlColumnListTests.class, 
 	SqlUtilsTests.class
 })

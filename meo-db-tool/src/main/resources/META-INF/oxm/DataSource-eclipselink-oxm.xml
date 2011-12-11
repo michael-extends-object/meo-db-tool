@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="org.springframework.jdbc.datasource" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="AbstractDataSource">
+			<xml-root-element />
+			<java-attributes>
+				<xml-transient java-attribute="logWriter" />
+			</java-attributes>
+		</java-type>
+		<java-type name="AbstractDriverBasedDataSource" xml-discriminator-node="@vtype" xml-discriminator-value="vehicle">
+			<xml-root-element />
+			<java-attributes>
+				<xml-transient java-attribute="connection" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

@@ -92,9 +92,16 @@ public class SqlUtilsTests {
 				databaseTableColumns);
 		assertEquals(expectedString, actualString);
 	}
-
+	
 	@Test
 	public void testGetDeleteStatement() {
+		expectedString = "DELETE FROM Database table A";
+		actualString = SqlUtils.getDeleteStatement(databaseTable);
+		assertEquals(expectedString, actualString);
+	}
+
+	@Test
+	public void testGetDeleteWhereStatement() {
 		expectedString = "DELETE FROM Database table A WHERE Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
 		actualString = SqlUtils.getDeleteStatement(databaseTable,
 				databaseTableColumns);

@@ -27,8 +27,7 @@ public class SqlUtils {
 		}
 
 		if (databaseTableColumns.isEmpty()) {
-			throw new IllegalArgumentException(
-					"The column list is empty!");
+			throw new IllegalArgumentException("The column list is empty!");
 		}
 
 		String sqlList = "";
@@ -81,6 +80,10 @@ public class SqlUtils {
 		SqlColumnList columnList = new SqlColumnList(databaseTableColumns);
 
 		return String.format(SQL_SELECT_STATEMENT, columnList, databaseTable);
+	}
+
+	public static String getDeleteStatement(DatabaseTable databaseTable) {
+		return String.format(SQL_DELETE_STATEMENT, databaseTable);
 	}
 
 	public static String getDeleteStatement(DatabaseTable databaseTable,
