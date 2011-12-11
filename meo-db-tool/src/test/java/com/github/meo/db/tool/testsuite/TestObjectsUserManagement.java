@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import com.github.meo.db.tool.domain.EntityRelationshipModel;
-import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.AttributeType;
 import com.github.meo.db.tool.domain.AttributeTypeMapping;

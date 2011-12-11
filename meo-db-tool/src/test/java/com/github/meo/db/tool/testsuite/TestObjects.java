@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
+import com.github.meo.db.tool.domain.EntityRelationshipModel;
 import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.AttributeType;
@@ -18,6 +19,7 @@ import com.github.meo.db.tool.domain.Database;
 import com.github.meo.db.tool.domain.DatabaseTable;
 import com.github.meo.db.tool.domain.DatabaseTableColumn;
 import com.github.meo.db.tool.domain.IEntity;
+import com.github.meo.db.tool.domain.IEntityRelationshipModel;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.domain.EntityType;
 import com.github.meo.db.tool.domain.EntityTypeMapping;
@@ -382,6 +384,38 @@ public class TestObjects {
 		relationships.add(getRelationshipA());
 
 		return relationships;
+	}
+	
+	public static IEntityRelationshipModel getErmA() {
+		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM A"); 
+		erm.addEntityType(getEntityTypeA());
+		erm.addEntityType(getEntityTypeB());
+		erm.addEntityType(getEntityTypeC());
+		return erm;
+	}
+	
+	public static IEntityRelationshipModel getErmB() {
+		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM B"); 
+		erm.addEntityType(getEntityTypeA());
+		erm.addEntityType(getEntityTypeB());
+		erm.addEntityType(getEntityTypeC());
+		return erm;
+	}
+	
+	public static IEntityRelationshipModel getErmC() {
+		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM C"); 
+		erm.addEntityType(getEntityTypeA());
+		erm.addEntityType(getEntityTypeB());
+		erm.addEntityType(getEntityTypeC());
+		return erm;
+	}
+	
+	public static List<IEntityRelationshipModel> getErms() {
+		List<IEntityRelationshipModel> erms = new ArrayList<IEntityRelationshipModel>();
+		erms.add(getErmA());
+		erms.add(getErmB());
+		erms.add(getErmC());
+		return erms;
 	}
 
 }

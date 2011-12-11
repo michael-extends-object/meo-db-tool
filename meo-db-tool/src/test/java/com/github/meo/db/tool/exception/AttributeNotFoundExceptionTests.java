@@ -1,8 +1,7 @@
 package com.github.meo.db.tool.exception;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.github.meo.db.tool.domain.IAttribute;
