@@ -16,8 +16,9 @@
 		<property name="classesToBeBound">
 			<list>
 				<value>com.github.meo.db.tool.domain.Attribute</value>
+<!-- 				<value>com.github.meo.db.tool.domain.MappableAttribute</value> -->
 				<value>com.github.meo.db.tool.domain.AttributeType</value>
-				<value>com.github.meo.db.tool.domain.Entity</value>
+<!-- 				<value>com.github.meo.db.tool.domain.Entity</value> -->
 				<value>com.github.meo.db.tool.domain.EntityRelationshipModel</value>
 				<value>com.github.meo.db.tool.domain.EntityType</value>
 			</list>
@@ -32,17 +33,18 @@
 				</entry>
 			</map>
 		</property>
-		<property name="schemas">
-			<list>
-				<value>classpath:/META-INF/xsd/Schema.xsd</value>
-			</list>
-		</property>
+	<property name="schemas">
+		<list>
+			<value>classpath:/META-INF/xsd/Schema.xsd</value>
+		</list>
+	</property>
 		<property name="bindingFiles">
 			<list>
-				<value>classpath:/META-INF/oxm/Attribute-eclipselink-oxm.xml</value>
+<!-- 				<value>classpath:/META-INF/oxm/Attribute-eclipselink-oxm.xml</value> -->
+<!-- 				<value>classpath:/META-INF/oxm/MappableAttribute-eclipselink-oxm.xml</value> -->
 				<value>classpath:/META-INF/oxm/AttributeType-eclipselink-oxm.xml
 				</value>
-				<value>classpath:/META-INF/oxm/Entity-eclipselink-oxm.xml</value>
+<!-- 				<value>classpath:/META-INF/oxm/Entity-eclipselink-oxm.xml</value> -->
 				<value>classpath:/META-INF/oxm/EntityRelationshipModel-eclipselink-oxm.xml
 				</value>
 				<value>classpath:/META-INF/oxm/EntityType-eclipselink-oxm.xml
@@ -50,5 +52,4 @@
 			</list>
 		</property>
 	</bean>
-
 </beans>
