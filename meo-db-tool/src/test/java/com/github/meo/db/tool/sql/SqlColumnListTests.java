@@ -7,13 +7,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.meo.db.tool.domain.DatabaseTableColumn;
+import com.github.meo.db.tool.domain.db.Column;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
 public class SqlColumnListTests {
 
 	SqlColumnList sqlColumnList;
-	List<DatabaseTableColumn> databaseTableColumns;
+	List<Column> columns;
 
 	private String expectedString;
 	private String actualString;
@@ -21,25 +21,24 @@ public class SqlColumnListTests {
 	@Before
 	public void setUp() throws Exception {
 		sqlColumnList = new SqlColumnList();
-		databaseTableColumns = TestObjects.getDatabaseTableColumns();
+		columns = TestObjects.getColumns();
 	}
 
 	@Test
-	public void testSqlColumnListListOfDatabaseTableColumn() {
-		sqlColumnList = new SqlColumnList(databaseTableColumns);
-		assertTrue(databaseTableColumns == sqlColumnList
-				.getDatabaseTableColumns());
+	public void testSqlColumnListOfColumn() {
+		sqlColumnList = new SqlColumnList(columns);
+		assertTrue(columns == sqlColumnList.columns());
 	}
 
 	@Test
 	public void testSize() {
-		sqlColumnList.setDatabaseTableColumns(databaseTableColumns);
+		sqlColumnList.setColumns(columns);
 		assertEquals(3, sqlColumnList.size());
 	}
 
 	@Test
 	public void testToString() {
-		sqlColumnList.setDatabaseTableColumns(databaseTableColumns);
+		sqlColumnList.setColumns(columns);
 		expectedString = "Database table column A, Database table column B, Database table column C";
 		actualString = sqlColumnList.toString();
 		assertEquals(expectedString, actualString);
@@ -47,47 +46,41 @@ public class SqlColumnListTests {
 
 	@Test
 	public void testGetPlaceholders() {
-		sqlColumnList.setDatabaseTableColumns(databaseTableColumns);
+		sqlColumnList.setColumns(columns);
 		expectedString = "?, ?, ?";
 		actualString = sqlColumnList.getPlaceholders();
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
-	public void testAddDatabaseTableColumn() {
-		sqlColumnList.addDatabaseTableColumn(TestObjects
-				.getDatabaseTableColumnA());
-		sqlColumnList.addDatabaseTableColumn(TestObjects
-				.getDatabaseTableColumnB());
-		sqlColumnList.addDatabaseTableColumn(TestObjects
-				.getDatabaseTableColumnC());
-		assertEquals(databaseTableColumns,
-				sqlColumnList.getDatabaseTableColumns());
+	public void testAddColumn() {
+		sqlColumnList.addColumn(TestObjects.getColumnA());
+		sqlColumnList.addColumn(TestObjects.getColumnB());
+		sqlColumnList.addColumn(TestObjects.getColumnC());
+		assertEquals(columns, sqlColumnList.columns());
 	}
 
 	@Test
-	public void testGetSetDatabaseTableColumns() {
-		sqlColumnList.setDatabaseTableColumns(databaseTableColumns);
-		assertTrue(databaseTableColumns == sqlColumnList
-				.getDatabaseTableColumns());
+	public void testGetSetColumns() {
+		sqlColumnList.setColumns(columns);
+		assertTrue(columns == sqlColumnList.columns());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testSetDatabaseTableColumnsNull() {
+	public void testSetColumnsNull() {
 		try {
-			sqlColumnList.setDatabaseTableColumns(null);
+			sqlColumnList.setColumns(null);
 		} catch (IllegalArgumentException e) {
-			expectedString = "<null> is not a valid argument!";
+			expectedString = "[Assertion failed] - this argument is required; it must not be null";
 			actualString = e.getMessage();
 			assertEquals(expectedString, actualString);
 			throw e;
 		}
-
 	}
 
 	@Test
 	public void testGetWhereCondition() {
-		sqlColumnList.setDatabaseTableColumns(databaseTableColumns);
+		sqlColumnList.setColumns(columns);
 		expectedString = "Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
 		actualString = sqlColumnList.getWhereCondition();
 		assertEquals(expectedString, actualString);

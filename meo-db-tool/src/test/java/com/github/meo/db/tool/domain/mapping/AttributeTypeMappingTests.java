@@ -1,4 +1,4 @@
-package com.github.meo.db.tool.domain;
+package com.github.meo.db.tool.domain.mapping;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,12 +8,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.meo.db.tool.domain.AttributeType;
+import com.github.meo.db.tool.domain.IAttributeType;
+import com.github.meo.db.tool.domain.db.Column;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
 public class AttributeTypeMappingTests {
 
 	IAttributeType attributeType;
-	DatabaseTableColumn column;
+	Column column;
 	AttributeTypeMapping attributeTypeMapping;
 	AttributeTypeMapping attributeTypeMappingA;
 	AttributeTypeMapping attributeTypeMappingB;
@@ -21,7 +24,7 @@ public class AttributeTypeMappingTests {
 	@Before
 	public void setUp() {
 		attributeType = new AttributeType();
-		column = new DatabaseTableColumn();
+		column = new Column();
 		attributeTypeMapping = new AttributeTypeMapping();
 	}
 	
@@ -29,7 +32,7 @@ public class AttributeTypeMappingTests {
 	public void testNewInstance() {
 		attributeTypeMapping = new AttributeTypeMapping(attributeType, column);
 		assertTrue(attributeType == attributeTypeMapping.getAttributeType());
-		assertTrue(column == attributeTypeMapping.getDatabaseTableColumn());
+		assertTrue(column == attributeTypeMapping.getColumn());
 	}
 
 	@Test
@@ -45,15 +48,15 @@ public class AttributeTypeMappingTests {
 	}
 
 	@Test
-	public void testSetGetDatabaseTableColumn() {
-		attributeTypeMapping.setDatabaseTableColumn(column);
-		assertTrue(column == attributeTypeMapping.getDatabaseTableColumn());
+	public void testSetGetColumn() {
+		attributeTypeMapping.setColumn(column);
+		assertTrue(column == attributeTypeMapping.getColumn());
 	}
 
 	@Test
-	public void testSetGetDatabaseTableColumnNull() {
-		attributeTypeMapping.setDatabaseTableColumn(null);
-		assertNotNull(attributeTypeMapping.getDatabaseTableColumn());
+	public void testSetGetColumnNull() {
+		attributeTypeMapping.setColumn(null);
+		assertNotNull(attributeTypeMapping.getColumn());
 	}
 
 	@Test
@@ -93,13 +96,13 @@ public class AttributeTypeMappingTests {
 	}
 
 	@Test
-	public void testEqualsDifferentDatabaseTableColumn() {
+	public void testEqualsDifferentColumn() {
 		attributeTypeMappingA = TestObjects.getAttributeTypeMappingA();
 		attributeTypeMappingB = TestObjects.getAttributeTypeMappingA();
-		attributeTypeMappingA.setDatabaseTableColumn(TestObjects
-				.getDatabaseTableColumnA());
-		attributeTypeMappingA.setDatabaseTableColumn(TestObjects
-				.getDatabaseTableColumnB());
+		attributeTypeMappingA.setColumn(TestObjects
+				.getColumnA());
+		attributeTypeMappingA.setColumn(TestObjects
+				.getColumnB());
 		assertFalse(attributeTypeMappingA.equals(attributeTypeMappingB));
 	}
 

@@ -14,10 +14,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 
-import com.github.meo.db.tool.domain.Database;
 import com.github.meo.db.tool.domain.IEntity;
 import com.github.meo.db.tool.domain.IEntityType;
-import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
 import com.github.meo.db.tool.testsuite.TestObjects;
 import com.github.meo.db.tool.testsuite.TestObjectsUserManagement;
 
@@ -92,8 +90,7 @@ public class EntityDaoTests {
 				.getDatabaseUserManagementSource();
 		IEntityType entityTypeUser = TestObjectsUserManagement.getTypeUser();
 		IEntity user = TestObjectsUserManagement.getUserA();
-		IEntityDao entityDao = new EntityDao();
-		entityDao.setDatabase(database);
+		IEntityDao entityDao = new EntityDao(database);
 
 		createTables(entityDao.getJdbcTemplate());
 		entityDao.insertEntity(user);
@@ -152,14 +149,10 @@ public class EntityDaoTests {
 		// user.getRelationships().get(0).getReferencedEntities()
 		// .get(0);
 
-		try {
-			user.setAttributeValue("User ID", 5);
-			user.setAttributeValue("Username", "Peter");
-			user.setAttributeValue("Password", "12345");
-			user.setAttributeValue("Group ID", 4);
-		} catch (AttributeTypeNotFoundException e) {
-			e.printStackTrace();
-		}
+		user.setAttributeValue("User ID", 5);
+		user.setAttributeValue("Username", "Peter");
+		user.setAttributeValue("Password", "12345");
+		user.setAttributeValue("Group ID", 4);
 		// group.setAttributeValue("Group ID", 4);
 		// group.setAttributeValue("Group Name", "Group Name");
 
@@ -182,7 +175,7 @@ public class EntityDaoTests {
 	}
 
 	@Test
-	public void testSelectEntityUser() throws AttributeTypeNotFoundException {
+	public void testSelectEntityUser() {
 		IEntityDao entityDao = new EntityDao();
 		entityDao.setDatabase(TestObjectsUserManagement
 				.getDatabaseUserManagementSource());
@@ -207,7 +200,7 @@ public class EntityDaoTests {
 	}
 
 	@Test
-	public void testSelectEntityGroup() throws AttributeTypeNotFoundException {
+	public void testSelectEntityGroup() {
 
 		IEntityDao entityDao = new EntityDao();
 		entityDao.setDatabase(TestObjectsUserManagement
@@ -270,7 +263,7 @@ public class EntityDaoTests {
 		entityDao.insertEntity(entity);
 
 		List<IEntity> entities;
-		
+
 		entities = entityDao.selectEntities(entityType);
 		assertEquals(3, entities.size());
 

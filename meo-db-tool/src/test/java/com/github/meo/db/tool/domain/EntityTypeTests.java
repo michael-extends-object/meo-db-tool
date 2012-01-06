@@ -63,10 +63,17 @@ public class EntityTypeTests {
 		assertEquals(ENTITY_TYPE_NAME, entityType.getName());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testGetSetNameNull() {
-		entityType.setName(null);
-		assertNotNull(entityType.getName());
+		try {
+			entityType.setName(null);
+		} catch (IllegalArgumentException e) {
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
+			assertNotNull(entityType.getName());
+			throw e;
+		}
 	}
 
 	@Test
@@ -76,14 +83,20 @@ public class EntityTypeTests {
 		assertTrue(attributeTypes == entityType.getAttributeTypes());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testGetSetAttributesNull() {
-		List<IAttributeType> attributeTypes = TestObjects.getAttributeTypes();
-		assertNotNull(attributeTypes);
-		entityType.setAttributeTypes(attributeTypes);
-		assertTrue(attributeTypes == entityType.getAttributeTypes());
-		entityType.setAttributeTypes(null);
 		assertNotNull(entityType.getAttributeTypes());
+
+		try {
+			entityType.setAttributeTypes(null);
+		} catch (IllegalArgumentException e) {
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
+			assertNotNull(entityType.getAttributeTypes());
+			throw e;
+		}
+
 	}
 
 	@Test
@@ -95,7 +108,8 @@ public class EntityTypeTests {
 		IEntity entity = entityType.getEntity();
 
 		for (int i = 0; i < entityType.getAttributeTypes().size(); i++) {
-			IAttributeType attributeType = entityType.getAttributeTypes().get(i);
+			IAttributeType attributeType = entityType.getAttributeTypes()
+					.get(i);
 			IAttribute attribute = entity.getAttributes().get(i);
 			assertEquals(attributeType, attribute.getAttributeType());
 		}
@@ -128,7 +142,7 @@ public class EntityTypeTests {
 
 		assertEquals(attributeTypes, entityType.getAttributeTypesPrimaryKey());
 	}
-	
+
 	@Test
 	public void testToString() {
 		entityType.setName(ENTITY_TYPE_NAME);
@@ -203,7 +217,9 @@ public class EntityTypeTests {
 		try {
 			entityType.getAttributeType(null);
 		} catch (IllegalArgumentException e) {
-			assertEquals("The given attribute name is null!", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 

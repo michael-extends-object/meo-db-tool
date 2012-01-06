@@ -1,6 +1,7 @@
 package com.github.meo.db.tool.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +46,9 @@ public class EntityRelationshipModelTests {
 		try {
 			erm.addEntityType(null);
 		} catch (IllegalArgumentException e) {
-			assertEquals("<null> is not a valid argument", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 
 			for (IEntityType entityType : erm.getEntityTypes()) {
 				assertNotNull(entityType);
@@ -56,26 +59,27 @@ public class EntityRelationshipModelTests {
 	}
 
 	@Test
-	public void testAddRelationship() {
-
-		List<IRelationship> relationships = TestObjects.getRelationships();
-
-		for (IRelationship relationship : relationships) {
-			erm.addRelationship(relationship);
+	public void testAddRelationshipTypes() {
+		List<IRelationshipType> relationshipTypes = TestObjects
+				.getRelationshipTypes();
+		for (IRelationshipType relationshipType : relationshipTypes) {
+			erm.addRelationshipType(relationshipType);
 		}
-
-		assertEquals(relationships, erm.getRelationships());
+		assertEquals(relationshipTypes, erm.getRelationshipTypes());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddRelationshipNull() {
 		try {
-			erm.addRelationship(null);
+			erm.addRelationshipType(null);
 		} catch (IllegalArgumentException e) {
-			assertEquals("<null> is not a valid argument", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 
-			for (IRelationship relationship : erm.getRelationships()) {
-				assertNotNull(relationship);
+			for (IRelationshipType relationshipType : erm
+					.getRelationshipTypes()) {
+				assertNotNull(relationshipType);
 			}
 
 			throw e;
@@ -95,30 +99,31 @@ public class EntityRelationshipModelTests {
 			erm.setName(null);
 		} catch (IllegalArgumentException e) {
 			assertNotNull(erm.getName());
-			assertEquals("<null> is not a valid argument", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
 
 	@Test
-	public void testSetRelationships() {
-
-		List<IRelationship> relationships = new ArrayList<IRelationship>();
-		IRelationship relationship = new Relationship();
-		relationships.add(relationship);
-
-		erm.setRelationships(relationships);
-		assertTrue(relationships == erm.getRelationships());
+	public void testSetRelationshipTypes() {
+		List<IRelationshipType> relationshipTypes = TestObjects
+				.getRelationshipTypes();
+		erm.setRelationshipTypes(relationshipTypes);
+		assertEquals(relationshipTypes, erm.getRelationshipTypes());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetRelationshipsNull() {
 
 		try {
-			erm.setRelationships(null);
+			erm.setRelationshipTypes(null);
 		} catch (IllegalArgumentException e) {
-			assertNotNull(erm.getRelationships());
-			assertEquals("<null> is not a valid argument", e.getMessage());
+			assertNotNull(erm.getRelationshipTypes());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
@@ -127,7 +132,7 @@ public class EntityRelationshipModelTests {
 	public void testSetEntityTypes() {
 		List<IEntityType> entityTypes = getEntityTypes();
 		erm.setEntityTypes(entityTypes);
-		assertTrue(entityTypes == erm.getEntityTypes());
+		assertEquals(entityTypes, erm.getEntityTypes());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -137,16 +142,12 @@ public class EntityRelationshipModelTests {
 			erm.setEntityTypes(null);
 		} catch (IllegalArgumentException e) {
 			assertNotNull(erm.getEntityTypes());
-			assertEquals("<null> is not a valid argument", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 
-	}
-	
-	@Test
-	public void testToString() {
-		erm.setName(ERM_NAME);
-		assertEquals(ERM_NAME, erm.toString());
 	}
 
 	private List<IEntityType> getEntityTypes() {
@@ -158,5 +159,83 @@ public class EntityRelationshipModelTests {
 		entityTypes.add(entityTypeB);
 		entityTypes.add(entityTypeC);
 		return entityTypes;
+	}
+
+	@Test
+	public void testToString() {
+		erm.setName(ERM_NAME);
+		assertEquals(ERM_NAME, erm.toString());
+	}
+
+	@Test
+	public void testEqualsNull() {
+		assertFalse(erm.equals(null));
+	}
+
+	@Test
+	public void testEqualsSameObject() {
+		assertTrue(erm.equals(erm));
+	}
+
+	@Test
+	public void testEqualsDifferentClass() {
+		assertFalse(erm.equals(new Object()));
+	}
+
+	@Test
+	public void testEqualsDifferentName() {
+		IEntityRelationshipModel differentErm = erm.clone();
+		erm.setName(ERM_NAME);
+		differentErm.setName("Different Name");
+		assertFalse(erm.equals(differentErm));
+	}
+
+	@Test
+	public void testEqualsDifferentEntityTypesSize() {
+		IEntityRelationshipModel differentErm = erm.clone();
+		erm.addEntityType(new EntityType());
+		erm.addEntityType(new EntityType());
+		differentErm.addEntityType(new EntityType());
+		assertFalse(erm.equals(differentErm));
+	}
+
+	@Test
+	public void testEqualsDifferentEntityTypes() {
+		IEntityRelationshipModel differentErm = erm.clone();
+		erm.addEntityType(new EntityType("Entity Type"));
+		differentErm.addEntityType(new EntityType("Different Entity Type"));
+		assertFalse(erm.equals(differentErm));
+	}
+
+	@Test
+	public void testEqualsDifferentRelationshipTypesSize() {
+		IEntityRelationshipModel differentErm = erm.clone();
+		erm.addRelationshipType(new RelationshipType());
+		erm.addRelationshipType(new RelationshipType());
+		differentErm.addRelationshipType(new RelationshipType());
+		assertFalse(erm.equals(differentErm));
+	}
+
+	@Test
+	public void testEqualsDifferentRelationshipTypes() {
+		IEntityRelationshipModel differentErm = erm.clone();
+		erm.addRelationshipType(new RelationshipType("Relationship Type"));
+		differentErm.addRelationshipType(new RelationshipType(
+				"Different Relationship Type"));
+		assertFalse(erm.equals(differentErm));
+	}
+
+	@Test
+	public void testEqualsClone() {
+		IEntityRelationshipModel differentErm = erm.clone();
+		assertTrue(erm.equals(differentErm));
+	}
+
+	@Test
+	public void testClone() {
+		erm.addEntityType(new EntityType());
+		erm.addRelationshipType(new RelationshipType());
+		IEntityRelationshipModel differentErm = erm.clone();
+		assertTrue(erm.equals(differentErm));
 	}
 }

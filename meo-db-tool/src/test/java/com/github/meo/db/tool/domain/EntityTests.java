@@ -2,7 +2,6 @@ package com.github.meo.db.tool.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -11,12 +10,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
+import com.github.meo.db.tool.exception.AttributeNotFoundException;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
 public class EntityTests {
 
-	private final static String ENTITY_NAME = "Entity Name";
+	private final static String ENTITY_TYPE_NAME = "Entity Name";
+	private final static String ATTRIBUTE_NAME = "Attribute Name";
 
 	private IEntityType entityType;
 	private IEntity entity;
@@ -24,8 +24,8 @@ public class EntityTests {
 
 	@Before
 	public void setUp() {
-		entityType = new EntityType("Entity Type");
-		entity = new Entity();
+		entityType = new EntityType(ENTITY_TYPE_NAME);
+		entity = entityType.getEntity();
 		attributeType = new AttributeType("Attribute");
 	}
 
@@ -37,57 +37,21 @@ public class EntityTests {
 	}
 
 	@Test
-	public void testSetGetEntityType() {
+	public void testGetEntityType() {
 		IEntityType entityType = new EntityType("Entity Class");
-		entity.setEntityType(entityType);
+		entity = new Entity(entityType);
 		assertEquals(entityType, entity.getEntityType());
 	}
 
 	@Test
-	public void getSetAttributes() {
+	public void getAtrribute() {
 
-		List<IAttribute> attributes = TestObjects.getAttributes();
+		List<IAttributeType> attributeTypes = TestObjects.getAttributeTypes();
+		IEntityType entityType = new EntityType(ENTITY_TYPE_NAME);
+		entityType.setAttributeTypes(attributeTypes);
+		entity = entityType.getEntity();
 
-		entity.setAttributes(attributes);
-
-		assertEquals(attributes, entity.getAttributes());
-	}
-
-	@Test
-	public void testAddAttribute() {
-
-		List<IAttribute> attributes = TestObjects.getAttributes();
-
-		for (int i = 0; i < attributes.size(); i++) {
-			entity.addAttribute(attributes.get(i));
-		}
-
-		List<IAttribute> attributesActual = entity.getAttributes();
-
-		for (int i = 0; i < attributesActual.size(); i++) {
-			assertEquals(attributes.get(i), attributesActual.get(i));
-		}
-	}
-
-	@Test
-	public void testAddAttributeNull() {
-		entity.addAttribute(null);
-
-		for (IAttribute attribute : entity.getAttributes()) {
-			assertNotNull(attribute);
-		}
-	}
-
-	@Test
-	public void getAtrribute() throws AttributeTypeNotFoundException {
-
-		List<IAttribute> attributes = TestObjects.getAttributes();
-
-		String attributeName = attributes.get(1).getName();
-
-		for (int i = 0; i < attributes.size(); i++) {
-			entity.addAttribute(attributes.get(i));
-		}
+		String attributeName = attributeTypes.get(1).getName();
 
 		assertEquals(attributeName, entity.getAttribute(attributeName)
 				.getName());
@@ -142,22 +106,22 @@ public class EntityTests {
 	@Test
 	public void equalsDifferentEntityType() {
 		for (IEntity entity : TestObjects.getEntities()) {
-			IEntity clonedEntity = entity.clone();
-			clonedEntity.setEntityType(new EntityType("New entity type"));
-			assertFalse(entity.equals(clonedEntity));
+			EntityType entityType = new EntityType("New entity type");
+			IEntity differentEntity = entityType.getEntity();
+			assertFalse(entity.equals(differentEntity));
 		}
 	}
 
 	@Test
-	public void equalsB() {
-
-		IEntity entityClone;
-
-		for (IEntity entity : TestObjects.getEntities()) {
-			entityClone = (IEntity) entity.clone();
-			entityClone.setAttributes(null);
-			entity.equals(entityClone);
-		}
+	public void equalsDifferentAttributesSize() {
+		List<IAttributeType> attributeTypes = new ArrayList<IAttributeType>();
+		attributeTypes.add(new AttributeType());
+		attributeTypes.add(new AttributeType());
+		entityType.setAttributeTypes(attributeTypes);
+		entity = entityType.getEntity();
+		attributeTypes.add(new AttributeType());
+		IEntity differentEntity = entityType.getEntity();
+		assertFalse(entity.equals(differentEntity));
 	}
 
 	@Test
@@ -172,43 +136,20 @@ public class EntityTests {
 		}
 	}
 
-	@Test
-	public void equals() {
-
-		IEntity modifiedEntity;
-
-		for (IEntity entity : TestObjects.getEntities()) {
-			modifiedEntity = (IEntity) entity.clone();
-			modifiedEntity.addAttribute(attributeType.getAttribute());
-			assertFalse(entity.equals(modifiedEntity));
-		}
-
-		for (IEntity entity : TestObjects.getEntities()) {
-			entity.setAttributes(null);
-
-			modifiedEntity = (IEntity) entity.clone();
-
-			List<IAttribute> attributes = new ArrayList<IAttribute>();
-			attributes.add(attributeType.getAttribute());
-			modifiedEntity.setAttributes(attributes);
-			assertFalse(entity.equals(modifiedEntity));
-		}
-	}
-
 	@Test(expected = IllegalArgumentException.class)
-	public void getAtrributeNullArgument()
-			throws AttributeTypeNotFoundException {
+	public void getAtrributeNullArgument() {
 
-		List<IAttribute> attributes = TestObjects.getAttributes();
+		List<IAttributeType> attributeTypes = TestObjects.getAttributeTypes();
+		entityType.setAttributeTypes(attributeTypes);
 
-		for (int i = 0; i < attributes.size(); i++) {
-			entity.addAttribute(attributes.get(i));
-		}
+		entity = entityType.getEntity();
 
 		try {
 			entity.getAttribute(null);
 		} catch (IllegalArgumentException e) {
-			assertEquals("The given attribute name is null!", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
@@ -216,101 +157,135 @@ public class EntityTests {
 	@Test
 	public void getAttributesPrimaryKey() {
 
+		List<IAttributeType> attributeTypes = TestObjects.getAttributeTypes();
+
+		for (IAttributeType attributeType : attributeTypes) {
+			attributeType.setPrimaryKey(false);
+		}
+
 		List<IAttribute> expectedAttributes = new ArrayList<IAttribute>();
 
-		expectedAttributes.add(TestObjects.getAttributeA());
-		expectedAttributes.add(TestObjects.getAttributeC());
+		attributeTypes.get(0).setPrimaryKey(true);
+		attributeTypes.get(2).setPrimaryKey(true);
+		expectedAttributes.add(attributeTypes.get(0).getAttribute());
+		expectedAttributes.add(attributeTypes.get(2).getAttribute());
 
-		entity.setAttributes(TestObjects.getAttributes());
+		entityType.setAttributeTypes(attributeTypes);
+		entity = entityType.getEntity();
 
 		assertEquals(expectedAttributes, entity.getAttributesPrimaryKey());
 	}
 
 	@Test
 	public void testToString() {
-		entity.setEntityType(new EntityType(ENTITY_NAME));
-		assertEquals(ENTITY_NAME, entity.toString());
+
+		IAttributeType attributeTypeA = new AttributeType("Attribute A");
+		IAttributeType attributeTypeB = new AttributeType("Attribute B");
+		IAttributeType attributeTypeC = new AttributeType("Attribute C");
+
+		attributeTypeA.setPrimaryKey(true);
+		attributeTypeC.setPrimaryKey(true);
+
+		entityType.addAttributeType(attributeTypeA);
+		entityType.addAttributeType(attributeTypeB);
+		entityType.addAttributeType(attributeTypeC);
+
+		entity = entityType.getEntity();
+
+		entity.setAttributeValue("Attribute A", "A");
+		entity.setAttributeValue("Attribute B", "B");
+		entity.setAttributeValue("Attribute C", "C");
+
+		String expectedString = ENTITY_TYPE_NAME
+				+ "('Attribute A' = 'A', 'Attribute C' = 'C')";
+		assertEquals(expectedString, entity.toString());
 	}
 
 	@Test
-	public void testGetSetAttributeValue()
-			throws AttributeTypeNotFoundException {
-		IAttribute attribute = attributeType.getAttribute();
+	public void testGetSetAttributeValue() {
+		entityType.addAttributeType(new AttributeType(ATTRIBUTE_NAME));
+		entity = entityType.getEntity();
 		String value = "Value";
-		entity.addAttribute(attribute);
-		entity.setAttributeValue(attribute, value);
-		assertEquals(value, entity.getAttributeValue(attribute));
+		entity.setAttributeValue(ATTRIBUTE_NAME, value);
+		assertEquals(value, entity.getAttributeValue(ATTRIBUTE_NAME));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void voidtestGetAttributeValueNullAttribute()
-			throws AttributeTypeNotFoundException {
+	public void voidtestGetAttributeValueNullAttribute() {
 		try {
 			entity.getAttributeValue((IAttribute) null);
 		} catch (IllegalArgumentException e) {
-			assertEquals("null is not valid argument!", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void voidtestGetAttributeValueNullAttributeName()
-			throws AttributeTypeNotFoundException {
+	public void voidtestGetAttributeValueNullAttributeName() {
 		try {
 			entity.getAttributeValue((String) null);
 		} catch (IllegalArgumentException e) {
-			assertEquals("null is not valid argument!", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void voidtestSetAttributeValueNullAttribute()
-			throws AttributeTypeNotFoundException {
+	public void voidtestSetAttributeValueNullAttribute() {
 		try {
 			entity.setAttributeValue((IAttribute) null, new Object());
 		} catch (IllegalArgumentException e) {
-			assertEquals("null is not valid argument!", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void voidtestSetAttributeValueNullAttributeName()
-			throws AttributeTypeNotFoundException {
+	public void voidtestSetAttributeValueNullAttributeName() {
 		try {
 			entity.setAttributeValue((String) null, new Object());
 		} catch (IllegalArgumentException e) {
-			assertEquals("null is not valid argument!", e.getMessage());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
 			throw e;
 		}
 	}
 
-	@Test(expected = AttributeTypeNotFoundException.class)
-	public void voidtestGetAttributeValueAttributeNotFound()
-			throws AttributeTypeNotFoundException {
+	@Test(expected = AttributeNotFoundException.class)
+	public void testGetAttributeValueAttributeNotFound()
+			throws AttributeNotFoundException {
 
 		String expectedString = "Couldn't find the attribute 'Attribute'";
 
 		try {
 			entity.getAttributeValue(attributeType.getAttribute());
-		} catch (AttributeTypeNotFoundException e) {
+		} catch (AttributeNotFoundException e) {
 			assertEquals(expectedString, e.getMessage());
 			throw e;
 		}
 	}
 
 	@Test
-	public void testGetAttributesNotNull()
-			throws AttributeTypeNotFoundException {
-		List<IAttribute> attributes = TestObjects.getAttributes();
+	public void testGetAttributesNotNull() {
+
+		entityType.setAttributeTypes(TestObjects.getAttributeTypes());
+		entity = entityType.getEntity();
+
+		List<IAttribute> attributes = new ArrayList<IAttribute>();
 		List<IAttribute> attributesNotNull = new ArrayList<IAttribute>();
+
+		attributes = entity.getAttributes();
 
 		for (IAttribute attribute : attributes) {
 			attribute.setValue(null);
 		}
-
-		entity.setAttributes(attributes);
 
 		entity.setAttributeValue(attributes.get(0), "Value");
 		entity.setAttributeValue(attributes.get(2), "Value");
@@ -320,4 +295,68 @@ public class EntityTests {
 		assertEquals(attributesNotNull, entity.getAttributesNotNull());
 	}
 
+	@Test
+	public void testGetAttributeValue() {
+		IEntityType entityType = new EntityType(ENTITY_TYPE_NAME);
+		entityType.addAttributeType(new AttributeType(ATTRIBUTE_NAME));
+		IEntity entity = entityType.getEntity();
+		entity.setAttributeValue(ATTRIBUTE_NAME, "Value");
+		IAttribute attribute = entity.getAttribute(ATTRIBUTE_NAME);
+		assertEquals("Value", entity.getAttributeValue(attribute));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetAttributeValueNull() {
+		try {
+			entity.getAttributeValue((IAttribute) null);
+		} catch (IllegalArgumentException e) {
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test
+	public void testGetAttributesPrimaryKeyNoPk() {
+		List<IAttributeType> attributeTypes = new ArrayList<IAttributeType>();
+		attributeTypes.add(new AttributeType("Attribute Type A"));
+		attributeTypes.add(new AttributeType("Attribute Type B"));
+		attributeTypes.add(new AttributeType("Attribute Type C"));
+		List<IAttribute> expectedAttributes = new ArrayList<IAttribute>();
+		for (IAttributeType attributeType : attributeTypes) {
+			expectedAttributes.add(new Attribute(attributeType));
+		}
+		entityType = new EntityType(ENTITY_TYPE_NAME);
+		entityType.setAttributeTypes(attributeTypes);
+		entity = entityType.getEntity();
+		assertEquals(expectedAttributes, entity.getAttributesPrimaryKey());
+	}
+
+	@Test
+	public void testGetAttributesPrimaryKeyNotNull() {
+
+		IAttributeType attributeTypeA = new AttributeType("Attribute Type A");
+		IAttributeType attributeTypeB = new AttributeType("Attribute Type B");
+		IAttributeType attributeTypeC = new AttributeType("Attribute Type C");
+
+		List<IAttributeType> attributeTypes = new ArrayList<IAttributeType>();
+
+		attributeTypes.add(attributeTypeA);
+		attributeTypes.add(attributeTypeB);
+		attributeTypes.add(attributeTypeC);
+
+		entityType = new EntityType(ENTITY_TYPE_NAME);
+		entityType.setAttributeTypes(attributeTypes);
+		entity = entityType.getEntity();
+		entity.setAttributeValue("Attribute Type A", "Value");
+		entity.setAttributeValue("Attribute Type C", "Value");
+
+		List<IAttribute> expectedAttributes = new ArrayList<IAttribute>();
+		expectedAttributes.add(entity.getAttribute("Attribute Type A"));
+		expectedAttributes.add(entity.getAttribute("Attribute Type C"));
+
+		assertEquals(expectedAttributes,
+				entity.getAttributesPrimaryKeyNotNull());
+	}
 }

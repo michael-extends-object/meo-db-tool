@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.meo.db.tool.domain.Database;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.testsuite.TestObjects;
 

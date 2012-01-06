@@ -2,7 +2,6 @@ package com.github.meo.db.tool.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
@@ -60,11 +59,12 @@ public class AttributeTests {
 
 	@Test
 	public void testEqualsDifferentAttrbuteType() {
-		IAttribute attributeCloned = attribute.clone();
-		attributeCloned.setAttributeType(new AttributeType());
-		assertFalse(attribute.equals(attributeCloned));
+		IAttributeType attributeType = new AttributeType(
+				"Different attribute type");
+		IAttribute differentAttribute = attributeType.getAttribute();
+		assertFalse(attribute.equals(differentAttribute));
 	}
-	
+
 	@Test
 	public void testEqualsValueNullA() {
 		IAttribute attributeCloned = attribute.clone();
@@ -72,7 +72,7 @@ public class AttributeTests {
 		attributeCloned.setValue(null);
 		assertFalse(attribute.equals(attributeCloned));
 	}
-	
+
 	@Test
 	public void testEqualsValueNullB() {
 		IAttribute attributeCloned = attribute.clone();
@@ -80,7 +80,7 @@ public class AttributeTests {
 		attributeCloned.setValue("Value");
 		assertFalse(attribute.equals(attributeCloned));
 	}
-	
+
 	@Test
 	public void testEqualsDifferentValue() {
 		IAttribute attributeCloned = attribute.clone();
@@ -88,7 +88,7 @@ public class AttributeTests {
 		attributeCloned.setValue("Different value");
 		assertFalse(attribute.equals(attributeCloned));
 	}
-	
+
 	@Test
 	public void equalsSameObject() {
 		for (IAttribute attribute : TestObjects.getAttributes()) {
@@ -112,14 +112,25 @@ public class AttributeTests {
 
 	@Test
 	public void testSetGetAttributeType() {
-		attribute.setAttributeType(attributeType);
+		attribute = new Attribute(attributeType);
 		assertEquals(attributeType, attribute.getAttributeType());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetAttributeTypeNull() {
-		attribute.setAttributeType(null);
-		assertNotNull(attribute.getAttributeType());
+		try {
+			attribute = new Attribute(null);
+		} catch (IllegalArgumentException e) {
+			assertEquals("[Assertion failed] - this argument is required; it must not be null", e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test
+	public void testIsPrimaryKey() {
+		attributeType.setPrimaryKey(true);
+		IAttribute attribute = attributeType.getAttribute();
+		assertTrue(attribute.isPrimaryKey());
 	}
 
 	@Test

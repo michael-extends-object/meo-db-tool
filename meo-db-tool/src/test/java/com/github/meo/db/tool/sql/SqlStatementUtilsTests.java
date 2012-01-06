@@ -8,30 +8,30 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.meo.db.tool.domain.DatabaseTable;
-import com.github.meo.db.tool.domain.DatabaseTableColumn;
+import com.github.meo.db.tool.domain.db.Table;
+import com.github.meo.db.tool.domain.db.Column;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
-public class SqlUtilsTests {
+public class SqlStatementUtilsTests {
 
-	SqlUtils sqlUtils;
+	SqlStatementUtils sqlUtils;
 
 	private String expectedString;
 	private String actualString;
-	private DatabaseTable databaseTable;
-	private List<DatabaseTableColumn> databaseTableColumns;
+	private Table table;
+	private List<Column> columns;
 
 	@Before
 	public void setUp() {
-		sqlUtils = new SqlUtils();
-		databaseTable = TestObjects.getDatabaseTableA();
-		databaseTableColumns = databaseTable.getDatabaseTableColumns();
+		sqlUtils = new SqlStatementUtils();
+		table = TestObjects.getTableA();
+		columns = table.getColumns();
 	}
 
 	@Test
 	public void testGetColumnList() {
 		expectedString = "Database table column A, Database table column B, Database table column C";
-		actualString = SqlUtils.getColumnList(databaseTableColumns);
+		actualString = SqlStatementUtils.getColumnList(columns);
 		assertEquals(expectedString, actualString);
 	}
 
@@ -39,9 +39,9 @@ public class SqlUtilsTests {
 	public void testGetColumnListNull() {
 
 		try {
-			SqlUtils.getColumnList(null);
+			SqlStatementUtils.getColumnList(null);
 		} catch (IllegalArgumentException e) {
-			expectedString = "<null> is not a valid argument!";
+			expectedString = "[Assertion failed] - this collection must not be empty: it must contain at least 1 element";
 			actualString = e.getMessage();
 			assertEquals(expectedString, actualString);
 			throw e;
@@ -53,9 +53,9 @@ public class SqlUtilsTests {
 	public void testGetColumnListEmptyList() {
 
 		try {
-			SqlUtils.getColumnList(new ArrayList<DatabaseTableColumn>());
+			SqlStatementUtils.getColumnList(new ArrayList<Column>());
 		} catch (IllegalArgumentException e) {
-			expectedString = "The column list is empty!";
+			expectedString = "[Assertion failed] - this collection must not be empty: it must contain at least 1 element";
 			actualString = e.getMessage();
 			assertEquals(expectedString, actualString);
 			throw e;
@@ -66,45 +66,42 @@ public class SqlUtilsTests {
 	@Test
 	public void testGetValuesPlaceholders() {
 		expectedString = "?, ?, ?";
-		actualString = SqlUtils.getValuePlaceholders(3);
+		actualString = SqlStatementUtils.getValuePlaceholders(3);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetWhereCondition() {
 		expectedString = "Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
-		actualString = SqlUtils.getWhereCondition(databaseTableColumns);
+		actualString = SqlStatementUtils.getWhereCondition(columns);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetInsertStatement() {
 		expectedString = "INSERT INTO Database table A(Database table column A, Database table column B, Database table column C) VALUES(?, ?, ?)";
-		actualString = SqlUtils.getInsertStatement(databaseTable,
-				databaseTableColumns);
+		actualString = SqlStatementUtils.getInsertStatement(table, columns);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetSelectStatement() {
 		expectedString = "SELECT Database table column A, Database table column B, Database table column C FROM Database table A";
-		actualString = SqlUtils.getSelectStatement(databaseTable,
-				databaseTableColumns);
+		actualString = SqlStatementUtils.getSelectStatement(table, columns);
 		assertEquals(expectedString, actualString);
 	}
-	
+
 	@Test
 	public void testGetDeleteStatement() {
 		expectedString = "DELETE FROM Database table A";
-		actualString = SqlUtils.getDeleteStatement(databaseTable);
+		actualString = SqlStatementUtils.getDeleteStatement(table);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetDeleteWhereStatement() {
 		expectedString = "DELETE FROM Database table A WHERE Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
-		actualString = SqlUtils.getDeleteStatement(databaseTable,
-				databaseTableColumns);
+		actualString = SqlStatementUtils.getDeleteStatement(table, columns);
 		assertEquals(expectedString, actualString);
 	}
 }
