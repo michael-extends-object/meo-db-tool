@@ -5,11 +5,9 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.github.meo.db.tool.domain.AttributeTypeMapping;
-import com.github.meo.db.tool.domain.Database;
 import com.github.meo.db.tool.domain.IEntity;
 import com.github.meo.db.tool.domain.IEntityType;
-import com.github.meo.db.tool.exception.AttributeTypeNotFoundException;
+import com.github.meo.db.tool.domain.mapping.AttributeTypeMapping;
 
 public class EntityRowMapper implements RowMapper<IEntity> {
 
@@ -35,14 +33,9 @@ public class EntityRowMapper implements RowMapper<IEntity> {
 				.getAttributeTypeMappings(entityType)) {
 			String attributeName = attributeTypeMapping.getAttributeType()
 					.getName();
-			String columnName = attributeTypeMapping.getDatabaseTableColumn()
+			String columnName = attributeTypeMapping.getColumn()
 					.toString();
-			try {
-				entity.setAttributeValue(attributeName,
-						rs.getObject(columnName));
-			} catch (AttributeTypeNotFoundException e) {
-				e.printStackTrace();
-			}
+			entity.setAttributeValue(attributeName, rs.getObject(columnName));
 		}
 
 		return entity;
