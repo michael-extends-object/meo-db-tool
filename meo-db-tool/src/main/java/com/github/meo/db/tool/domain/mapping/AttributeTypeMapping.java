@@ -1,24 +1,28 @@
-package com.github.meo.db.tool.domain;
+package com.github.meo.db.tool.domain.mapping;
+
+import com.github.meo.db.tool.domain.AttributeType;
+import com.github.meo.db.tool.domain.IAttributeType;
+import com.github.meo.db.tool.domain.db.Column;
 
 public class AttributeTypeMapping {
 
 	IAttributeType attributeType;
-	DatabaseTableColumn databaseTableColumn;
+	Column column;
 
 	public AttributeTypeMapping() {
 		init();
 	}
 
 	public AttributeTypeMapping(IAttributeType attributeType,
-			DatabaseTableColumn databaseTableColumn) {
+			Column column) {
 		init();
 		setAttributeType(attributeType);
-		setDatabaseTableColumn(databaseTableColumn);
+		setColumn(column);
 	}
 
 	private void init() {
 		setAttributeType(new AttributeType());
-		setDatabaseTableColumn(new DatabaseTableColumn());
+		setColumn(new Column());
 	}
 
 	public boolean equals(Object object) {
@@ -54,8 +58,8 @@ public class AttributeTypeMapping {
 		/*
 		 * Do the objects have the same database table column?
 		 */
-		if (!getDatabaseTableColumn().equals(
-				attributeMapping.getDatabaseTableColumn())) {
+		if (!getColumn().equals(
+				attributeMapping.getColumn())) {
 			return false;
 		}
 
@@ -71,7 +75,7 @@ public class AttributeTypeMapping {
 		AttributeTypeMapping attributeMapping = new AttributeTypeMapping();
 
 		attributeMapping.setAttributeType(getAttributeType());
-		attributeMapping.setDatabaseTableColumn(getDatabaseTableColumn());
+		attributeMapping.setColumn(getColumn());
 
 		return attributeMapping;
 	}
@@ -80,8 +84,8 @@ public class AttributeTypeMapping {
 		return attributeType;
 	}
 
-	public DatabaseTableColumn getDatabaseTableColumn() {
-		return databaseTableColumn;
+	public Column getColumn() {
+		return column;
 	}
 
 	public void setAttributeType(IAttributeType attributeType) {
@@ -93,12 +97,12 @@ public class AttributeTypeMapping {
 		this.attributeType = attributeType;
 	}
 
-	public void setDatabaseTableColumn(DatabaseTableColumn databaseTableColumn) {
+	public void setColumn(Column column) {
 
-		if (databaseTableColumn == null) {
+		if (column == null) {
 			return;
 		}
 
-		this.databaseTableColumn = databaseTableColumn;
+		this.column = column;
 	}
 }

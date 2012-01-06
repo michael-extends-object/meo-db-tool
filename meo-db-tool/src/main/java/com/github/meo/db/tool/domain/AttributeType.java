@@ -1,5 +1,6 @@
 package com.github.meo.db.tool.domain;
 
+
 public class AttributeType implements IAttributeType, Cloneable {
 
 	private String name;

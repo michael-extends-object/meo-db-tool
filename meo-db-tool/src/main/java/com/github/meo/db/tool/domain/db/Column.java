@@ -1,13 +1,13 @@
-package com.github.meo.db.tool.domain;
+package com.github.meo.db.tool.domain.db;
 
-public class DatabaseTableColumn {
+public class Column {
 
 	private String name;
 
-	public DatabaseTableColumn() {
+	public Column() {
 	}
 
-	public DatabaseTableColumn(String name) {
+	public Column(String name) {
 		setName(name);
 	}
 
@@ -18,18 +18,18 @@ public class DatabaseTableColumn {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String toString() {
 		return name;
 	}
-	
+
 	public boolean equals(Object object) {
 
 		// null reference?
 		if (object == null) {
 			return false;
 		}
-		
+
 		/*
 		 * Are the references pointing to the same object?
 		 */
@@ -44,21 +44,21 @@ public class DatabaseTableColumn {
 			return false;
 		}
 
-		DatabaseTableColumn databaseTableColumn = (DatabaseTableColumn) object;
-		
+		Column column = (Column) object;
+
 		/*
 		 * Do the objects have the same name?
 		 */
 		if (getName() == null) {
-			if (databaseTableColumn.getName() != null) {
+			if (column.getName() != null) {
 				return false;
 			}
 		} else {
-			if (databaseTableColumn.getName() == null) {
+			if (column.getName() == null) {
 				return false;
 			}
 
-			if (!getName().equals(databaseTableColumn.getName())) {
+			if (!getName().equals(column.getName())) {
 				return false;
 			}
 		}

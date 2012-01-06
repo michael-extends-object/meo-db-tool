@@ -3,101 +3,58 @@ package com.github.meo.db.tool.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.Assert;
+
+
 public class Relationship implements IRelationship, Cloneable {
 
-	private String name;
-	private Object entity;
-	private Object referencedEntity;
-	private List<Object> referencedEntities;
-	private Cardinality cardinality;
+	private IRelationshipType relationshipType;
+	private IEntity entity;
+	private List<IEntity> referencedEntities;
 
-	public Relationship() {
+	public Relationship(IRelationshipType relationshipType) {
 		init();
-	}
-
-	public Relationship(String name) {
-		init();
-		setName(name);
-	}
-
-	public Relationship(IEntity referencedEntity, Cardinality cardinality) {
-		init();
-		setReferencedEntity(referencedEntity);
-		setCardinality(cardinality);
-	}
-
-	public Relationship(String name, IEntity entity,
-			IEntity referencedEntity, Cardinality cardinality) {
-		init();
-		setName(name);
-		setReferencedEntity(referencedEntity);
-		setCardinality(cardinality);
+		setRelationshipType(relationshipType);
 	}
 
 	private void init() {
-		name = "";
-		entity = new Entity();
-		referencedEntity = new Entity();
-		referencedEntities = new ArrayList<Object>();
-		cardinality = Cardinality.OneToOne;
+		setEntity(new Entity(new EntityType()));
+		setReferencedEntities(new ArrayList<IEntity>());
 	}
 
-	public boolean addReferencedEntity(Object entity) {
+	public boolean addReferencedEntity(IEntity entity) {
 
-		if (entity == null) {
-			return false;
-		}
+		Assert.notNull(entity);
 
 		return referencedEntities.add(entity);
 	}
 
-	public boolean addReferencedEntities(List<Object> referencedEntities) {
+	public void addReferencedEntities(List<IEntity> referencedEntities) {
 
-		boolean isOperationSuccessful = true;
+		Assert.notNull(referencedEntities);
 
-		if (referencedEntities == null) {
-			return false;
+		for (IEntity referencedEntity : referencedEntities) {
+			addReferencedEntity(referencedEntity);
 		}
-
-		for (Object referencedEntity : referencedEntities) {
-			if (!addReferencedEntity(referencedEntity)) {
-				isOperationSuccessful = false;
-			}
-		}
-
-		return isOperationSuccessful;
 	}
 
-	public String getName() {
-		return name;
+	public IRelationshipType getRelationshipType() {
+		return relationshipType;
 	}
 
-	public Object getEntity() {
+	public IEntity getEntity() {
 		return entity;
 	}
 
-	public Object getReferencedEntity() {
-		return referencedEntity;
-	}
-
-	public List<Object> getReferencedEntities() {
+	public List<IEntity> getReferencedEntities() {
 		return referencedEntities;
 	}
 
-	public Cardinality getCardinality() {
-		return cardinality;
+	public void setRelationshipType(IRelationshipType relationshipType) {
+		this.relationshipType = relationshipType;
 	}
 
-	public void setName(String name) {
-
-		if (name == null) {
-			return;
-		}
-
-		this.name = name;
-	}
-
-	public void setEntity(Object entity) {
+	public void setEntity(IEntity entity) {
 
 		if (entity == null) {
 			return;
@@ -106,62 +63,32 @@ public class Relationship implements IRelationship, Cloneable {
 		this.entity = entity;
 	}
 
-	public void setReferencedEntity(Object referencedEntity) {
-
-		if (referencedEntity == null) {
-			return;
-		}
-
-		this.referencedEntity = referencedEntity;
-	}
-
-	public void setReferencedEntities(List<Object> referencedEntities) {
+	public void setReferencedEntities(List<IEntity> referencedEntities) {
 
 		if (referencedEntities == null) {
 			return;
 		}
 
-		this.referencedEntities = new ArrayList<Object>();
+		this.referencedEntities = new ArrayList<IEntity>();
 
-		for (Object referencedEntity : referencedEntities) {
+		for (IEntity referencedEntity : referencedEntities) {
 			addReferencedEntity(referencedEntity);
 		}
 	}
 
-	public void setCardinality(Cardinality cardinality) {
-
-		if (cardinality == null) {
-			return;
-		}
-
-		this.cardinality = cardinality;
-	}
-
 	public String toString() {
-
-		// named entity
-		if (!"".equals(getName())) {
-			return getName();
-		}
-
-		return String.format("'Relationship to %s'", referencedEntity);
+		return getRelationshipType().toString();
 	}
 
 	public IRelationship clone() {
 
-		IRelationship relationship = new Relationship();
-
-		relationship.setName(getName());
+		IRelationship relationship = new Relationship(getRelationshipType());
 
 		relationship.setEntity(getEntity());
 
-		relationship.setReferencedEntity(getReferencedEntity());
-
-		for (Object referencedEntity : getReferencedEntities()) {
+		for (IEntity referencedEntity : getReferencedEntities()) {
 			relationship.addReferencedEntity(referencedEntity);
 		}
-
-		relationship.setCardinality(getCardinality());
 
 		return relationship;
 	}
@@ -191,23 +118,9 @@ public class Relationship implements IRelationship, Cloneable {
 		IRelationship relationship = (IRelationship) object;
 
 		/*
-		 * Do the objects have the same name?
-		 */
-		if (!getName().equals(relationship.getName())) {
-			return false;
-		}
-
-		/*
 		 * Do the objects have the same entity?
 		 */
 		if (!getEntity().equals(relationship.getEntity())) {
-			return false;
-		}
-
-		/*
-		 * Do the objects have the same referenced entity?
-		 */
-		if (!getReferencedEntity().equals(relationship.getReferencedEntity())) {
 			return false;
 		}
 
@@ -226,13 +139,7 @@ public class Relationship implements IRelationship, Cloneable {
 			}
 		}
 
-		/*
-		 * Do the objects have the same cardinality?
-		 */
-		if (!getCardinality().equals(relationship.getCardinality())) {
-			return false;
-		}
-
 		return true;
 	}
+
 }

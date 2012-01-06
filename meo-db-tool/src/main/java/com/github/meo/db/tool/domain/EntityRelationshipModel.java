@@ -3,12 +3,16 @@ package com.github.meo.db.tool.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.Assert;
+
+import com.github.meo.db.tool.exception.RelationshipTypeNotFoundException;
+
 public class EntityRelationshipModel implements IEntityRelationshipModel,
 		Cloneable {
 
 	String name;
 	List<IEntityType> entityTypes;
-	List<IRelationship> relationships;
+	List<IRelationshipType> relationshipTypes;
 
 	public EntityRelationshipModel() {
 		init();
@@ -20,27 +24,23 @@ public class EntityRelationshipModel implements IEntityRelationshipModel,
 	}
 
 	private void init() {
-		name = "";
+		setName("");
 		entityTypes = new ArrayList<IEntityType>();
-		relationships = new ArrayList<IRelationship>();
+		setRelationshipTypes(new ArrayList<IRelationshipType>());
 	}
 
 	public boolean addEntityType(IEntityType entityType) {
 
-		if (entityType == null) {
-			throw new IllegalArgumentException("<null> is not a valid argument");
-		}
+		Assert.notNull(entityType);
 
-		return entityTypes.add(entityType);
+		return getEntityTypes().add(entityType);
 	}
 
-	public boolean addRelationship(IRelationship relationship) {
+	public boolean addRelationshipType(IRelationshipType relationshipType) {
 
-		if (relationship == null) {
-			throw new IllegalArgumentException("<null> is not a valid argument");
-		}
+		Assert.notNull(relationshipType);
 
-		return relationships.add(relationship);
+		return relationshipTypes.add(relationshipType);
 	}
 
 	public String getName() {
@@ -51,37 +51,62 @@ public class EntityRelationshipModel implements IEntityRelationshipModel,
 		return entityTypes;
 	}
 
-	public List<IRelationship> getRelationships() {
-		return relationships;
+	public List<IRelationshipType> getRelationshipTypes() {
+		return relationshipTypes;
+	}
+
+	public List<IRelationshipType> getRelationshipTypes(IEntityType entityType) {
+
+		Assert.notNull(entityType);
+
+		List<IRelationshipType> relationshipTypes = new ArrayList<IRelationshipType>();
+
+		for (IRelationshipType rType : getRelationshipTypes()) {
+			if (entityType.equals(rType.getEntityType())) {
+				relationshipTypes.add(rType);
+			}
+		}
+
+		return relationshipTypes;
+	}
+
+	public IRelationshipType getRelationshipType(IEntityType entityType,
+			IEntityType referencedEntityType) {
+
+		Assert.notNull(entityType);
+		Assert.notNull(referencedEntityType);
+
+		for (IRelationshipType rType : getRelationshipTypes(entityType)) {
+			if (referencedEntityType.equals(rType.getReferencedEntityType())) {
+				return rType;
+			}
+		}
+
+		throw new RelationshipTypeNotFoundException(entityType,
+				referencedEntityType);
 	}
 
 	public void setName(String name) {
 
-		if (name == null) {
-			throw new IllegalArgumentException("<null> is not a valid argument");
-		}
+		Assert.notNull(name);
 
 		this.name = name;
 	}
 
 	public void setEntityTypes(List<IEntityType> entityTypes) {
 
-		if (entityTypes == null) {
-			throw new IllegalArgumentException("<null> is not a valid argument");
+		Assert.notNull(entityTypes);
+
+		for (IEntityType entityType : entityTypes) {
+			addEntityType(entityType);
 		}
-
-		this.entityTypes = entityTypes;
-
 	}
 
-	public void setRelationships(List<IRelationship> relationships) {
+	public void setRelationshipTypes(List<IRelationshipType> relationships) {
 
-		if (relationships == null) {
-			throw new IllegalArgumentException("<null> is not a valid argument");
-		}
+		Assert.notNull(relationships);
 
-		this.relationships = relationships;
-
+		this.relationshipTypes = relationships;
 	}
 
 	@Override
@@ -90,14 +115,15 @@ public class EntityRelationshipModel implements IEntityRelationshipModel,
 	}
 
 	public IEntityRelationshipModel clone() {
+
 		IEntityRelationshipModel erm = new EntityRelationshipModel(getName());
 
 		for (IEntityType entityType : getEntityTypes()) {
 			erm.addEntityType(entityType.clone());
 		}
 
-		for (IRelationship relationship : getRelationships()) {
-			erm.addRelationship(relationship.clone());
+		for (IRelationshipType relationshipType : getRelationshipTypes()) {
+			erm.addRelationshipType(relationshipType.clone());
 		}
 
 		return erm;
@@ -149,17 +175,18 @@ public class EntityRelationshipModel implements IEntityRelationshipModel,
 		/*
 		 * Do the objects have the same relationships?
 		 */
-		if (getRelationships().size() != erm.getRelationships().size()) {
+		if (getRelationshipTypes().size() != erm.getRelationshipTypes().size()) {
 			return false;
 		}
 
-		for (int i = 0; i < getRelationships().size(); i++) {
-			if (!getRelationships().get(i)
-					.equals(erm.getRelationships().get(i))) {
+		for (int i = 0; i < getRelationshipTypes().size(); i++) {
+			if (!getRelationshipTypes().get(i).equals(
+					erm.getRelationshipTypes().get(i))) {
 				return false;
 			}
 		}
 
 		return true;
 	}
+
 }

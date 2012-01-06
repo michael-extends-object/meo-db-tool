@@ -3,6 +3,9 @@ package com.github.meo.db.tool.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.Assert;
+
+
 public class EntityType implements IEntityType {
 
 	private String name;
@@ -62,37 +65,25 @@ public class EntityType implements IEntityType {
 
 	public void setName(String name) {
 
-		if (name == null) {
-			return;
-		}
+		Assert.notNull(name);
 
 		this.name = name;
 	}
 
 	public void setAttributeTypes(List<IAttributeType> attributeTypes) {
 
-		if (attributeTypes == null) {
-			return;
-		}
+		Assert.notNull(attributeTypes);
 
 		this.attributeTypes = attributeTypes;
 	}
 
 	public IEntity getEntity() {
-
-		IEntity entity = new Entity();
-
-		entity.setEntityType(this);
-
-		return entity;
+		return new Entity(this);
 	}
 
 	public IAttributeType getAttributeType(String name) {
 
-		if (name == null) {
-			throw new IllegalArgumentException(
-					"The given attribute name is null!");
-		}
+		Assert.notNull(name);
 
 		IAttributeType resultAttributeType = null;
 
@@ -104,7 +95,7 @@ public class EntityType implements IEntityType {
 
 		return resultAttributeType;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
@@ -115,6 +106,7 @@ public class EntityType implements IEntityType {
 		IEntityType entityType = new EntityType();
 
 		entityType.setName(getName());
+		// entityType.setEntityRelationshipModel(getEntityRelationshipModel());
 
 		for (IAttributeType attributeType : getAttributeTypes()) {
 			entityType.addAttributeType(attributeType.clone());
@@ -122,7 +114,7 @@ public class EntityType implements IEntityType {
 
 		return entityType;
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
 

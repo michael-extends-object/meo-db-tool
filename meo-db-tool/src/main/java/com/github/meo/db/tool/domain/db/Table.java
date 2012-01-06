@@ -1,33 +1,32 @@
-package com.github.meo.db.tool.domain;
+package com.github.meo.db.tool.domain.db;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseTable {
+public class Table {
 
 	private String name;
-	private List<DatabaseTableColumn> databaseTableColumns;
-	
-	public DatabaseTable() {
+	private List<Column> columns;
+
+	public Table() {
 		init();
 	}
 
-	public DatabaseTable(String name) {
+	public Table(String name) {
 		init();
 		setName(name);
 	}
 
 	private void init() {
-		setDatabaseTableColumns(new ArrayList<DatabaseTableColumn>());
+		setColumns(new ArrayList<Column>());
 	}
 
-	public List<DatabaseTableColumn> getDatabaseTableColumns() {
-		return databaseTableColumns;
+	public List<Column> getColumns() {
+		return columns;
 	}
 
-	public void setDatabaseTableColumns(
-			List<DatabaseTableColumn> databaseTableColumns) {
-		this.databaseTableColumns = databaseTableColumns;
+	public void setColumns(List<Column> columns) {
+		this.columns = columns;
 	}
 
 	public String getName() {
@@ -43,7 +42,7 @@ public class DatabaseTable {
 	}
 
 	public boolean equals(Object object) {
-		
+
 		// null reference?
 		if (object == null) {
 			return false;
@@ -63,22 +62,22 @@ public class DatabaseTable {
 			return false;
 		}
 
-		DatabaseTable databaseTable = (DatabaseTable) object;
+		Table table = (Table) object;
 
 		/*
 		 * Do the objects have the same name?
 		 */
 		if (getName() == null) {
-			if (databaseTable.getName() != null) {
+			if (table.getName() != null) {
 				return false;
 			}
 		} else {
 
-			if (databaseTable.getName() == null) {
+			if (table.getName() == null) {
 				return false;
 			}
 
-			if (!getName().equals(databaseTable.getName())) {
+			if (!getName().equals(table.getName())) {
 				return false;
 			}
 		}

@@ -1,5 +1,6 @@
 package com.github.meo.db.tool.domain;
 
+
 public interface IAttributeType {
 
 	public boolean equals(Object object);

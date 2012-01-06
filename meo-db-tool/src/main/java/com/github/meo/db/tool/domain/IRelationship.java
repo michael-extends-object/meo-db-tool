@@ -2,36 +2,27 @@ package com.github.meo.db.tool.domain;
 
 import java.util.List;
 
+
 public interface IRelationship {
 
-	public boolean addReferencedEntity(Object entity);
+	public boolean addReferencedEntity(IEntity entity);
+
+	public void addReferencedEntities(List<IEntity> referencedEntities);
+
+	public IRelationshipType getRelationshipType();
 	
-	public boolean addReferencedEntities(List<Object> referencedEntities);
+	public IEntity getEntity();
 
-	public String getName();
+	public List<IEntity> getReferencedEntities();
 
-	public Object getEntity();
+	public void setEntity(IEntity entity);
 
-	public Object getReferencedEntity();
+	public void setReferencedEntities(List<IEntity> referencedEntities);
 
-	public List<Object> getReferencedEntities();
-
-	public Cardinality getCardinality();
-
-	public void setName(String name);
-
-	public void setEntity(Object entity);
-
-	public void setReferencedEntity(Object referencedEntity);
-
-	public void setReferencedEntities(List<Object> referencedEntities);
-
-	public void setCardinality(Cardinality cardinality);
-
-	public boolean equals(Object object);
+	public String toString();
 
 	public IRelationship clone();
 
-	public String toString();
+	public boolean equals(Object object);
 
 }
