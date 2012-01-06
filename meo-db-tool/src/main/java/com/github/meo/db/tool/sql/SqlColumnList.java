@@ -3,59 +3,55 @@ package com.github.meo.db.tool.sql;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.meo.db.tool.domain.DatabaseTableColumn;
+import org.springframework.util.Assert;
+
+import com.github.meo.db.tool.domain.db.Column;
 
 public class SqlColumnList {
 
-	List<DatabaseTableColumn> databaseTableColumns;
+	List<Column> columns;
 
 	public SqlColumnList() {
 		init();
 	}
 
-	public SqlColumnList(List<DatabaseTableColumn> databaseTableColumns) {
-		setDatabaseTableColumns(databaseTableColumns);
+	public SqlColumnList(List<Column> columns) {
+		setColumns(columns);
 	}
 
 	private void init() {
-		setDatabaseTableColumns(new ArrayList<DatabaseTableColumn>());
+		setColumns(new ArrayList<Column>());
 	}
 
 	public int size() {
-		return getDatabaseTableColumns().size();
+		return columns().size();
 	}
 
 	@Override
 	public String toString() {
-		return SqlUtils.getColumnList(getDatabaseTableColumns());
+		return SqlStatementUtils.getColumnList(columns());
 	}
 
 	public String getPlaceholders() {
-		return SqlUtils.getValuePlaceholders(size());
+		return SqlStatementUtils.getValuePlaceholders(size());
 	}
 
-	public boolean addDatabaseTableColumn(
-			DatabaseTableColumn databaseTableColumn) {
-		return databaseTableColumns.add(databaseTableColumn);
+	public boolean addColumn(Column column) {
+		Assert.notNull(column);
+		return columns.add(column);
 	}
 
-	public List<DatabaseTableColumn> getDatabaseTableColumns() {
-		return databaseTableColumns;
+	public List<Column> columns() {
+		return columns;
 	}
 
-	public void setDatabaseTableColumns(
-			List<DatabaseTableColumn> databaseTableColumns) {
-
-		if (databaseTableColumns == null) {
-			throw new IllegalArgumentException(
-					"<null> is not a valid argument!");
-		}
-
-		this.databaseTableColumns = databaseTableColumns;
+	public void setColumns(List<Column> columns) {
+		Assert.notNull(columns);
+		this.columns = columns;
 	}
 
 	public String getWhereCondition() {
-		return SqlUtils.getWhereCondition(getDatabaseTableColumns());
+		return SqlStatementUtils.getWhereCondition(columns());
 	}
 
 }
