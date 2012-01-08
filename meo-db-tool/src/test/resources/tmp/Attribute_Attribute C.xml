@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <attribute>
-   <attributeType name="Attribute C"/>
+   <attributeType name="Attribute C" isPrimaryKey="true"/>
    <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:double">8.8</value>
 </attribute>

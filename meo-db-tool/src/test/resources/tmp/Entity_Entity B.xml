@@ -2,22 +2,22 @@
 <entity>
    <entityType name="Entity B">
       <attributeTypes>
-         <attributeType name="Attribute A"/>
-         <attributeType name="Attribute B"/>
-         <attributeType name="Attribute C"/>
+         <attributeType name="Attribute A" isPrimaryKey="true"/>
+         <attributeType name="Attribute B" isPrimaryKey="false"/>
+         <attributeType name="Attribute C" isPrimaryKey="true"/>
       </attributeTypes>
    </entityType>
    <attributes>
       <attribute>
-         <attributeType name="Attribute A"/>
+         <attributeType name="Attribute A" isPrimaryKey="true"/>
          <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">value</value>
       </attribute>
       <attribute>
-         <attributeType name="Attribute B"/>
+         <attributeType name="Attribute B" isPrimaryKey="false"/>
          <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:boolean">true</value>
       </attribute>
       <attribute>
-         <attributeType name="Attribute C"/>
+         <attributeType name="Attribute C" isPrimaryKey="true"/>
          <value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:double">8.8</value>
       </attribute>
    </attributes>

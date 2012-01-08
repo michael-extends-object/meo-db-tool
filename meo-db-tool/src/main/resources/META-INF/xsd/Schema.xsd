@@ -13,6 +13,8 @@
 
 	<xs:element name="jdbcDataSource" type="jdbcDataSource" />
 
+	<xs:element name="mappableAttribute" type="mappableAttribute" />
+
 	<xs:complexType name="attribute">
 		<xs:sequence>
 			<xs:element ref="attributeType" minOccurs="1" maxOccurs="1" />
@@ -23,6 +25,7 @@
 
 	<xs:complexType name="attributeType">
 		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="isPrimaryKey" type="xs:boolean" />
 	</xs:complexType>
 
 	<xs:complexType name="entity">
@@ -75,6 +78,14 @@
 				maxOccurs="1" />
 		</xs:sequence>
 		<xs:attribute name="driver" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="mappableAttribute">
+		<xs:sequence>
+			<xs:element ref="attributeType" minOccurs="1" maxOccurs="1" />
+			<xs:element name="value" type="xs:anyType" minOccurs="0"
+				maxOccurs="1" />
+		</xs:sequence>
 	</xs:complexType>
 
 </xs:schema>

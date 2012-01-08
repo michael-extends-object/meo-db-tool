@@ -15,6 +15,6 @@ public interface IAttributeType {
 
 	public IAttributeType clone();
 
-	public IAttribute getAttribute();
+	public IAttribute createAttribute();
 
 }

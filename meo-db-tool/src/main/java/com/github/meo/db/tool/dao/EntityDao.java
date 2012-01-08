@@ -136,7 +136,7 @@ public class EntityDao implements IEntityDao {
 		List<IAttribute> attributes = new ArrayList<IAttribute>();
 
 		for (int i = 0; i < refAttributeTypes.size(); i++) {
-			IAttribute attribute = refAttributeTypes.get(i).getAttribute();
+			IAttribute attribute = refAttributeTypes.get(i).createAttribute();
 			attribute.setValue(entity.getAttributeValue(attributeTypes.get(i)
 					.getName()));
 			attributes.add(attribute);

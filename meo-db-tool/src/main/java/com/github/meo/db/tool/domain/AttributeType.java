@@ -1,6 +1,5 @@
 package com.github.meo.db.tool.domain;
 
-
 public class AttributeType implements IAttributeType, Cloneable {
 
 	private String name;
@@ -56,11 +55,9 @@ public class AttributeType implements IAttributeType, Cloneable {
 	 */
 	@Override
 	public IAttributeType clone() {
-
 		IAttributeType attributeType = new AttributeType();
-
 		attributeType.setName(getName());
-
+		attributeType.setPrimaryKey(isPrimaryKey());
 		return attributeType;
 	}
 
@@ -94,10 +91,15 @@ public class AttributeType implements IAttributeType, Cloneable {
 			return false;
 		}
 
+		// compare field: isPrimaryKey
+		if (isPrimaryKey() != attributeType.isPrimaryKey()) {
+			return false;
+		}
+
 		return true;
 	}
 
-	public IAttribute getAttribute() {
+	public IAttribute createAttribute() {
 		IAttribute attribute = new Attribute(this);
 		return attribute;
 	}

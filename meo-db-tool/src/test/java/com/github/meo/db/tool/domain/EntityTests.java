@@ -167,8 +167,8 @@ public class EntityTests {
 
 		attributeTypes.get(0).setPrimaryKey(true);
 		attributeTypes.get(2).setPrimaryKey(true);
-		expectedAttributes.add(attributeTypes.get(0).getAttribute());
-		expectedAttributes.add(attributeTypes.get(2).getAttribute());
+		expectedAttributes.add(attributeTypes.get(0).createAttribute());
+		expectedAttributes.add(attributeTypes.get(2).createAttribute());
 
 		entityType.setAttributeTypes(attributeTypes);
 		entity = entityType.getEntity();
@@ -265,7 +265,7 @@ public class EntityTests {
 		String expectedString = "Couldn't find the attribute 'Attribute'";
 
 		try {
-			entity.getAttributeValue(attributeType.getAttribute());
+			entity.getAttributeValue(attributeType.createAttribute());
 		} catch (AttributeNotFoundException e) {
 			assertEquals(expectedString, e.getMessage());
 			throw e;

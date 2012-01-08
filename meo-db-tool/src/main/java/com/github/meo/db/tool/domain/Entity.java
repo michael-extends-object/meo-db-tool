@@ -12,6 +12,14 @@ public class Entity implements IEntity, Cloneable {
 	private IEntityType entityType;
 	private List<IAttribute> attributes;
 
+	/**
+	 * @deprecated Only used by JAXB interface. Will be removed after the
+	 *             XML-binding does not need this constructor anymore.
+	 */
+	@Deprecated
+	public Entity() {
+	}
+
 	public Entity(IEntityType entityType) {
 		setEntityType(entityType);
 	}

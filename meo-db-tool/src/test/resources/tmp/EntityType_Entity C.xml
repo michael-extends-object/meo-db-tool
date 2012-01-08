@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entityType name="Entity C">
    <attributeTypes>
-      <attributeType name="Attribute A"/>
-      <attributeType name="Attribute B"/>
-      <attributeType name="Attribute C"/>
+      <attributeType name="Attribute A" isPrimaryKey="true"/>
+      <attributeType name="Attribute B" isPrimaryKey="false"/>
+      <attributeType name="Attribute C" isPrimaryKey="true"/>
    </attributeTypes>
 </entityType>

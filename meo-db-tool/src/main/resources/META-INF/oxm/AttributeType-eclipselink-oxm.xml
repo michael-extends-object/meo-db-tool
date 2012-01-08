@@ -4,9 +4,10 @@
 	<java-types>
 		<java-type name="AttributeType">
 			<xml-root-element name="attributeType" />
-			<xml-type name="attributeType" prop-order="name" />
+			<xml-type name="attributeType" prop-order="name isPrimaryKey" />
 			<java-attributes>
 				<xml-attribute java-attribute="name" />
+				<xml-attribute java-attribute="isPrimaryKey" />
 			</java-attributes>
 		</java-type>
 	</java-types>

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<attributeType name="Attribute C"/>
+<attributeType name="Attribute C" isPrimaryKey="true"/>

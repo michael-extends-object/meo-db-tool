@@ -119,19 +119,19 @@ public class TestObjects {
 	}
 
 	public static IAttribute getAttributeA() {
-		IAttribute attribute = getAttributeTypeA().getAttribute();
+		IAttribute attribute = getAttributeTypeA().createAttribute();
 		attribute.setValue("value");
 		return attribute;
 	}
 
 	public static IAttribute getAttributeB() {
-		IAttribute attribute = getAttributeTypeB().getAttribute();
+		IAttribute attribute = getAttributeTypeB().createAttribute();
 		attribute.setValue(Boolean.TRUE);
 		return attribute;
 	}
 
 	public static IAttribute getAttributeC() {
-		IAttribute attribute = getAttributeTypeC().getAttribute();
+		IAttribute attribute = getAttributeTypeC().createAttribute();
 		attribute.setValue(8.8);
 		return attribute;
 	}

@@ -114,7 +114,7 @@ public class AttributeTypeTests {
 	@Test
 	public void testGetAttribute() {
 		for (IAttributeType attributeType : TestObjects.getAttributeTypes()) {
-			IAttribute attribute = attributeType.getAttribute();
+			IAttribute attribute = attributeType.createAttribute();
 			assertEquals(attributeType.getName(), attribute.getAttributeType()
 					.getName());
 		}

@@ -21,7 +21,7 @@ public class AttributeTests {
 	@Before
 	public void setUp() {
 		attributeType = new AttributeType(ATTRIBUTE_NAME);
-		attribute = attributeType.getAttribute();
+		attribute = attributeType.createAttribute();
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class AttributeTests {
 	public void testEqualsDifferentAttrbuteType() {
 		IAttributeType attributeType = new AttributeType(
 				"Different attribute type");
-		IAttribute differentAttribute = attributeType.getAttribute();
+		IAttribute differentAttribute = attributeType.createAttribute();
 		assertFalse(attribute.equals(differentAttribute));
 	}
 
@@ -129,7 +129,7 @@ public class AttributeTests {
 	@Test
 	public void testIsPrimaryKey() {
 		attributeType.setPrimaryKey(true);
-		IAttribute attribute = attributeType.getAttribute();
+		IAttribute attribute = attributeType.createAttribute();
 		assertTrue(attribute.isPrimaryKey());
 	}
 

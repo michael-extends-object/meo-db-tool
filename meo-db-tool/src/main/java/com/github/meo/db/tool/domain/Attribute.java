@@ -1,16 +1,19 @@
 package com.github.meo.db.tool.domain;
 
-import com.github.meo.db.tool.xml.AttributeAdapter;
-
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.springframework.util.Assert;
 
-@XmlJavaTypeAdapter(AttributeAdapter.class)
 public class Attribute implements IAttribute, Cloneable {
 
 	private IAttributeType attributeType;
 	private Object value;
+
+	/**
+	 * @deprecated Only used by JAXB interface. Will be removed after the
+	 *             XML-binding does not need this constructor anymore.
+	 */
+	@Deprecated
+	public Attribute() {
+	}
 
 	public Attribute(IAttributeType attributeType) {
 		setAttributeType(attributeType);

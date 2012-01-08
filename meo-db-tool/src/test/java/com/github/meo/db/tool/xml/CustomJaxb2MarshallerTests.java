@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.oxm.XmlMappingException;
 
+import com.github.meo.db.tool.domain.AttributeType;
 import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.IEntity;
@@ -33,51 +34,46 @@ public class CustomJaxb2MarshallerTests {
 				.getBean("jaxbMarshaller");
 	}
 
-	@Ignore
 	@Test
 	public void marshalUnmarshalAttribute() throws XmlMappingException,
 			FileNotFoundException, IOException {
-
 		for (IAttribute attribute : TestObjects.getAttributes()) {
-
-			String path = basePath + attribute.getClass().getSimpleName() + "_"
-					+ attribute.getAttributeType().getName() + ".xml";
-
+			String path = getPath(attribute, attribute.getAttributeType()
+					.getName());
 			jaxbMarshaller.marshal(attribute, path);
-
 			assertEquals(attribute, jaxbMarshaller.unmarshal(path));
 		}
+	}
 
+	@Test
+	public void marshalUnmarshalMappbleAttribute() throws XmlMappingException,
+			FileNotFoundException, IOException {
+		IAttributeType attributeType = new AttributeType("Attribute Name");
+		MappableAttribute attribute = new MappableAttribute();
+		attribute.setAttributeType(attributeType);
+		attribute.setValue("Value");
+		String path = getPath(attribute, attribute.getAttributeType().getName());
+		jaxbMarshaller.marshal(attribute, path);
+		assertEquals(attribute, jaxbMarshaller.unmarshal(path));
 	}
 
 	@Test
 	public void marshalUnmarshalAttributeType() throws XmlMappingException,
 			FileNotFoundException, IOException {
-
 		for (IAttributeType attributeType : TestObjects.getAttributeTypes()) {
-
-			String path = basePath + attributeType.getClass().getSimpleName()
-					+ "_" + attributeType.getName() + ".xml";
-
+			String path = getPath(attributeType, attributeType.getName());
 			jaxbMarshaller.marshal(attributeType, path);
-
 			assertEquals(attributeType, jaxbMarshaller.unmarshal(path));
 		}
 
 	}
 
-	@Ignore
 	@Test
 	public void marshalUnmarshalEntity() throws XmlMappingException,
 			FileNotFoundException, IOException {
-
 		for (IEntity entity : TestObjects.getEntities()) {
-
-			String path = basePath + entity.getClass().getSimpleName() + "_"
-					+ entity.getEntityType().getName() + ".xml";
-
+			String path = getPath(entity, entity.getEntityType().getName());
 			jaxbMarshaller.marshal(entity, path);
-
 			assertEquals(entity, jaxbMarshaller.unmarshal(path));
 		}
 	}
@@ -85,47 +81,29 @@ public class CustomJaxb2MarshallerTests {
 	@Test
 	public void marshalUnmarshalEntityRelationshipModel()
 			throws XmlMappingException, FileNotFoundException, IOException {
-
 		for (IEntityRelationshipModel erm : TestObjects.getErms()) {
-
-			String path = basePath + erm.getClass().getSimpleName() + "_"
-					+ erm.getName() + ".xml";
-
+			String path = getPath(erm, erm.getName());
 			jaxbMarshaller.marshal(erm, path);
-
-			// assertEquals(erm, jaxbMarshaller.unmarshal(path));
+			assertEquals(erm, jaxbMarshaller.unmarshal(path));
 		}
 	}
 
 	@Test
 	public void marshalUnmarshalEntityType() throws XmlMappingException,
 			FileNotFoundException, IOException {
-
 		for (IEntityType entityType : TestObjects.getEntityTypes()) {
-
-			String path = basePath + entityType.getClass().getSimpleName()
-					+ "_" + entityType.getName() + ".xml";
-
+			String path = getPath(entityType, entityType.getName());
 			jaxbMarshaller.marshal(entityType, path);
-
-			// assertEquals(entityType, jaxbMarshaller.unmarshal(path));
-		}
-	}
-
-	@Ignore
-	@Test
-	public void marshalUnmarshalRelationship() throws XmlMappingException,
-			FileNotFoundException, IOException {
-
-		for (IEntityType entityType : TestObjects.getEntityTypes()) {
-
-			String path = basePath + entityType.getClass().getSimpleName()
-					+ "_" + entityType.getName() + ".xml";
-
-			jaxbMarshaller.marshal(entityType, path);
-
 			assertEquals(entityType, jaxbMarshaller.unmarshal(path));
 		}
 	}
 
+	private String getPath(Object object, String... args) {
+		String path = basePath + object.getClass().getSimpleName();
+		for (String string : args) {
+			path += "_";
+			path += string;
+		}
+		return path + ".xml";
+	}
 }
