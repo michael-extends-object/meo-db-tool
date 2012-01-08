@@ -1,6 +1,5 @@
 package com.github.meo.db.tool.xml;
 
-import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.IAttributeType;
 
 public class MappableAttribute {
