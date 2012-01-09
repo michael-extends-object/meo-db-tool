@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain.mapping" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="RelationshipTypeMapping">
+			<xml-root-element name="relationshipTypeMapping" />
+			<xml-type name="relationshipTypeMapping"
+				prop-order="relationshipType attributeTypes referencedAttributeTypes columns referencedColumns" />
+			<java-attributes>
+				<xml-element java-attribute="relationshipType"
+					type="com.github.meo.db.tool.domain.RelationshipType" />
+				<xml-element java-attribute="attributeTypes"
+					type="com.github.meo.db.tool.domain.AttributeType" xml-path="attributeTypes/attributeType" />
+				<xml-element java-attribute="referencedAttributeTypes"
+					type="com.github.meo.db.tool.domain.AttributeType" xml-path="referencedAttributeTypes/attributeType" />
+				<xml-element java-attribute="columns"
+					type="com.github.meo.db.tool.domain.db.Column" xml-path="columns/column" />
+				<xml-element java-attribute="referencedColumns"
+					type="com.github.meo.db.tool.domain.db.Column" xml-path="referencedColumns/column" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

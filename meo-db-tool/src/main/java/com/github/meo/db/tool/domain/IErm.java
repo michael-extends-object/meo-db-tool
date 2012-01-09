@@ -2,7 +2,7 @@ package com.github.meo.db.tool.domain;
 
 import java.util.List;
 
-public interface IEntityRelationshipModel {
+public interface IErm {
 
 	public boolean addEntityType(IEntityType entityType);
 
@@ -27,7 +27,7 @@ public interface IEntityRelationshipModel {
 
 	public String toString();
 
-	public IEntityRelationshipModel clone();
+	public IErm clone();
 
 	public boolean equals(Object object);
 

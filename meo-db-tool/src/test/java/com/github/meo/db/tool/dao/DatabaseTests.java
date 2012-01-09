@@ -12,10 +12,10 @@ import org.junit.Test;
 
 import com.github.meo.db.tool.dao.Database;
 import com.github.meo.db.tool.domain.AttributeType;
-import com.github.meo.db.tool.domain.EntityRelationshipModel;
+import com.github.meo.db.tool.domain.Erm;
 import com.github.meo.db.tool.domain.EntityType;
 import com.github.meo.db.tool.domain.IAttributeType;
-import com.github.meo.db.tool.domain.IEntityRelationshipModel;
+import com.github.meo.db.tool.domain.IErm;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.testsuite.TestObjects;
 
@@ -63,7 +63,7 @@ public class DatabaseTests {
 		List<Database> databases = TestObjects.getDatabases();
 
 		for (Database database : databases) {
-			database.setCurrentEntityRelationshipModel(TestObjects.getErmA());
+			database.setCurrentErm(TestObjects.getErmA());
 			assertEquals(TestObjects.getTableA(),
 					database.getTable(TestObjects.getEntityTypeA()));
 		}
@@ -101,7 +101,7 @@ public class DatabaseTests {
 	@Test
 	public void getAttributeMappingsEntityType() {
 		database = TestObjects.getDatabaseA();
-		database.setCurrentEntityRelationshipModel(TestObjects.getErmA());
+		database.setCurrentErm(TestObjects.getErmA());
 		assertEquals(TestObjects.getAttributeTypeMappings(),
 				database.getAttributeTypeMappings(TestObjects.getEntityTypeA()));
 	}
@@ -109,7 +109,7 @@ public class DatabaseTests {
 	@Test
 	public void getColumnCountEntityType() {
 		database = TestObjects.getDatabaseA();
-		database.setCurrentEntityRelationshipModel(TestObjects.getErmA());
+		database.setCurrentErm(TestObjects.getErmA());
 		assertEquals(3, database.getColumnCount(TestObjects.getEntityTypeA()));
 	}
 
@@ -153,19 +153,19 @@ public class DatabaseTests {
 
 	@Test
 	public void testSetGetEntityRelationshipModels() {
-		List<IEntityRelationshipModel> entityRelationshipModels = new ArrayList<IEntityRelationshipModel>();
-		entityRelationshipModels.add(new EntityRelationshipModel());
-		entityRelationshipModels.add(new EntityRelationshipModel());
-		entityRelationshipModels.add(new EntityRelationshipModel());
-		database.setEntityRelationshipModels(entityRelationshipModels);
+		List<IErm> entityRelationshipModels = new ArrayList<IErm>();
+		entityRelationshipModels.add(new Erm());
+		entityRelationshipModels.add(new Erm());
+		entityRelationshipModels.add(new Erm());
+		database.setErms(entityRelationshipModels);
 		assertEquals(entityRelationshipModels,
-				database.getEntityRelationshipModels());
+				database.getErms());
 	}
 
 	@Test
 	public void testGetTableEntityType() {
 		database = TestObjects.getDatabaseA();
-		expectedString = "Database table column A";
+		expectedString = "Column A";
 		actualString = database.getColumn(
 				new EntityType("Entity A"), "Attribute A").getName();
 		assertEquals(expectedString, actualString);

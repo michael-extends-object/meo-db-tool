@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain" xml-accessor-type="FIELD">
+	<xml-enums>
+		<xml-enum java-enum="com.github.meo.db.tool.domain.Cardinality"
+			value="java.lang.String">
+			<xml-enum-value java-enum-value="OneToOne">OneToOne</xml-enum-value>
+			<xml-enum-value java-enum-value="OneToMany">OneToMany</xml-enum-value>
+			<xml-enum-value java-enum-value="ManyToOne">ManyToOne</xml-enum-value>
+			<xml-enum-value java-enum-value="ManyToMany">ManyToMany</xml-enum-value>
+		</xml-enum>
+	</xml-enums>
+</xml-bindings>

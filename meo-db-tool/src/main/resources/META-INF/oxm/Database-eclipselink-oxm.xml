@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.dao" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="Database">
+			<xml-root-element name="database" />
+			<xml-type name="database" prop-order="name" />
+			<java-attributes>
+				<xml-attribute java-attribute="name" />
+				<xml-element java-attribute="dataSource">
+					<xml-java-type-adapter
+						value="com.github.meo.db.tool.xml.DataSourceXmlAdapter" />
+				</xml-element>
+				<xml-element java-attribute="erms"
+					type="com.github.meo.db.tool.domain.Erm" xml-path="erms/erm" />
+				<xml-element java-attribute="ermMappings"
+					type="com.github.meo.db.tool.domain.mapping.ErmMapping" xml-path="ermMappings/ermMapping" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

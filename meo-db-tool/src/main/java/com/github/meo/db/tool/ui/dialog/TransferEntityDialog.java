@@ -46,8 +46,8 @@ public class TransferEntityDialog {
 						// Database sourceDatabase = getSourceDatabase();
 						Database targetDatabase = getTargetDatabase();
 						targetDatabase
-								.setCurrentEntityRelationshipModel(targetDatabase
-										.getEntityRelationshipModels().get(0));
+								.setCurrentErm(targetDatabase
+										.getErms().get(0));
 						// EntityDao entityDaoSource = new EntityDao(
 						// sourceDatabase);
 						EntityDao entityDaoTarget = new EntityDao(

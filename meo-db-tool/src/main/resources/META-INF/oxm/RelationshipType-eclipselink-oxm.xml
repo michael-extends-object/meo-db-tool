@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="RelationshipType">
+			<xml-root-element name="relationshipType" />
+			<xml-type name="relationshipType" prop-order="name cardinality entityType referencedEntityType" />
+			<java-attributes>
+				<xml-attribute java-attribute="name" />
+				<xml-attribute java-attribute="cardinality" />
+				<xml-element java-attribute="entityType"
+					type="com.github.meo.db.tool.domain.EntityType" />
+				<xml-element java-attribute="referencedEntityType"
+					type="com.github.meo.db.tool.domain.EntityType" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

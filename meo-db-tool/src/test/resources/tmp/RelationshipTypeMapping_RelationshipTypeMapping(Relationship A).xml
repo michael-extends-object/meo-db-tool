@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relationshipTypeMapping>
+   <relationshipType name="Relationship A" cardinality="OneToMany">
+      <entityType name="Entity A">
+         <attributeTypes>
+            <attributeType name="Attribute A" isPrimaryKey="true"/>
+            <attributeType name="Attribute B" isPrimaryKey="false"/>
+            <attributeType name="Attribute C" isPrimaryKey="true"/>
+         </attributeTypes>
+      </entityType>
+      <referencedEntityType name="Entity B">
+         <attributeTypes>
+            <attributeType name="Attribute A" isPrimaryKey="true"/>
+            <attributeType name="Attribute B" isPrimaryKey="false"/>
+            <attributeType name="Attribute C" isPrimaryKey="true"/>
+         </attributeTypes>
+      </referencedEntityType>
+   </relationshipType>
+   <attributeTypes>
+      <attributeType name="Attribute A" isPrimaryKey="true"/>
+      <attributeType name="Attribute B" isPrimaryKey="false"/>
+      <attributeType name="Attribute C" isPrimaryKey="true"/>
+   </attributeTypes>
+   <referencedAttributeTypes>
+      <attributeType name="Attribute A" isPrimaryKey="true"/>
+      <attributeType name="Attribute B" isPrimaryKey="false"/>
+      <attributeType name="Attribute C" isPrimaryKey="true"/>
+   </referencedAttributeTypes>
+   <columns>
+      <column name="Column A"/>
+      <column name="Column B"/>
+      <column name="Column C"/>
+   </columns>
+   <referencedColumns>
+      <column name="Column A"/>
+      <column name="Column B"/>
+      <column name="Column C"/>
+   </referencedColumns>
+</relationshipTypeMapping>

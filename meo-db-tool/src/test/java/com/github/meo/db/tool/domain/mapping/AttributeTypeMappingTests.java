@@ -27,7 +27,7 @@ public class AttributeTypeMappingTests {
 		column = new Column();
 		attributeTypeMapping = new AttributeTypeMapping();
 	}
-	
+
 	@Test
 	public void testNewInstance() {
 		attributeTypeMapping = new AttributeTypeMapping(attributeType, column);
@@ -41,10 +41,17 @@ public class AttributeTypeMappingTests {
 		assertTrue(attributeType == attributeTypeMapping.getAttributeType());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetGetAttributeTypeNull() {
-		attributeTypeMapping.setAttributeType(null);
-		assertNotNull(attributeTypeMapping.getAttributeType());
+		try {
+			attributeTypeMapping.setAttributeType(null);
+		} catch (IllegalArgumentException e) {
+			assertNotNull(attributeTypeMapping.getAttributeType());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
+			throw e;
+		}
 	}
 
 	@Test
@@ -53,10 +60,17 @@ public class AttributeTypeMappingTests {
 		assertTrue(column == attributeTypeMapping.getColumn());
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetGetColumnNull() {
-		attributeTypeMapping.setColumn(null);
-		assertNotNull(attributeTypeMapping.getColumn());
+		try {
+			attributeTypeMapping.setColumn(null);
+		} catch (IllegalArgumentException e) {
+			assertNotNull(attributeTypeMapping.getColumn());
+			assertEquals(
+					"[Assertion failed] - this argument is required; it must not be null",
+					e.getMessage());
+			throw e;
+		}
 	}
 
 	@Test
@@ -99,10 +113,8 @@ public class AttributeTypeMappingTests {
 	public void testEqualsDifferentColumn() {
 		attributeTypeMappingA = TestObjects.getAttributeTypeMappingA();
 		attributeTypeMappingB = TestObjects.getAttributeTypeMappingA();
-		attributeTypeMappingA.setColumn(TestObjects
-				.getColumnA());
-		attributeTypeMappingA.setColumn(TestObjects
-				.getColumnB());
+		attributeTypeMappingA.setColumn(TestObjects.getColumnA());
+		attributeTypeMappingA.setColumn(TestObjects.getColumnB());
 		assertFalse(attributeTypeMappingA.equals(attributeTypeMappingB));
 	}
 

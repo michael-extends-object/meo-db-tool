@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource driver="org.postgresql.Driver">
+   <url>url</url>
+   <username>Username</username>
+   <password>ENC(bAQ4bFAJtH93xWOpTV+iETTPN9MMQyD3)</password>
+</dataSource>

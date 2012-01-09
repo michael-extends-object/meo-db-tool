@@ -22,7 +22,7 @@ import org.springframework.util.Assert;
 import com.github.meo.db.tool.dao.Database;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.IEntity;
-import com.github.meo.db.tool.domain.IEntityRelationshipModel;
+import com.github.meo.db.tool.domain.IErm;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.ui.dialog.MessagePane;
 import com.github.meo.db.tool.ui.dialog.TransferEntityDialog;
@@ -76,7 +76,7 @@ public class Controller {
 						case 1:
 							break;
 						case 2:
-							changeEntityRelationshipModel((IEntityRelationshipModel) node
+							changeEntityRelationshipModel((IErm) node
 									.getUserObject());
 							break;
 						case 3:
@@ -162,9 +162,9 @@ public class Controller {
 		return entities;
 	}
 
-	private void changeEntityRelationshipModel(IEntityRelationshipModel erm) {
+	private void changeEntityRelationshipModel(IErm erm) {
 		Assert.notNull(erm);
-		getDatabase().setCurrentEntityRelationshipModel(erm);
+		getDatabase().setCurrentErm(erm);
 	}
 
 	private void changeDatabase(Database database) {
@@ -202,7 +202,7 @@ public class Controller {
 	public Database getDatabase() {
 		Database database = (Database) view.getDatabaseComboBox()
 				.getSelectedItem();
-		database.setCurrentEntityRelationshipModel(ModelTestObjects.getErm());
+		database.setCurrentErm(ModelTestObjects.getErm());
 		return database;
 	}
 

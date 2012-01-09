@@ -16,16 +16,16 @@ import com.github.meo.db.tool.testsuite.TestObjects;
 public class EntityRelationshipModelTests {
 
 	private final static String ERM_NAME = "ERM Name";
-	private IEntityRelationshipModel erm;
+	private IErm erm;
 
 	@Before
 	public void setUp() {
-		erm = new EntityRelationshipModel();
+		erm = new Erm();
 	}
 
 	@Test
 	public void testNewInstanceString() {
-		erm = new EntityRelationshipModel(ERM_NAME);
+		erm = new Erm(ERM_NAME);
 		assertEquals(ERM_NAME, erm.getName());
 	}
 
@@ -184,7 +184,7 @@ public class EntityRelationshipModelTests {
 
 	@Test
 	public void testEqualsDifferentName() {
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		erm.setName(ERM_NAME);
 		differentErm.setName("Different Name");
 		assertFalse(erm.equals(differentErm));
@@ -192,7 +192,7 @@ public class EntityRelationshipModelTests {
 
 	@Test
 	public void testEqualsDifferentEntityTypesSize() {
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		erm.addEntityType(new EntityType());
 		erm.addEntityType(new EntityType());
 		differentErm.addEntityType(new EntityType());
@@ -201,7 +201,7 @@ public class EntityRelationshipModelTests {
 
 	@Test
 	public void testEqualsDifferentEntityTypes() {
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		erm.addEntityType(new EntityType("Entity Type"));
 		differentErm.addEntityType(new EntityType("Different Entity Type"));
 		assertFalse(erm.equals(differentErm));
@@ -209,7 +209,7 @@ public class EntityRelationshipModelTests {
 
 	@Test
 	public void testEqualsDifferentRelationshipTypesSize() {
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		erm.addRelationshipType(new RelationshipType());
 		erm.addRelationshipType(new RelationshipType());
 		differentErm.addRelationshipType(new RelationshipType());
@@ -218,7 +218,7 @@ public class EntityRelationshipModelTests {
 
 	@Test
 	public void testEqualsDifferentRelationshipTypes() {
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		erm.addRelationshipType(new RelationshipType("Relationship Type"));
 		differentErm.addRelationshipType(new RelationshipType(
 				"Different Relationship Type"));
@@ -227,7 +227,7 @@ public class EntityRelationshipModelTests {
 
 	@Test
 	public void testEqualsClone() {
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		assertTrue(erm.equals(differentErm));
 	}
 
@@ -235,7 +235,7 @@ public class EntityRelationshipModelTests {
 	public void testClone() {
 		erm.addEntityType(new EntityType());
 		erm.addRelationshipType(new RelationshipType());
-		IEntityRelationshipModel differentErm = erm.clone();
+		IErm differentErm = erm.clone();
 		assertTrue(erm.equals(differentErm));
 	}
 }

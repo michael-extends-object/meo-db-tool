@@ -9,22 +9,20 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import com.github.meo.db.tool.dao.Database;
-//import com.github.meo.db.tool.domain.EntityRelationshipModel;
 import com.github.meo.db.tool.domain.AttributeType;
 import com.github.meo.db.tool.domain.Cardinality;
-import com.github.meo.db.tool.domain.EntityRelationshipModel;
+import com.github.meo.db.tool.domain.Erm;
 import com.github.meo.db.tool.domain.EntityType;
 import com.github.meo.db.tool.domain.IAttributeType;
-import com.github.meo.db.tool.domain.IEntityRelationshipModel;
+import com.github.meo.db.tool.domain.IErm;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.domain.IRelationshipType;
 import com.github.meo.db.tool.domain.RelationshipType;
 import com.github.meo.db.tool.domain.db.Table;
 import com.github.meo.db.tool.domain.db.Column;
 import com.github.meo.db.tool.domain.mapping.AttributeTypeMapping;
-import com.github.meo.db.tool.domain.mapping.EntityRelationshipModelMapping;
+import com.github.meo.db.tool.domain.mapping.ErmMapping;
 import com.github.meo.db.tool.domain.mapping.EntityTypeMapping;
-import com.github.meo.db.tool.domain.mapping.IEntityRelationshipModelMapping;
 import com.github.meo.db.tool.domain.mapping.RelationshipTypeMapping;
 
 public class ModelTestObjects {
@@ -111,17 +109,17 @@ public class ModelTestObjects {
 		return relationshipType;
 	}
 
-	public static IEntityRelationshipModel getErm() {
-		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM");
+	public static IErm getErm() {
+		IErm erm = new Erm("ERM");
 		erm.addEntityType(getTypeUser());
 		erm.addEntityType(getTypeGroup());
 		erm.addRelationshipType(getRelationshipUserToGroup());
 		return erm;
 	}
 
-	public static IEntityRelationshipModelMapping getErmMapping() {
-		IEntityRelationshipModelMapping ermMapping = new EntityRelationshipModelMapping();
-		ermMapping.setEntityRelationshipModel(getErm());
+	public static ErmMapping getErmMapping() {
+		ErmMapping ermMapping = new ErmMapping();
+		ermMapping.setErm(getErm());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingUser());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingGroup());
 		ermMapping
@@ -198,8 +196,7 @@ public class ModelTestObjects {
 		databaseUserManagement.setName("Account Management (Source)");
 		databaseUserManagement.setDataSource(getDataSourceSource());
 		databaseUserManagement.addEntityRelationshipModel(getErm());
-		databaseUserManagement
-				.addEntityRelationshipModelMapping(getErmMapping());
+		databaseUserManagement.addErmMapping(getErmMapping());
 		return databaseUserManagement;
 	}
 
@@ -208,8 +205,7 @@ public class ModelTestObjects {
 		databaseUserManagement.setName("Account Management (Target)");
 		databaseUserManagement.setDataSource(getDataSourceTarget());
 		databaseUserManagement.addEntityRelationshipModel(getErm());
-		databaseUserManagement
-				.addEntityRelationshipModelMapping(getErmMapping());
+		databaseUserManagement.addErmMapping(getErmMapping());
 		return databaseUserManagement;
 	}
 

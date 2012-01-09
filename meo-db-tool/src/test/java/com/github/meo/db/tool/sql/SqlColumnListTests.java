@@ -39,7 +39,7 @@ public class SqlColumnListTests {
 	@Test
 	public void testToString() {
 		sqlColumnList.setColumns(columns);
-		expectedString = "Database table column A, Database table column B, Database table column C";
+		expectedString = "Column A, Column B, Column C";
 		actualString = sqlColumnList.toString();
 		assertEquals(expectedString, actualString);
 	}
@@ -81,7 +81,7 @@ public class SqlColumnListTests {
 	@Test
 	public void testGetWhereCondition() {
 		sqlColumnList.setColumns(columns);
-		expectedString = "Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
+		expectedString = "Column A = ? AND Column B = ? AND Column C = ?";
 		actualString = sqlColumnList.getWhereCondition();
 		assertEquals(expectedString, actualString);
 	}

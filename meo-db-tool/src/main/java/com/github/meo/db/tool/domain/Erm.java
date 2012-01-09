@@ -7,18 +7,17 @@ import org.springframework.util.Assert;
 
 import com.github.meo.db.tool.exception.RelationshipTypeNotFoundException;
 
-public class EntityRelationshipModel implements IEntityRelationshipModel,
-		Cloneable {
+public class Erm implements IErm, Cloneable {
 
 	String name;
 	List<IEntityType> entityTypes;
 	List<IRelationshipType> relationshipTypes;
 
-	public EntityRelationshipModel() {
+	public Erm() {
 		init();
 	}
 
-	public EntityRelationshipModel(String name) {
+	public Erm(String name) {
 		init();
 		setName(name);
 	}
@@ -114,9 +113,9 @@ public class EntityRelationshipModel implements IEntityRelationshipModel,
 		return name;
 	}
 
-	public IEntityRelationshipModel clone() {
+	public IErm clone() {
 
-		IEntityRelationshipModel erm = new EntityRelationshipModel(getName());
+		IErm erm = new Erm(getName());
 
 		for (IEntityType entityType : getEntityTypes()) {
 			erm.addEntityType(entityType.clone());
@@ -136,45 +135,34 @@ public class EntityRelationshipModel implements IEntityRelationshipModel,
 			return false;
 		}
 
-		/*
-		 * Are the references pointing to the same object?
-		 */
+		// Same object?
 		if (this == object) {
 			return true;
 		}
 
-		/*
-		 * Same class?
-		 */
+		// Same class?
 		if (!getClass().equals(object.getClass())) {
 			return false;
 		}
 
-		IEntityRelationshipModel erm = (IEntityRelationshipModel) object;
+		IErm erm = (IErm) object;
 
-		/*
-		 * Do the objects have the same name?
-		 */
+		// Same name?
 		if (!getName().equals(erm.getName())) {
 			return false;
 		}
 
-		/*
-		 * Do the objects have the same entity types?
-		 */
+		// Same entity types?
 		if (getEntityTypes().size() != erm.getEntityTypes().size()) {
 			return false;
 		}
-
 		for (int i = 0; i < getEntityTypes().size(); i++) {
 			if (!getEntityTypes().get(i).equals(erm.getEntityTypes().get(i))) {
 				return false;
 			}
 		}
 
-		/*
-		 * Do the objects have the same relationships?
-		 */
+		// Same relationship types?
 		if (getRelationshipTypes().size() != erm.getRelationshipTypes().size()) {
 			return false;
 		}

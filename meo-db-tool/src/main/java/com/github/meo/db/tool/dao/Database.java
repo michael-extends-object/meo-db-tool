@@ -8,28 +8,28 @@ import javax.sql.DataSource;
 import org.springframework.util.Assert;
 
 import com.github.meo.db.tool.domain.AttributeType;
-import com.github.meo.db.tool.domain.EntityRelationshipModel;
+import com.github.meo.db.tool.domain.Erm;
 import com.github.meo.db.tool.domain.IAttributeType;
-import com.github.meo.db.tool.domain.IEntityRelationshipModel;
+import com.github.meo.db.tool.domain.IErm;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.domain.IRelationshipType;
 import com.github.meo.db.tool.domain.db.Table;
 import com.github.meo.db.tool.domain.db.Column;
 import com.github.meo.db.tool.domain.mapping.AttributeTypeMapping;
 import com.github.meo.db.tool.domain.mapping.EntityTypeMapping;
-import com.github.meo.db.tool.domain.mapping.IEntityRelationshipModelMapping;
+import com.github.meo.db.tool.domain.mapping.ErmMapping;
 import com.github.meo.db.tool.domain.mapping.RelationshipTypeMapping;
 import com.github.meo.db.tool.exception.ColumnNotFoundException;
-import com.github.meo.db.tool.exception.EntityRelationshipModelMappingNotFoundException;
+import com.github.meo.db.tool.exception.ErmMappingNotFoundException;
 import com.github.meo.db.tool.exception.RelationshipTypeMappingNotFoundException;
 
 public class Database {
 
 	private String name;
 	private DataSource dataSource;
-	private List<IEntityRelationshipModel> entityRelationshipModels;
-	private List<IEntityRelationshipModelMapping> entityRelationshipModelMappings;
-	private IEntityRelationshipModel currentEntityRelationshipModel;
+	private List<IErm> erms;
+	private List<ErmMapping> ermMappings;
+	private IErm currentErm;
 
 	public Database() {
 		init();
@@ -41,18 +41,17 @@ public class Database {
 	}
 
 	private void init() {
-		entityRelationshipModels = new ArrayList<IEntityRelationshipModel>();
-		entityRelationshipModelMappings = new ArrayList<IEntityRelationshipModelMapping>();
-		setCurrentEntityRelationshipModel(new EntityRelationshipModel());
+		erms = new ArrayList<IErm>();
+		ermMappings = new ArrayList<ErmMapping>();
+		setCurrentErm(new Erm());
 	}
 
-	public boolean addEntityRelationshipModel(IEntityRelationshipModel erm) {
-		return getEntityRelationshipModels().add(erm);
+	public boolean addEntityRelationshipModel(IErm erm) {
+		return getErms().add(erm);
 	}
 
-	public boolean addEntityRelationshipModelMapping(
-			IEntityRelationshipModelMapping ermMapping) {
-		return getEntityRelationshipModelMappings().add(ermMapping);
+	public boolean addErmMapping(ErmMapping ermMapping) {
+		return getErmMappings().add(ermMapping);
 	}
 
 	public Table getTable(IEntityType entityType) {
@@ -66,7 +65,7 @@ public class Database {
 
 		Assert.notNull(entityType);
 
-		IEntityRelationshipModelMapping ermMapping = getEntityRelationshipModelMapping(getCurrentEntityRelationshipModel());
+		ErmMapping ermMapping = getErmMapping(getCurrentErm());
 		for (EntityTypeMapping entityTypeMapping : ermMapping
 				.getEntityTypeMappings()) {
 			// TODO consider a different comparison
@@ -79,24 +78,22 @@ public class Database {
 		return null;
 	}
 
-	public IEntityRelationshipModelMapping getEntityRelationshipModelMapping(
-			IEntityRelationshipModel erm) {
+	public ErmMapping getErmMapping(IErm erm) {
 
 		Assert.notNull(erm);
 
-		for (IEntityRelationshipModelMapping entityRelationshipModelMapping : getEntityRelationshipModelMappings()) {
-			if (erm.equals(entityRelationshipModelMapping
-					.getEntityRelationshipModel())) {
-				return entityRelationshipModelMapping;
+		for (ErmMapping ErmMapping : getErmMappings()) {
+			if (erm.equals(ErmMapping.getErm())) {
+				return ErmMapping;
 			}
 		}
 
-		throw new EntityRelationshipModelMappingNotFoundException(erm);
+		throw new ErmMappingNotFoundException(erm);
 	}
 
 	public List<EntityTypeMapping> getEntityTypeMappings() {
 
-		IEntityRelationshipModelMapping ermMapping = getEntityRelationshipModelMapping(getCurrentEntityRelationshipModel());
+		ErmMapping ermMapping = getErmMapping(getCurrentErm());
 
 		return ermMapping.getEntityTypeMappings();
 	}
@@ -166,8 +163,8 @@ public class Database {
 			}
 		}
 
-		throw new ColumnNotFoundException(entityType,
-				new AttributeType(attributeName));
+		throw new ColumnNotFoundException(entityType, new AttributeType(
+				attributeName));
 	}
 
 	public List<IEntityType> getReferencedEntityTypes(IEntityType entityType) {
@@ -184,43 +181,40 @@ public class Database {
 	}
 
 	public List<IRelationshipType> getRelationshipTypes() {
-		return getCurrentEntityRelationshipModel().getRelationshipTypes();
+		return getCurrentErm().getRelationshipTypes();
 	}
 
-	public List<IEntityRelationshipModel> getEntityRelationshipModels() {
-		return entityRelationshipModels;
+	public List<IErm> getErms() {
+		return erms;
 	}
 
-	public List<IEntityRelationshipModelMapping> getEntityRelationshipModelMappings() {
-		return entityRelationshipModelMappings;
+	public List<ErmMapping> getErmMappings() {
+		return ermMappings;
 	}
 
-	public IEntityRelationshipModel getCurrentEntityRelationshipModel() {
-		return currentEntityRelationshipModel;
+	public IErm getCurrentErm() {
+		return currentErm;
 	}
 
-	public void setEntityRelationshipModels(
-			List<IEntityRelationshipModel> entityRelationshipModels) {
+	public void setErms(List<IErm> entityRelationshipModels) {
 
 		Assert.notNull(entityRelationshipModels);
 
-		this.entityRelationshipModels = entityRelationshipModels;
+		this.erms = entityRelationshipModels;
 	}
 
-	public void setEntityRelationshipModelMappings(
-			List<IEntityRelationshipModelMapping> entityRelationshipModelMappings) {
+	public void setErmMappings(List<ErmMapping> ErmMappings) {
 
-		Assert.notNull(entityRelationshipModelMappings);
+		Assert.notNull(ErmMappings);
 
-		this.entityRelationshipModelMappings = entityRelationshipModelMappings;
+		this.ermMappings = ErmMappings;
 	}
 
-	public void setCurrentEntityRelationshipModel(
-			IEntityRelationshipModel currentEntityRelationshipModel) {
+	public void setCurrentErm(IErm currentEntityRelationshipModel) {
 
 		Assert.notNull(currentEntityRelationshipModel);
 
-		this.currentEntityRelationshipModel = currentEntityRelationshipModel;
+		this.currentErm = currentEntityRelationshipModel;
 	}
 
 	public RelationshipTypeMapping getRelationshipTypeMapping(
@@ -228,7 +222,7 @@ public class Database {
 
 		Assert.notNull(relationshipType);
 
-		IEntityRelationshipModelMapping ermMapping = getEntityRelationshipModelMapping(getCurrentEntityRelationshipModel());
+		ErmMapping ermMapping = getErmMapping(getCurrentErm());
 
 		for (RelationshipTypeMapping relationshipTypeMapping : ermMapping
 				.getRelationshipTypeMappings()) {
@@ -244,8 +238,8 @@ public class Database {
 			IEntityType referencedEntityType) {
 		Assert.notNull(entityType);
 		Assert.notNull(referencedEntityType);
-		return getCurrentEntityRelationshipModel().getRelationshipType(
-				entityType, referencedEntityType);
+		return getCurrentErm().getRelationshipType(entityType,
+				referencedEntityType);
 	}
 
 	public RelationshipTypeMapping getRelationshipTypeMapping(
@@ -253,5 +247,59 @@ public class Database {
 		IRelationshipType relationshipType = getRelationshipType(entityType,
 				referencedEntityType);
 		return getRelationshipTypeMapping(relationshipType);
+	}
+
+	public boolean equals(Object object) {
+
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+
+		// Same object?
+		if (this == object) {
+			return true;
+		}
+
+		// Same class?
+		if (!getClass().equals(object.getClass())) {
+			return false;
+		}
+
+		Database database = (Database) object;
+
+		// Same name?
+		if (!getName().equals(database.getName())) {
+			return false;
+		}
+
+		// Same data source?
+		if (!getDataSource().getClass().getName()
+				.equals(database.getDataSource().getClass().getName())) {
+			return false;
+		}
+
+		// Same ERMs?
+		if (getErms().size() != database.getErms().size()) {
+			return false;
+		}
+		for (int i = 0; i < getErms().size(); i++) {
+			if (!getErms().get(i).equals(database.getErms().get(i))) {
+				return false;
+			}
+		}
+
+		// Same ERM-mappings?
+		if (getErmMappings().size() != database.getErmMappings().size()) {
+			return false;
+		}
+		for (int i = 0; i < getErmMappings().size(); i++) {
+			if (!getErmMappings().get(i).equals(
+					database.getErmMappings().get(i))) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

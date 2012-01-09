@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entityTypeMapping>
+   <entityType name="Entity C">
+      <attributeTypes>
+         <attributeType name="Attribute A" isPrimaryKey="true"/>
+         <attributeType name="Attribute B" isPrimaryKey="false"/>
+         <attributeType name="Attribute C" isPrimaryKey="true"/>
+      </attributeTypes>
+   </entityType>
+   <table name="Table C">
+      <columns>
+         <column name="Column A"/>
+         <column name="Column B"/>
+         <column name="Column C"/>
+      </columns>
+   </table>
+   <attributeTypeMappings>
+      <attributeTypeMapping>
+         <attributeType name="Attribute A" isPrimaryKey="true"/>
+         <column name="Column A"/>
+      </attributeTypeMapping>
+      <attributeTypeMapping>
+         <attributeType name="Attribute B" isPrimaryKey="false"/>
+         <column name="Column B"/>
+      </attributeTypeMapping>
+      <attributeTypeMapping>
+         <attributeType name="Attribute C" isPrimaryKey="true"/>
+         <column name="Column C"/>
+      </attributeTypeMapping>
+   </attributeTypeMappings>
+</entityTypeMapping>

@@ -2,18 +2,31 @@
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 	<xs:element name="attribute" type="attribute" />
-
 	<xs:element name="attributeType" type="attributeType" />
-
+	<xs:element name="attributeTypeMapping" type="attributeTypeMapping" />
+	<xs:element name="cardinality" type="cardinality" />
+	<xs:element name="column" type="column" />
+	<xs:element name="database" type="database" />
+	<xs:element name="dataSource" type="dataSource" />
 	<xs:element name="entity" type="entity" />
-
 	<xs:element name="entityType" type="entityType" />
-
-	<xs:element name="entityRelationshipModel" type="entityRelationshipModel" />
-
+	<xs:element name="entityTypeMapping" type="entityTypeMapping" />
+	<xs:element name="erm" type="erm" />
+	<xs:element name="ermMapping" type="ermMapping" />
 	<xs:element name="jdbcDataSource" type="jdbcDataSource" />
-
 	<xs:element name="mappableAttribute" type="mappableAttribute" />
+	<xs:element name="relationshipType" type="relationshipType" />
+	<xs:element name="relationshipTypeMapping" type="relationshipTypeMapping" />
+	<xs:element name="table" type="table" />
+
+	<xs:simpleType name="cardinality">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OneToOne" />
+			<xs:enumeration value="OneToMany" />
+			<xs:enumeration value="ManyToOne" />
+			<xs:enumeration value="ManyToMany" />
+		</xs:restriction>
+	</xs:simpleType>
 
 	<xs:complexType name="attribute">
 		<xs:sequence>
@@ -26,6 +39,39 @@
 	<xs:complexType name="attributeType">
 		<xs:attribute name="name" type="xs:string" />
 		<xs:attribute name="isPrimaryKey" type="xs:boolean" />
+	</xs:complexType>
+
+	<xs:complexType name="attributeTypeMapping">
+		<xs:sequence>
+			<xs:element ref="attributeType" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="column" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="column">
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="database">
+		<xs:sequence>
+			<xs:element name="dataSource" type="dataSource" minOccurs="1"
+				maxOccurs="1" />
+			<xs:element name="erms" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="erm" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ermMappings" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="ermMapping" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
 	<xs:complexType name="entity">
@@ -41,19 +87,6 @@
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:complexType name="entityRelationshipModel">
-		<xs:sequence>
-			<xs:element name="entityTypes">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element ref="entityType" minOccurs="0" maxOccurs="unbounded" />
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" />
-	</xs:complexType>
-
 	<xs:complexType name="entityType">
 		<xs:sequence>
 			<xs:element name="attributeTypes">
@@ -66,6 +99,67 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="entityTypeMapping">
+		<xs:sequence>
+			<xs:element ref="entityType" minOccurs="1" maxOccurs="1" />
+			<xs:element ref="table" minOccurs="1" maxOccurs="1" />
+			<xs:element name="attributeTypeMappings">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="attributeTypeMapping" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="erm">
+		<xs:sequence>
+			<xs:element name="entityTypes" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="entityType" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="relationshipTypes" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="relationshipType" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="ermMapping">
+		<xs:sequence>
+			<xs:element ref="erm" minOccurs="1" maxOccurs="1" />
+			<xs:element name="entityTypeMappings" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="entityTypeMapping" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="relationshipTypeMappings" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="relationshipTypeMapping" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="jdbcDataSource">
@@ -86,6 +180,69 @@
 			<xs:element name="value" type="xs:anyType" minOccurs="0"
 				maxOccurs="1" />
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="relationshipType">
+		<xs:sequence>
+			<xs:element name="entityType" type="entityType" minOccurs="1"
+				maxOccurs="1" />
+			<xs:element name="referencedEntityType" type="entityType"
+				minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="cardinality" type="cardinality" />
+	</xs:complexType>
+
+	<xs:complexType name="relationshipTypeMapping">
+		<xs:sequence>
+			<xs:element ref="relationshipType" minOccurs="1"
+				maxOccurs="1" />
+			<xs:element name="attributeTypes" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="attributeType" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="referencedAttributeTypes" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="attributeType" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="columns" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="column" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="referencedColumns" minOccurs="0"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="column" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="table">
+		<xs:sequence>
+			<xs:element name="columns">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="column" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
 </xs:schema>

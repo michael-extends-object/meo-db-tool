@@ -1,21 +1,21 @@
 package com.github.meo.db.tool.domain.mapping;
 
+import org.springframework.util.Assert;
+
 import com.github.meo.db.tool.domain.AttributeType;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.db.Column;
 
 public class AttributeTypeMapping {
 
-	IAttributeType attributeType;
-	Column column;
+	private IAttributeType attributeType;
+	private Column column;
 
 	public AttributeTypeMapping() {
 		init();
 	}
 
-	public AttributeTypeMapping(IAttributeType attributeType,
-			Column column) {
-		init();
+	public AttributeTypeMapping(IAttributeType attributeType, Column column) {
 		setAttributeType(attributeType);
 		setColumn(column);
 	}
@@ -23,6 +23,38 @@ public class AttributeTypeMapping {
 	private void init() {
 		setAttributeType(new AttributeType());
 		setColumn(new Column());
+	}
+
+	public IAttributeType getAttributeType() {
+		return attributeType;
+	}
+
+	public Column getColumn() {
+		return column;
+	}
+
+	public void setAttributeType(IAttributeType attributeType) {
+		Assert.notNull(attributeType);
+		this.attributeType = attributeType;
+	}
+
+	public void setColumn(Column column) {
+		Assert.notNull(column);
+		this.column = column;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("AttributeMapping(%s, %s)", getAttributeType(),
+				getColumn());
+	}
+
+	@Override
+	public AttributeTypeMapping clone() {
+		AttributeTypeMapping attributeTypeMapping = new AttributeTypeMapping();
+		attributeTypeMapping.setAttributeType(getAttributeType());
+		attributeTypeMapping.setColumn(getColumn());
+		return attributeTypeMapping;
 	}
 
 	public boolean equals(Object object) {
@@ -46,63 +78,23 @@ public class AttributeTypeMapping {
 			return false;
 		}
 
-		AttributeTypeMapping attributeMapping = (AttributeTypeMapping) object;
+		AttributeTypeMapping attributeTypeMapping = (AttributeTypeMapping) object;
 
 		/*
-		 * Do the objects have the same attribute?
+		 * Do the objects have the same attribute type?
 		 */
-		if (!getAttributeType().equals(attributeMapping.getAttributeType())) {
+		if (!getAttributeType().equals(attributeTypeMapping.getAttributeType())) {
 			return false;
 		}
 
 		/*
-		 * Do the objects have the same database table column?
+		 * Do the objects have the same column?
 		 */
-		if (!getColumn().equals(
-				attributeMapping.getColumn())) {
+		if (!getColumn().equals(attributeTypeMapping.getColumn())) {
 			return false;
 		}
 
 		return true;
 	}
 
-	/**
-	 * Clone attributeMapping
-	 */
-	@Override
-	public AttributeTypeMapping clone() {
-
-		AttributeTypeMapping attributeMapping = new AttributeTypeMapping();
-
-		attributeMapping.setAttributeType(getAttributeType());
-		attributeMapping.setColumn(getColumn());
-
-		return attributeMapping;
-	}
-
-	public IAttributeType getAttributeType() {
-		return attributeType;
-	}
-
-	public Column getColumn() {
-		return column;
-	}
-
-	public void setAttributeType(IAttributeType attributeType) {
-
-		if (attributeType == null) {
-			return;
-		}
-
-		this.attributeType = attributeType;
-	}
-
-	public void setColumn(Column column) {
-
-		if (column == null) {
-			return;
-		}
-
-		this.column = column;
-	}
 }

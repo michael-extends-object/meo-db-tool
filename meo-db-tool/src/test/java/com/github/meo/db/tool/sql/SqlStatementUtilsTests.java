@@ -30,7 +30,7 @@ public class SqlStatementUtilsTests {
 
 	@Test
 	public void testGetColumnList() {
-		expectedString = "Database table column A, Database table column B, Database table column C";
+		expectedString = "Column A, Column B, Column C";
 		actualString = SqlStatementUtils.getColumnList(columns);
 		assertEquals(expectedString, actualString);
 	}
@@ -72,35 +72,35 @@ public class SqlStatementUtilsTests {
 
 	@Test
 	public void testGetWhereCondition() {
-		expectedString = "Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
+		expectedString = "Column A = ? AND Column B = ? AND Column C = ?";
 		actualString = SqlStatementUtils.getWhereCondition(columns);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetInsertStatement() {
-		expectedString = "INSERT INTO Database table A(Database table column A, Database table column B, Database table column C) VALUES(?, ?, ?)";
+		expectedString = "INSERT INTO Table A(Column A, Column B, Column C) VALUES(?, ?, ?)";
 		actualString = SqlStatementUtils.getInsertStatement(table, columns);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetSelectStatement() {
-		expectedString = "SELECT Database table column A, Database table column B, Database table column C FROM Database table A";
+		expectedString = "SELECT Column A, Column B, Column C FROM Table A";
 		actualString = SqlStatementUtils.getSelectStatement(table, columns);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetDeleteStatement() {
-		expectedString = "DELETE FROM Database table A";
+		expectedString = "DELETE FROM Table A";
 		actualString = SqlStatementUtils.getDeleteStatement(table);
 		assertEquals(expectedString, actualString);
 	}
 
 	@Test
 	public void testGetDeleteWhereStatement() {
-		expectedString = "DELETE FROM Database table A WHERE Database table column A = ? AND Database table column B = ? AND Database table column C = ?";
+		expectedString = "DELETE FROM Table A WHERE Column A = ? AND Column B = ? AND Column C = ?";
 		actualString = SqlStatementUtils.getDeleteStatement(table, columns);
 		assertEquals(expectedString, actualString);
 	}

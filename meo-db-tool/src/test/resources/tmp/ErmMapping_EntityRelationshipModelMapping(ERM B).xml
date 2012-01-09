@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ermMapping>
+   <erm name="ERM B">
+      <entityTypes>
+         <entityType name="Entity A">
+            <attributeTypes>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+            </attributeTypes>
+         </entityType>
+         <entityType name="Entity B">
+            <attributeTypes>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+            </attributeTypes>
+         </entityType>
+         <entityType name="Entity C">
+            <attributeTypes>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+            </attributeTypes>
+         </entityType>
+      </entityTypes>
+      <relationshipTypes>
+         <relationshipType name="Relationship A" cardinality="OneToMany">
+            <entityType name="Entity A">
+               <attributeTypes>
+                  <attributeType name="Attribute A" isPrimaryKey="true"/>
+                  <attributeType name="Attribute B" isPrimaryKey="false"/>
+                  <attributeType name="Attribute C" isPrimaryKey="true"/>
+               </attributeTypes>
+            </entityType>
+            <referencedEntityType name="Entity B">
+               <attributeTypes>
+                  <attributeType name="Attribute A" isPrimaryKey="true"/>
+                  <attributeType name="Attribute B" isPrimaryKey="false"/>
+                  <attributeType name="Attribute C" isPrimaryKey="true"/>
+               </attributeTypes>
+            </referencedEntityType>
+         </relationshipType>
+         <relationshipType name="Relationship B" cardinality="ManyToMany">
+            <entityType name="Entity B">
+               <attributeTypes>
+                  <attributeType name="Attribute A" isPrimaryKey="true"/>
+                  <attributeType name="Attribute B" isPrimaryKey="false"/>
+                  <attributeType name="Attribute C" isPrimaryKey="true"/>
+               </attributeTypes>
+            </entityType>
+            <referencedEntityType name="Entity C">
+               <attributeTypes>
+                  <attributeType name="Attribute A" isPrimaryKey="true"/>
+                  <attributeType name="Attribute B" isPrimaryKey="false"/>
+                  <attributeType name="Attribute C" isPrimaryKey="true"/>
+               </attributeTypes>
+            </referencedEntityType>
+         </relationshipType>
+         <relationshipType name="Relationship C" cardinality="OneToOne">
+            <entityType name="Entity C">
+               <attributeTypes>
+                  <attributeType name="Attribute A" isPrimaryKey="true"/>
+                  <attributeType name="Attribute B" isPrimaryKey="false"/>
+                  <attributeType name="Attribute C" isPrimaryKey="true"/>
+               </attributeTypes>
+            </entityType>
+            <referencedEntityType name="Entity A">
+               <attributeTypes>
+                  <attributeType name="Attribute A" isPrimaryKey="true"/>
+                  <attributeType name="Attribute B" isPrimaryKey="false"/>
+                  <attributeType name="Attribute C" isPrimaryKey="true"/>
+               </attributeTypes>
+            </referencedEntityType>
+         </relationshipType>
+      </relationshipTypes>
+   </erm>
+   <entityTypeMappings>
+      <entityTypeMapping>
+         <entityType name="Entity A">
+            <attributeTypes>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+            </attributeTypes>
+         </entityType>
+         <table name="Table A">
+            <columns>
+               <column name="Column A"/>
+               <column name="Column B"/>
+               <column name="Column C"/>
+            </columns>
+         </table>
+         <attributeTypeMappings>
+            <attributeTypeMapping>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <column name="Column A"/>
+            </attributeTypeMapping>
+            <attributeTypeMapping>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <column name="Column B"/>
+            </attributeTypeMapping>
+            <attributeTypeMapping>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+               <column name="Column C"/>
+            </attributeTypeMapping>
+         </attributeTypeMappings>
+      </entityTypeMapping>
+      <entityTypeMapping>
+         <entityType name="Entity B">
+            <attributeTypes>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+            </attributeTypes>
+         </entityType>
+         <table name="Table B">
+            <columns>
+               <column name="Column A"/>
+               <column name="Column B"/>
+               <column name="Column C"/>
+            </columns>
+         </table>
+         <attributeTypeMappings>
+            <attributeTypeMapping>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <column name="Column A"/>
+            </attributeTypeMapping>
+            <attributeTypeMapping>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <column name="Column B"/>
+            </attributeTypeMapping>
+            <attributeTypeMapping>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+               <column name="Column C"/>
+            </attributeTypeMapping>
+         </attributeTypeMappings>
+      </entityTypeMapping>
+      <entityTypeMapping>
+         <entityType name="Entity C">
+            <attributeTypes>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+            </attributeTypes>
+         </entityType>
+         <table name="Table C">
+            <columns>
+               <column name="Column A"/>
+               <column name="Column B"/>
+               <column name="Column C"/>
+            </columns>
+         </table>
+         <attributeTypeMappings>
+            <attributeTypeMapping>
+               <attributeType name="Attribute A" isPrimaryKey="true"/>
+               <column name="Column A"/>
+            </attributeTypeMapping>
+            <attributeTypeMapping>
+               <attributeType name="Attribute B" isPrimaryKey="false"/>
+               <column name="Column B"/>
+            </attributeTypeMapping>
+            <attributeTypeMapping>
+               <attributeType name="Attribute C" isPrimaryKey="true"/>
+               <column name="Column C"/>
+            </attributeTypeMapping>
+         </attributeTypeMappings>
+      </entityTypeMapping>
+   </entityTypeMappings>
+</ermMapping>

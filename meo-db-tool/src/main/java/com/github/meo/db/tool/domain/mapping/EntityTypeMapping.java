@@ -32,8 +32,7 @@ public class EntityTypeMapping {
 		for (AttributeTypeMapping attributeTypeMapping : getAttributeTypeMappings()) {
 			if (attribute.getAttributeType().getName()
 					.equals(attributeTypeMapping.getAttributeType().getName())) {
-				column = attributeTypeMapping
-						.getColumn();
+				column = attributeTypeMapping.getColumn();
 			}
 		}
 
@@ -68,6 +67,75 @@ public class EntityTypeMapping {
 	public void setAttributeTypeMappings(
 			List<AttributeTypeMapping> attributeTypeMappings) {
 		this.attributeTypeMappings = attributeTypeMappings;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("EntityTypeMapping(%s, %s)", entityType, table);
+	}
+
+	@Override
+	public EntityTypeMapping clone() {
+		EntityTypeMapping entityTypeMapping = new EntityTypeMapping();
+		entityTypeMapping.setEntityType(getEntityType());
+		entityTypeMapping.setTable(getTable());
+		entityTypeMapping.setAttributeTypeMappings(getAttributeTypeMappings());
+		return entityTypeMapping;
+	}
+
+	public boolean equals(Object object) {
+
+		// null reference?
+		if (object == null) {
+			return false;
+		}
+
+		/*
+		 * Are the references pointing to the same object?
+		 */
+		if (this == object) {
+			return true;
+		}
+
+		/*
+		 * Same class?
+		 */
+		if (!getClass().equals(object.getClass())) {
+			return false;
+		}
+
+		EntityTypeMapping entityTypeMapping = (EntityTypeMapping) object;
+
+		/*
+		 * Do the objects have the same entity type?
+		 */
+		if (!getEntityType().equals(entityTypeMapping.getEntityType())) {
+			return false;
+		}
+
+		/*
+		 * Do the objects have the same table?
+		 */
+		if (!getTable().equals(entityTypeMapping.getTable())) {
+			return false;
+		}
+
+		/*
+		 * Do the objects have equal attribute type mappings?
+		 */
+		if (getAttributeTypeMappings().size() != entityTypeMapping
+				.getAttributeTypeMappings().size()) {
+			return false;
+		}
+
+		for (int i = 0; i < getAttributeTypeMappings().size(); i++) {
+			if (!getAttributeTypeMappings().get(i).equals(
+					entityTypeMapping.getAttributeTypeMappings().get(i))) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

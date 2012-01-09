@@ -6,7 +6,7 @@ import com.github.meo.db.tool.domain.Attribute;
 import com.github.meo.db.tool.domain.IAttribute;
 
 
-public class AttributeAdapter extends XmlAdapter<MappableAttribute, Attribute> {
+public class AttributeXmlAdapter extends XmlAdapter<MappableAttribute, Attribute> {
 
 	@Override
 	public Attribute unmarshal(MappableAttribute mappableAttribute)

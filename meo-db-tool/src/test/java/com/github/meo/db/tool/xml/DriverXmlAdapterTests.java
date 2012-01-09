@@ -20,14 +20,20 @@ public class DriverXmlAdapterTests {
 	@Test
 	public void marshalUnmarshal() throws Exception {
 		Driver driver = TestObjects.getDriver();
-		
 		String marshalledDriver = driverXmlAdapter.marshal(driver);
-		
-		assertEquals(driver.getClass(), driverXmlAdapter.unmarshal(marshalledDriver).getClass());
+		Driver unmarshalledDriver = driverXmlAdapter
+				.unmarshal(marshalledDriver);
+		assertEquals("org.postgresql.Driver", unmarshalledDriver.getClass()
+				.getName());
 	}
-	
-	@Test
+
+	@Test(expected = ClassNotFoundException.class)
 	public void unmarshalException() throws Exception {
-		driverXmlAdapter.unmarshal(TestObjects.INVALID_DRIVER_CLASS_NAME);
+		try {
+			driverXmlAdapter.unmarshal(TestObjects.INVALID_DRIVER_CLASS_NAME);
+		} catch (ClassNotFoundException e) {
+			assertEquals("invalid.Driver", e.getMessage());
+			throw e;
+		}
 	}
 }

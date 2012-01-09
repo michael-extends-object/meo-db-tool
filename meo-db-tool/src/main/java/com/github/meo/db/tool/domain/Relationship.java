@@ -5,12 +5,20 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
-
 public class Relationship implements IRelationship, Cloneable {
 
 	private IRelationshipType relationshipType;
 	private IEntity entity;
 	private List<IEntity> referencedEntities;
+
+	/**
+	 * @deprecated Only used by JAXB interface. Will be removed after the
+	 *             XML-binding does not need this constructor anymore.
+	 */
+	@Deprecated
+	public Relationship() {
+		init();
+	}
 
 	public Relationship(IRelationshipType relationshipType) {
 		init();

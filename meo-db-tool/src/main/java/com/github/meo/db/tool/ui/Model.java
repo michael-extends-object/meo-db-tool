@@ -19,7 +19,7 @@ import com.github.meo.db.tool.domain.AttributeType;
 import com.github.meo.db.tool.domain.EntityType;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.IEntity;
-import com.github.meo.db.tool.domain.IEntityRelationshipModel;
+import com.github.meo.db.tool.domain.IErm;
 import com.github.meo.db.tool.domain.IEntityType;
 
 public class Model {
@@ -80,8 +80,8 @@ public class Model {
 
 		root = new DefaultMutableTreeNode(database.getName());
 
-		for (IEntityRelationshipModel erm : database
-				.getEntityRelationshipModels()) {
+		for (IErm erm : database
+				.getErms()) {
 
 			DefaultMutableTreeNode ermNode = new DefaultMutableTreeNode(erm);
 

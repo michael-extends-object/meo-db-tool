@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relationshipType name="Relationship B" cardinality="ManyToMany">
+   <entityType name="Entity B">
+      <attributeTypes>
+         <attributeType name="Attribute A" isPrimaryKey="true"/>
+         <attributeType name="Attribute B" isPrimaryKey="false"/>
+         <attributeType name="Attribute C" isPrimaryKey="true"/>
+      </attributeTypes>
+   </entityType>
+   <referencedEntityType name="Entity C">
+      <attributeTypes>
+         <attributeType name="Attribute A" isPrimaryKey="true"/>
+         <attributeType name="Attribute B" isPrimaryKey="false"/>
+         <attributeType name="Attribute C" isPrimaryKey="true"/>
+      </attributeTypes>
+   </referencedEntityType>
+</relationshipType>

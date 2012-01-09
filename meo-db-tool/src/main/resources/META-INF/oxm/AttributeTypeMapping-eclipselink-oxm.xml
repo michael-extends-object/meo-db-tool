@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain.mapping" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="AttributeTypeMapping">
+			<xml-root-element name="attributeTypeMapping" />
+			<xml-type name="attributeTypeMapping" prop-order="attributeType column" />
+			<java-attributes>
+				<xml-element java-attribute="attributeType"
+					type="com.github.meo.db.tool.domain.AttributeType" />
+				<xml-element java-attribute="column"
+					type="com.github.meo.db.tool.domain.db.Column" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

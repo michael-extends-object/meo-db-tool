@@ -2,13 +2,15 @@
 <xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
 	package-name="com.github.meo.db.tool.domain" xml-accessor-type="NONE">
 	<java-types>
-		<java-type name="EntityRelationshipModel">
-			<xml-root-element name="entityRelationshipModel" />
-			<xml-type name="entityRelationshipModel" prop-order="name entityTypes" />
+		<java-type name="Erm">
+			<xml-root-element name="erm" />
+			<xml-type name="erm" prop-order="name entityTypes" />
 			<java-attributes>
 				<xml-attribute java-attribute="name" />
 				<xml-element java-attribute="entityTypes"
 					type="com.github.meo.db.tool.domain.EntityType" xml-path="entityTypes/entityType" />
+				<xml-element java-attribute="relationshipTypes"
+					type="com.github.meo.db.tool.domain.RelationshipType" xml-path="relationshipTypes/relationshipType" />
 			</java-attributes>
 		</java-type>
 	</java-types>

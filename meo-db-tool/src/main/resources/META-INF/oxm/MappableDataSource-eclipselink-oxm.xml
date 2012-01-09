@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.xml" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="MappableDataSource">
+			<xml-root-element name="dataSource" />
+			<xml-type name="dataSource" prop-order="driver url username password" />
+			<java-attributes>
+				<xml-attribute java-attribute="driver">
+					<xml-java-type-adapter
+						value="com.github.meo.db.tool.xml.DriverXmlAdapter" />
+				</xml-attribute>
+				<xml-element java-attribute="url" />
+				<xml-element java-attribute="username" />
+				<xml-element java-attribute="password">
+					<xml-java-type-adapter
+						value="com.github.meo.db.tool.xml.EncryptedStringXmlAdapter" />
+				</xml-element>
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

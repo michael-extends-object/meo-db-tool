@@ -12,12 +12,12 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import com.github.meo.db.tool.dao.Database;
 import com.github.meo.db.tool.domain.AttributeType;
 import com.github.meo.db.tool.domain.Cardinality;
-import com.github.meo.db.tool.domain.EntityRelationshipModel;
+import com.github.meo.db.tool.domain.Erm;
 import com.github.meo.db.tool.domain.EntityType;
 import com.github.meo.db.tool.domain.IAttribute;
 import com.github.meo.db.tool.domain.IAttributeType;
 import com.github.meo.db.tool.domain.IEntity;
-import com.github.meo.db.tool.domain.IEntityRelationshipModel;
+import com.github.meo.db.tool.domain.IErm;
 import com.github.meo.db.tool.domain.IEntityType;
 import com.github.meo.db.tool.domain.IRelationship;
 import com.github.meo.db.tool.domain.IRelationshipType;
@@ -26,9 +26,8 @@ import com.github.meo.db.tool.domain.RelationshipType;
 import com.github.meo.db.tool.domain.db.Table;
 import com.github.meo.db.tool.domain.db.Column;
 import com.github.meo.db.tool.domain.mapping.AttributeTypeMapping;
-import com.github.meo.db.tool.domain.mapping.EntityRelationshipModelMapping;
+import com.github.meo.db.tool.domain.mapping.ErmMapping;
 import com.github.meo.db.tool.domain.mapping.EntityTypeMapping;
-import com.github.meo.db.tool.domain.mapping.IEntityRelationshipModelMapping;
 
 public class TestObjects {
 
@@ -56,13 +55,13 @@ public class TestObjects {
 	public static final String DATABASE_NAME_B = "Database B";
 	public static final String DATABASE_NAME_C = "Database C";
 
-	public static final String DATABASE_TABLE_NAME_A = "Database table A";
-	public static final String DATABASE_TABLE_NAME_B = "Database table B";
-	public static final String DATABASE_TABLE_NAME_C = "Database table C";
+	public static final String DATABASE_TABLE_NAME_A = "Table A";
+	public static final String DATABASE_TABLE_NAME_B = "Table B";
+	public static final String DATABASE_TABLE_NAME_C = "Table C";
 
-	public static final String COLUMN_NAME_A = "Database table column A";
-	public static final String COLUMN_NAME_B = "Database table column B";
-	public static final String COLUMN_NAME_C = "Database table column C";
+	public static final String COLUMN_NAME_A = "Column A";
+	public static final String COLUMN_NAME_B = "Column B";
+	public static final String COLUMN_NAME_C = "Column C";
 
 	public static IAttributeType getAttributeTypeA() {
 		IAttributeType attributeType = new AttributeType(ATTRIBUTE_NAME_A);
@@ -265,10 +264,10 @@ public class TestObjects {
 		database.addEntityRelationshipModel(getErmA());
 		database.addEntityRelationshipModel(getErmB());
 		database.addEntityRelationshipModel(getErmC());
-		database.addEntityRelationshipModelMapping(getErmMappingA());
-		database.addEntityRelationshipModelMapping(getErmMappingB());
-		database.addEntityRelationshipModelMapping(getErmMappingC());
-		database.setCurrentEntityRelationshipModel(getErmA());
+		database.addErmMapping(getErmMappingA());
+		database.addErmMapping(getErmMappingB());
+		database.addErmMapping(getErmMappingC());
+		database.setCurrentErm(getErmA());
 		return database;
 	}
 
@@ -278,10 +277,10 @@ public class TestObjects {
 		database.addEntityRelationshipModel(getErmA());
 		database.addEntityRelationshipModel(getErmB());
 		database.addEntityRelationshipModel(getErmC());
-		database.addEntityRelationshipModelMapping(getErmMappingA());
-		database.addEntityRelationshipModelMapping(getErmMappingB());
-		database.addEntityRelationshipModelMapping(getErmMappingC());
-		database.setCurrentEntityRelationshipModel(getErmB());
+		database.addErmMapping(getErmMappingA());
+		database.addErmMapping(getErmMappingB());
+		database.addErmMapping(getErmMappingC());
+		database.setCurrentErm(getErmB());
 		return database;
 	}
 
@@ -291,10 +290,10 @@ public class TestObjects {
 		database.addEntityRelationshipModel(getErmA());
 		database.addEntityRelationshipModel(getErmB());
 		database.addEntityRelationshipModel(getErmC());
-		database.addEntityRelationshipModelMapping(getErmMappingA());
-		database.addEntityRelationshipModelMapping(getErmMappingB());
-		database.addEntityRelationshipModelMapping(getErmMappingC());
-		database.setCurrentEntityRelationshipModel(getErmC());
+		database.addErmMapping(getErmMappingA());
+		database.addErmMapping(getErmMappingB());
+		database.addErmMapping(getErmMappingC());
+		database.setCurrentErm(getErmC());
 		return database;
 	}
 
@@ -373,7 +372,7 @@ public class TestObjects {
 		IRelationshipType relationshipType = new RelationshipType(
 				"Relationship A");
 		relationshipType.setEntityType(getEntityTypeA());
-		relationshipType.setEntityType(getEntityTypeB());
+		relationshipType.setReferencedEntityType(getEntityTypeB());
 		relationshipType.setCardinality(Cardinality.OneToMany);
 		return relationshipType;
 	}
@@ -382,7 +381,7 @@ public class TestObjects {
 		IRelationshipType relationshipType = new RelationshipType(
 				"Relationship B");
 		relationshipType.setEntityType(getEntityTypeB());
-		relationshipType.setEntityType(getEntityTypeC());
+		relationshipType.setReferencedEntityType(getEntityTypeC());
 		relationshipType.setCardinality(Cardinality.ManyToMany);
 		return relationshipType;
 	}
@@ -391,7 +390,7 @@ public class TestObjects {
 		IRelationshipType relationshipType = new RelationshipType(
 				"Relationship C");
 		relationshipType.setEntityType(getEntityTypeC());
-		relationshipType.setEntityType(getEntityTypeA());
+		relationshipType.setReferencedEntityType(getEntityTypeA());
 		relationshipType.setCardinality(Cardinality.OneToOne);
 		return relationshipType;
 	}
@@ -440,59 +439,70 @@ public class TestObjects {
 		return relationships;
 	}
 
-	public static IEntityRelationshipModel getErmA() {
-		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM A");
+	public static IErm getErmA() {
+		IErm erm = new Erm("ERM A");
 		erm.addEntityType(getEntityTypeA());
 		erm.addEntityType(getEntityTypeB());
 		erm.addEntityType(getEntityTypeC());
+		erm.setRelationshipTypes(getRelationshipTypes());
 		return erm;
 	}
 
-	public static IEntityRelationshipModel getErmB() {
-		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM B");
+	public static IErm getErmB() {
+		IErm erm = new Erm("ERM B");
 		erm.addEntityType(getEntityTypeA());
 		erm.addEntityType(getEntityTypeB());
 		erm.addEntityType(getEntityTypeC());
+		erm.setRelationshipTypes(getRelationshipTypes());
 		return erm;
 	}
 
-	public static IEntityRelationshipModel getErmC() {
-		IEntityRelationshipModel erm = new EntityRelationshipModel("ERM C");
+	public static IErm getErmC() {
+		IErm erm = new Erm("ERM C");
 		erm.addEntityType(getEntityTypeA());
 		erm.addEntityType(getEntityTypeB());
 		erm.addEntityType(getEntityTypeC());
+		erm.setRelationshipTypes(getRelationshipTypes());
 		return erm;
 	}
 
-	public static IEntityRelationshipModelMapping getErmMappingA() {
-		IEntityRelationshipModelMapping ermMapping = new EntityRelationshipModelMapping();
-		ermMapping.setEntityRelationshipModel(getErmA());
+	public static ErmMapping getErmMappingA() {
+		ErmMapping ermMapping = new ErmMapping();
+		ermMapping.setErm(getErmA());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingA());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingB());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingC());
 		return ermMapping;
 	}
 
-	public static IEntityRelationshipModelMapping getErmMappingB() {
-		IEntityRelationshipModelMapping ermMapping = new EntityRelationshipModelMapping();
-		ermMapping.setEntityRelationshipModel(getErmB());
+	public static ErmMapping getErmMappingB() {
+		ErmMapping ermMapping = new ErmMapping();
+		ermMapping.setErm(getErmB());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingA());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingB());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingC());
 		return ermMapping;
 	}
 
-	public static IEntityRelationshipModelMapping getErmMappingC() {
-		IEntityRelationshipModelMapping ermMapping = new EntityRelationshipModelMapping();
-		ermMapping.setEntityRelationshipModel(getErmC());
+	public static ErmMapping getErmMappingC() {
+		ErmMapping ermMapping = new ErmMapping();
+		ermMapping.setErm(getErmC());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingA());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingB());
 		ermMapping.addEntityTypeMapping(getEntityTypeMappingC());
 		return ermMapping;
 	}
 
-	public static List<IEntityRelationshipModel> getErms() {
-		List<IEntityRelationshipModel> erms = new ArrayList<IEntityRelationshipModel>();
+	public static List<ErmMapping> getErmMappings() {
+		List<ErmMapping> ermMappings = new ArrayList<ErmMapping>();
+		ermMappings.add(getErmMappingA());
+		ermMappings.add(getErmMappingB());
+		ermMappings.add(getErmMappingC());
+		return ermMappings;
+	}
+
+	public static List<IErm> getErms() {
+		List<IErm> erms = new ArrayList<IErm>();
 		erms.add(getErmA());
 		erms.add(getErmB());
 		erms.add(getErmC());

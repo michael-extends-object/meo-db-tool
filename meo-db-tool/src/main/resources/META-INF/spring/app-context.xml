@@ -16,12 +16,26 @@
 			/> -->
 		<property name="classesToBeBound">
 			<list>
+				<value>com.github.meo.db.tool.dao.Database</value>
 				<value>com.github.meo.db.tool.domain.Attribute</value>
 				<value>com.github.meo.db.tool.domain.AttributeType</value>
+				<value>com.github.meo.db.tool.domain.Cardinality</value>
 				<value>com.github.meo.db.tool.domain.Entity</value>
-				<value>com.github.meo.db.tool.domain.EntityRelationshipModel</value>
+				<value>com.github.meo.db.tool.domain.Erm</value>
+				<value>com.github.meo.db.tool.domain.mapping.ErmMapping
+				</value>
 				<value>com.github.meo.db.tool.domain.EntityType</value>
+				<value>com.github.meo.db.tool.domain.db.Column</value>
+				<value>com.github.meo.db.tool.domain.db.Table</value>
+				<value>com.github.meo.db.tool.domain.mapping.AttributeTypeMapping
+				</value>
+				<value>com.github.meo.db.tool.domain.mapping.EntityTypeMapping
+				</value>
 				<value>com.github.meo.db.tool.xml.MappableAttribute</value>
+				<value>com.github.meo.db.tool.xml.MappableDataSource</value>
+				<value>com.github.meo.db.tool.domain.RelationshipType</value>
+				<value>com.github.meo.db.tool.domain.mapping.RelationshipTypeMapping
+				</value>
 			</list>
 		</property>
 		<property name="marshallerProperties">
@@ -34,23 +48,39 @@
 				</entry>
 			</map>
 		</property>
-		<property name="schemas">
-			<list>
-				<value>classpath:/META-INF/xsd/Schema.xsd</value>
-			</list>
-		</property>
+		<!-- <property name="schemas"> -->
+		<!-- <list> -->
+		<!-- <value>classpath:/META-INF/xsd/Schema.xsd</value> -->
+		<!-- </list> -->
+		<!-- </property> -->
 		<property name="bindingFiles">
 			<list>
 				<value>classpath:/META-INF/oxm/Attribute-eclipselink-oxm.xml</value>
 				<value>classpath:/META-INF/oxm/AttributeType-eclipselink-oxm.xml
 				</value>
+				<value>classpath:/META-INF/oxm/AttributeTypeMapping-eclipselink-oxm.xml
+				</value>
+				<value>classpath:/META-INF/oxm/Column-eclipselink-oxm.xml</value>
+				<value>classpath:/META-INF/oxm/Database-eclipselink-oxm.xml</value>
 				<value>classpath:/META-INF/oxm/Entity-eclipselink-oxm.xml</value>
-				<value>classpath:/META-INF/oxm/EntityRelationshipModel-eclipselink-oxm.xml
+				<value>classpath:/META-INF/oxm/Erm-eclipselink-oxm.xml
+				</value>
+				<value>classpath:/META-INF/oxm/ErmMapping-eclipselink-oxm.xml
 				</value>
 				<value>classpath:/META-INF/oxm/EntityType-eclipselink-oxm.xml
 				</value>
+				<value>classpath:/META-INF/oxm/EntityTypeMapping-eclipselink-oxm.xml
+				</value>
 				<value>classpath:/META-INF/oxm/MappableAttribute-eclipselink-oxm.xml
 				</value>
+				<value>
+					classpath:/META-INF/oxm/MappableDataSource-eclipselink-oxm.xml
+				</value>
+				<value>classpath:/META-INF/oxm/RelationshipType-eclipselink-oxm.xml
+				</value>
+				<value>classpath:/META-INF/oxm/RelationshipTypeMapping-eclipselink-oxm.xml
+				</value>
+				<value>classpath:/META-INF/oxm/Table-eclipselink-oxm.xml</value>
 			</list>
 		</property>
 	</bean>

@@ -4,11 +4,7 @@ import java.sql.Driver;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.apache.log4j.Logger;
-
 public class DriverXmlAdapter extends XmlAdapter<String, Driver> {
-
-	private final static Logger logger = Logger.getLogger(DriverXmlAdapter.class);
 
 	public DriverXmlAdapter() {
 	}
@@ -19,18 +15,8 @@ public class DriverXmlAdapter extends XmlAdapter<String, Driver> {
 	}
 
 	@Override
-	public Driver unmarshal(String driverClassName) {
-
-		Driver driver = null;
-
-		try {
-			driver = (Driver) Class.forName(driverClassName).newInstance();
-		} catch (Exception e) {
-			logger.error(String.format("Could not instantiate class '%s'",
-					driverClassName));
-		}
-
+	public Driver unmarshal(String driverClassName) throws Exception {
+		Driver driver = (Driver) Class.forName(driverClassName).newInstance();
 		return driver;
 	}
-
 }

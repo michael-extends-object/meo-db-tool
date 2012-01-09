@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain.db" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="Table">
+			<xml-root-element name="table" />
+			<xml-type name="table" prop-order="name columns" />
+			<java-attributes>
+				<xml-attribute java-attribute="name" />
+				<xml-element java-attribute="columns"
+					type="com.github.meo.db.tool.domain.db.Column" xml-path="columns/column" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>

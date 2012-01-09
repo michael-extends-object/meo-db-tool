@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xml-bindings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/oxm"
+	package-name="com.github.meo.db.tool.domain.mapping" xml-accessor-type="NONE">
+	<java-types>
+		<java-type name="ErmMapping">
+			<xml-root-element name="ermMapping" />
+			<xml-type name="ermMapping"
+				prop-order="erm entityTypeMappings relationshipTypeMappings" />
+			<java-attributes>
+				<xml-element java-attribute="erm"
+					type="com.github.meo.db.tool.domain.Erm" />
+				<xml-element java-attribute="entityTypeMappings"
+					type="com.github.meo.db.tool.domain.mapping.EntityTypeMapping" xml-path="entityTypeMappings/entityTypeMapping" />
+				<xml-element java-attribute="relationshipTypeMappings"
+					type="com.github.meo.db.tool.domain.mapping.RelationshipTypeMapping" xml-path="relationshipTypeMappings/relationshipTypeMapping" />
+			</java-attributes>
+		</java-type>
+	</java-types>
+</xml-bindings>
